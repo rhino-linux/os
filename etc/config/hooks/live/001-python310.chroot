@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rm -r /usr/bin/python3
+cp -r /usr/bin/python3.10 /usr/bin/python3

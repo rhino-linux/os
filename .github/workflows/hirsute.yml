@@ -1,0 +1,34 @@
+name: Ubuntu Cinnamon Remix 21.04 Hirsute Bleeding Edge Daily
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    - cron: ' 0 14 * * * '
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    container:
+      image: debian:latest
+      options: --privileged -it
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install debootstrap/git
+      run: apt update && apt install git debootstrap -y
+
+    - name: Build ISO
+      run: |
+        cd /
+        git clone https://github.com/Ubuntu-Cinnamon-Remix/iso-builder-devel
+        cd iso-builder-devel
+        ./build.sh etc/terraform.conf
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Ubuntu Cinnamon Remix 21.04 Hirsute Bleeding Edge Daily
+        path: /iso-builder-devel/builds/

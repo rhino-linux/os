@@ -1,0 +1,45 @@
+# List of rebuilds in case anything goes wrong or anything happens
+
+Tue, 18 Aug 2020 20:01:15 -0400
+Reason: Possible Debian Build error
+Urgency: Medium
+
+Wed, 19 Aug 2020 19:36:28 -0400
+Reason: Debian Image failure from yesterday may have been confirmed. Final testing, as also was trying to build for arm64 tests.
+Urgency: Medium
+
+Wed, 19 Aug 2020 19:38:68 -0400
+Reason: Confirmed: Debian Image is broken. Revert last commit.
+Urgency: High
+
+Wed, 19 Aug 2020 23:30:47 -0400
+Reason: Ubiquity Switch/Testing. Keeping Calamares just-in-case.
+Urgency: Medium
+
+Wed, 19 Aug 2020 23:49:47 -0400
+Reason: fwupdate-signed -> fwupdate. Was already mentioned so removed/fixed.
+Urgency: Low
+
+Wed, 26 Aug 2020 13:53:24 -0400
+Reason: Switch back to calamares due to feature freeze.
+Urgency: Medium
+
+Thu, 27 Aug 2020 11:53:04 -0400
+Reason: Refire build - Environment is gone (walllpapers, themes, etc).
+Urgency: Medium
+
+Fri, 02 Oct 2020 09:07:23 -0400
+Reason: Beta Freeze
+Urgency: Medium
+
+Thu, 15 Oct 2020 08:57:04 -0400
+Reason: Final Freeze - Release RC's
+Urgency: Medium
+
+Wed, 21 Oct 2020 22:35:17 -0400
+Reason: Release
+Urgency: High
+
+Sun, 08 Nov 2020 22:25:51 -0400
+Reason: 21.04 Hirsute - Begin Builds
+Urgency: Medium
