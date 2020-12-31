@@ -1,6 +1,6 @@
 @XORG_HWE
 cargo
-libstd-rust-1.48
+rustc
 python3.10
 ubuntucinnamon-minimal
 ubuntucinnamon-standard
