@@ -1,7 +1,7 @@
 @XORG_HWE
 cargo
 rustc
-python3.10
+python3.9
 ubuntucinnamon-minimal
 ubuntucinnamon-standard
 ubuntucinnamon-desktop
