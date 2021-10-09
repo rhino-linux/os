@@ -24,11 +24,10 @@ echo -e "
 "
 
 apt-get update
-apt-get install -y live-build patch ubuntu-keyring
+apt-get install -y live-build patch binutils zstd
+dpkg -i debs/*.deb
 
-# TODO: Remove once live-build is able to acommodate for cases where LB_INITRAMFS is not live-boot:
-# https://salsa.debian.org/live-team/live-build/merge_requests/31
-patch -d /usr/lib/live/build/ < live-build-fix-syslinux.patch
+patch /usr/lib/live/build/binary_grub-efi < live-build-fix-shim-remove.patch
 
 # TODO: Remove this once debootstrap 1.0.117 or newer is released and available:
 # https://salsa.debian.org/installer-team/debootstrap/blob/master/debian/changelog
