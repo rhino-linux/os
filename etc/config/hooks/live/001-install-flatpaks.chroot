@@ -1,0 +1,5 @@
+#!/bin/sh
+# Description: Add Flatpak remotes and install system-wide Flatpaks
+
+apt install -y flatpak
+flatpak remote-add --system flathub https://flathub.org/repo/flathub.flatpakrepo

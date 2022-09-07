@@ -1,7 +1,8 @@
 @XORG_HWE
-cargo
-rustc
-python3.9
-ubuntucinnamon-minimal
-ubuntucinnamon-standard
-ubuntucinnamon-desktop
+gpg
+curl
+vanilla-gnome-desktop
+vanilla-gnome-default-settings
+plymouth-theme-vanilla
+vanilla-distrologo
+vanilla-first-setup

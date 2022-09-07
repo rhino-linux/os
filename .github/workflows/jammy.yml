@@ -1,16 +1,12 @@
-name: Ubuntu Cinnamon Remix 21.04 Hirsute Bleeding Edge Daily
+name: VanillaOS 22.04.1
 
 on:
-  push:
+  workflow_dispatch:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  schedule:
-    - cron: ' 0 14 * * * '
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     container:
       image: debian:latest
       options: --privileged -it
@@ -24,11 +20,11 @@ jobs:
     - name: Build ISO
       run: |
         cd /
-        git clone https://github.com/Ubuntu-Cinnamon-Remix/iso-builder-devel
-        cd iso-builder-devel
+        git clone https://github.com/Vanilla-OS/iso-builder
+        cd iso-builder
         ./build.sh etc/terraform.conf
 
     - uses: actions/upload-artifact@v2
       with:
-        name: Ubuntu Cinnamon Remix 21.04 Hirsute Bleeding Edge Daily
+        name: VanillaOS 22.04.1
         path: /iso-builder-devel/builds/

@@ -1,0 +1,5 @@
+#!/bin/sh
+# Description: Remove default Snap packages
+
+snap remove --purge firefox
+snap remove --purge snap-store

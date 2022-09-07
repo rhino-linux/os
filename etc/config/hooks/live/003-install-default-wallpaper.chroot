@@ -1,0 +1,8 @@
+#!/bin/sh
+# Description: Install the default GNOME wallpaper
+
+cat > /usr/share/glib-2.0/schemas/90_ubuntuvanillagnome-wallpaper.gschema.override <<EOF
+[org.gnome.desktop.background]
+picture-uri='file:///usr/share/backgrounds/gnome/adwaita-l.jpg'
+EOF
+glib-compile-schemas /usr/share/glib-2.0/schemas/
