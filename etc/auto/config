@@ -4,12 +4,14 @@ set -e
 
 . ./terraform.conf
 
-# HWE starts with y, Y or 1?
-if [ "$HWE" = "yes" ]; then
+if [ "$HWE_KERNEL" = "yes" ]; then
     KERNEL_FLAVORS="generic-hwe-${BASEVERSION}"
-    XORG_HWE="xserver-xorg-hwe-${BASEVERSION}"
 else
     KERNEL_FLAVORS="generic"
+fi
+
+if [ "$HWE_X11" = "yes" ]; then
+    XORG_HWE="xserver-xorg-hwe-${BASEVERSION}"
 fi
 
 lb config noauto \
@@ -29,8 +31,8 @@ lb config noauto \
     --parent-mirror-chroot-security "http://security.ubuntu.com/ubuntu/" \
     --mirror-binary-security "http://security.ubuntu.com/ubuntu/" \
     --parent-mirror-binary-security "http://security.ubuntu.com/ubuntu/" \
-    --mirror-binary "http://archive.ubuntu.com/ubuntu/" \
-    --parent-mirror-binary "http://archive.ubuntu.com/ubuntu/" \
+    --mirror-binary "mirror://mirrors.ubuntu.com/mirrors.txt" \
+    --parent-mirror-binary "mirror://mirrors.ubuntu.com/mirrors.txt" \
     --keyring-packages ubuntu-keyring \
     --apt-options "--yes --option Acquire::Retries=5 --option Acquire::http::Timeout=100" \
     --cache-packages false \
@@ -45,6 +47,7 @@ lb config noauto \
     --security true \
     --updates true \
     --debootstrap-options "--exclude=pinephone-tweaks,mobile-tweaks-common,librem5-tweaks,pinetab-tweaks" \
+    --checksums md5 \
     "${@}"
 
 
