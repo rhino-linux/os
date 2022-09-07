@@ -32,10 +32,6 @@ dpkg -i debs/*.deb
 # This can be removed when our Debian container has a version containing this fix
 patch /usr/lib/live/build/binary_grub-efi < live-build-fix-shim-remove.patch
 
-# TODO: This can be removed when our Debian container has debootstrap 1.0.124 or later
-# It's needed to support the new zstd .deb package compression that Ubuntu is doing
-patch -d /usr/share/debootstrap/ < debootstrap-backport-zstd-support.patch
-
 # TODO: Remove this once debootstrap has a script to build jammy images in our container:
 # https://salsa.debian.org/installer-team/debootstrap/blob/master/debian/changelog
 ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/jammy
