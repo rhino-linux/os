@@ -27,4 +27,4 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: VanillaOS 22.04.1
-        path: /iso-builder-devel/builds/
+        path: /iso-builder/builds/
