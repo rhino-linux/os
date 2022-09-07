@@ -2,7 +2,6 @@ casper
 expect
 gparted
 cifs-utils
-lupin-casper
 language-pack-en
 language-pack-gnome-en
 xfsprogs
