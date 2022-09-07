@@ -31,7 +31,7 @@ patch /usr/lib/live/build/binary_grub-efi < live-build-fix-shim-remove.patch
 
 # TODO: Remove this once debootstrap 1.0.117 or newer is released and available:
 # https://salsa.debian.org/installer-team/debootstrap/blob/master/debian/changelog
-ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/hirsute
+ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/jammy
 
 build () {
   BUILD_ARCH="$1"
