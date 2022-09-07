@@ -15,7 +15,7 @@ fi
 lb config noauto \
     --architectures "$ARCH" \
     --mode ubuntu \
-    --initramfs auto \
+    --initramfs none \
     --distribution "$BASECODENAME" \
     --parent-distribution "$BASECODENAME" \
     --archive-areas "main restricted universe multiverse" \
