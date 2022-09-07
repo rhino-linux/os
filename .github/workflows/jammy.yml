@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-22.04
     container:
       image: debian:latest
+      volumes:
+        - /proc:/proc
       options: --privileged -it
 
     steps:
