@@ -3,10 +3,13 @@
 # Specific ubuntu-image chroot configuration goes here.
 if [ "$IMAGEFORMAT" == "none" ]; then
     if [ "$SUBPROJECT" == "desktop-preinstalled" ]; then
-        # Create files/dirs Ubiquity requires
+        # Create files/dirs Calamares requires
         mkdir -p /var/log/installer
         touch /var/log/installer/debug
         touch /var/log/syslog
+        mkdir -p /home/ubuntu/.cache/calamares
+        touch /home/ubuntu/.cache/calamares/session.log
+        chmod 777 /home/ubuntu/.cache/calamares
         chown syslog:adm /var/log/syslog
 
         # Create the oem user account
