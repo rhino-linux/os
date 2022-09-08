@@ -6,3 +6,10 @@ sudo curl -s --compressed -o /etc/apt/sources.list.d/vanilla-os.list "https://va
 sudo apt update
 
 sudo apt install -y plymouth-theme-vanilla vanilla-distrologo vanilla-first-setup
+
+mkdir -p /etc/skel/.config/autostart
+if [ -f /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop ]; then
+    cp /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop /etc/skel/.config/autostart/
+else
+    cp /usr/local/share/applications/io.github.vanilla-os.FirstSetup.desktop /etc/skel/.config/autostart/
+fi
