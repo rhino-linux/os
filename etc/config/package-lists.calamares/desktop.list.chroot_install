@@ -56,8 +56,6 @@ tracker
 ubuntu-drivers-common
 ubuntu-release-upgrader-gtk
 unzip
-update-manager
-update-notifier
 vanilla-gnome-default-settings
 wireless-tools
 wpasupplicant
