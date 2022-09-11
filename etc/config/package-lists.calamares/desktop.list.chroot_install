@@ -1,6 +1,7 @@
 @XORG_HWE
 gpg
 curl
+bash-completion
 adwaita-icon-theme-full
 alsa-base
 alsa-utils
