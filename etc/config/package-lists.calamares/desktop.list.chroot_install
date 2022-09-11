@@ -29,6 +29,7 @@ gnome-session
 gnome-session-canberra
 gnome-settings-daemon
 gnome-shell
+gnome-shell-extensions
 gnome-shell-extension-manager
 gnome-themes-extra
 gnome-tweaks
