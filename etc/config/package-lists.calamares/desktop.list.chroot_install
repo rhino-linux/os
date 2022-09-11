@@ -153,3 +153,5 @@ speech-dispatcher
 totem
 ubuntu-gnome-wallpapers
 xdg-utils
+ntfs-3g
+samba-common-bin
