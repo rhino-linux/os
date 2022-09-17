@@ -3,9 +3,6 @@
 
 # Prepare
 distro_pretty_name="@DISTRO_NAME @VERSION @CHANNEL"
-distro_home_url="https://github.com/vanilla-os"
-distro_support_url="https://github.com/vanilla-os"
-distro_bug_report_url="https://github.com/vanilla-os"
 
 # Set OS name
 echo "$distro_pretty_name /\n /\l" > /etc/issue
@@ -18,8 +15,8 @@ VERSION="@VERSION @CHANNEL"
 VERSION_CODENAME="@CODENAME"
 ID=ubuntu
 ID_LIKE=debian
-HOME_URL="https://www.ubuntu.com/"
-SUPPORT_URL="https://help.ubuntu.com/"
-BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+HOME_URL="https://github.com/vanilla-os"
+SUPPORT_URL="https://github.com/vanilla-os"
+BUG_REPORT_URL="https://github.com/vanilla-os"
 PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
 UBUNTU_CODENAME="@BASECODENAME"' > /etc/os-release
