@@ -11,7 +11,15 @@ distro_bug_report_url="https://github.com/vanilla-os"
 echo "$distro_pretty_name /\n /\l" > /etc/issue
 
 # Set OS info
-sed -i "s/PRETTY_NAME=\".*\"/PRETTY_NAME=\"$distro_pretty_name\"/" /etc/os-release
-sed -i "s/HOME_URL=\".*\"/HOME_URL=\"$distro_home_url\"/" /etc/os-release
-sed -i "s/SUPPORT_URL=\".*\"/SUPPORT_URL=\"$distro_support_url\"/" /etc/os-release
-sed -i "s/BUG_REPORT_URL=\".*\"/BUG_REPORT_URL=\"$distro_bug_report_url\"/" /etc/os-release
+echo 'PRETTY_NAME="$distro_pretty_name"
+NAME="@DISTRO_NAME"
+VERSION_ID="@VERSION"
+VERSION="@VERSION @CHANNEL"
+VERSION_CODENAME="@CODENAME"
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME="@BASECODENAME"' > /etc/os-release
