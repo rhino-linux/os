@@ -70,7 +70,6 @@ yelp
 zenity
 zip
 zsync
-acpi-support
 avahi-autoipd
 avahi-daemon
 bluez
@@ -126,9 +125,6 @@ libwmf0.2-7-gtk
 memtest86+
 mousetweaks
 nautilus
-nautilus-extension-brasero
-nautilus-sendto
-nautilus-share
 network-manager-config-connectivity-ubuntu
 network-manager-openvpn-gnome
 network-manager-pptp-gnome
