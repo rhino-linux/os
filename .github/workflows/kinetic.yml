@@ -1,4 +1,4 @@
-name: VanillaOS jammy
+name: VanillaOS kinetic
 
 on:
   workflow_dispatch:
@@ -28,5 +28,5 @@ jobs:
 
     - uses: actions/upload-artifact@v2
       with:
-        name: VanillaOS 22.04.1
+        name: VanillaOS 22.10
         path: /iso-builder/builds/
