@@ -3,7 +3,7 @@
 
 cat > /usr/share/glib-2.0/schemas/90_ubuntuvanillagnome-wallpaper.gschema.override <<EOF
 [org.gnome.desktop.background]
-picture-uri='file:///usr/share/backgrounds/gnome/adwaita-l.jpg'
-picture-uri-dark='file:///usr/share/backgrounds/gnome/adwaita-d.jpg'
+picture-uri='file:///usr/share/backgrounds/gnome/adwaita-l.webp'
+picture-uri-dark='file:///usr/share/backgrounds/gnome/adwaita-d.webp'
 EOF
 glib-compile-schemas /usr/share/glib-2.0/schemas/
