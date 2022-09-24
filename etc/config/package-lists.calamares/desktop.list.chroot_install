@@ -9,7 +9,6 @@ at-spi2-core
 bc
 ca-certificates
 chrome-gnome-shell
-dconf-editor
 epiphany-browser
 fonts-cantarell
 fonts-dejavu-core
