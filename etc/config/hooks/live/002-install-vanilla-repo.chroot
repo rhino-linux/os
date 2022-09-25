@@ -11,6 +11,9 @@ sudo apt install -y \
     vanilla-first-setup \
     calamares-settings-vanilla
 
+# WORKAROUND: <https://github.com/Vanilla-OS/testing-issues/issues/3>
+sudo sed -i 's/apt-cdrom add -m -d=\/media\/cdrom\//echo "dummy"/g' /etc/calamares/modules/before_bootloader_context.conf
+
 mkdir -p /etc/skel/.config/autostart
 if [ -f /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop ]; then
     cp /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop /etc/skel/.config/autostart/
