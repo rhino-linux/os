@@ -3,6 +3,7 @@ curl
 bash-completion
 adwaita-icon-theme-full
 acpi
+acpi-call-dkms
 alsa-base
 alsa-utils
 anacron
