@@ -2,6 +2,7 @@ gpg
 curl
 bash-completion
 adwaita-icon-theme-full
+acpi
 alsa-base
 alsa-utils
 anacron
