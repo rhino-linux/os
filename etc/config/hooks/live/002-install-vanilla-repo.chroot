@@ -18,16 +18,17 @@ sudo sed -i 's/apt-cdrom add -m -d=\/media\/cdrom\//echo "dummy"/g' /etc/calamar
 
 # Set Vanilla First Setup autostart and blacklist in live session
 mkdir -p /etc/skel/.config/autostart
+mkdir -p /home/vanillaos/.local/share/applications/
 if [ -f /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop ]; then
     # autostart
     cp /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop /etc/skel/.config/autostart/
 
     # blacklist desktop entries
-    cp /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop /home/$USER/.local/share/applications/
-    echo "NoDisplay=true" >> /home/$USER/.local/share/applications/io.github.vanilla-os.FirstSetup.desktop
-    touch /home/$USER/.local/share/applications/calamares.desktop
+    cp /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop /home/vanillaos/.local/share/applications/
+    echo "NoDisplay=true" >> /home/vanillaos/.local/share/applications/io.github.vanilla-os.FirstSetup.desktop
+    touch /home/vanillaos/.local/share/applications/calamares.desktop
     # create a dummy desktop entry to prevent Original Calamares from being shown in the menu
-    cat << EOF > /home/$USER/.local/share/applications/calamares.desktop
+    cat << EOF > /home/vanillaos/.local/share/applications/calamares.desktop
 [Desktop Entry]
 Type=Application
 Version=1.0
@@ -44,6 +45,6 @@ else
     cp /usr/local/share/applications/io.github.vanilla-os.FirstSetup.desktop /etc/skel/.config/autostart/
 
     # blacklist desktop entries
-    cp /usr/local/share/applications/io.github.vanilla-os.FirstSetup.desktop /home/$USER/.local/share/applications/
-    echo "NoDisplay=true" >> /home/$USER/.local/share/applications/io.github.vanilla-os.FirstSetup.desktop
+    cp /usr/local/share/applications/io.github.vanilla-os.FirstSetup.desktop /home/vanillaos/.local/share/applications/
+    echo "NoDisplay=true" >> /home/vanillaos/.local/share/applications/io.github.vanilla-os.FirstSetup.desktop
 fi
