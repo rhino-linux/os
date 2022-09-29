@@ -22,14 +22,28 @@ if [ -f /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop ]; then
     # autostart
     cp /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop /etc/skel/.config/autostart/
 
-    #blacklist
+    # blacklist desktop entries
     cp /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop /home/$USER/.local/share/applications/
     echo "NoDisplay=true" >> /home/$USER/.local/share/applications/io.github.vanilla-os.FirstSetup.desktop
+    touch /home/$USER/.local/share/applications/calamares.desktop
+    # create a dummy desktop entry to prevent Original Calamares from being shown in the menu
+    cat << EOF > /home/$USER/.local/share/applications/calamares.desktop
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Install System
+GenericName=System Installer
+Comment=Calamares — System Installer
+Keywords=calamares;system;installer;
+TryExec=calamares
+Exec=sh -c "sudo -E calamares -D6"
+NoDisplay=true
+EOF
 else
     # autstart
     cp /usr/local/share/applications/io.github.vanilla-os.FirstSetup.desktop /etc/skel/.config/autostart/
 
-    #blacklist
+    # blacklist desktop entries
     cp /usr/local/share/applications/io.github.vanilla-os.FirstSetup.desktop /home/$USER/.local/share/applications/
     echo "NoDisplay=true" >> /home/$USER/.local/share/applications/io.github.vanilla-os.FirstSetup.desktop
 fi
