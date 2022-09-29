@@ -152,3 +152,4 @@ xdg-utils
 ntfs-3g
 samba-common-bin
 wireplumber
+btrfs-progs
