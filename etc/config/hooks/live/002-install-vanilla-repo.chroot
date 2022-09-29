@@ -1,10 +1,12 @@
 #!/bin/sh
-# Description: Add The Vanilla OS PPA
+# Description: Add The Vanilla OS PPA and packages
 
+# Add the Vanilla OS PPA
 curl -s --compressed "https://vanilla-os.github.io/ppa/KEY.gpg" | gpg --dearmor | sudo tee /usr/share/keyrings/vanilla-archive-keyring.gpg
 sudo curl -s --compressed -o /etc/apt/sources.list.d/vanilla-os.list "https://vanilla-os.github.io/ppa/vanilla-os.list"
 sudo apt update
 
+# Install the packages
 sudo apt install -y \
     plymouth-theme-vanilla plymouth-theme-vanilla-logo plymouth-theme-vanilla-text \
     vanilla-distrologo \
@@ -14,9 +16,20 @@ sudo apt install -y \
 # WORKAROUND: <https://github.com/Vanilla-OS/testing-issues/issues/3>
 sudo sed -i 's/apt-cdrom add -m -d=\/media\/cdrom\//echo "dummy"/g' /etc/calamares/modules/before_bootloader_context.conf
 
+# Set Vanilla First Setup autostart and blacklist in live session
 mkdir -p /etc/skel/.config/autostart
 if [ -f /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop ]; then
+    # autostart
     cp /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop /etc/skel/.config/autostart/
+
+    #blacklist
+    cp /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop /home/$USER/.local/share/applications/
+    echo "NoDisplay=true" >> /home/$USER/.local/share/applications/io.github.vanilla-os.FirstSetup.desktop
 else
+    # autstart
     cp /usr/local/share/applications/io.github.vanilla-os.FirstSetup.desktop /etc/skel/.config/autostart/
+
+    #blacklist
+    cp /usr/local/share/applications/io.github.vanilla-os.FirstSetup.desktop /home/$USER/.local/share/applications/
+    echo "NoDisplay=true" >> /home/$USER/.local/share/applications/io.github.vanilla-os.FirstSetup.desktop
 fi
