@@ -19,6 +19,7 @@ sudo sed -i 's/apt-cdrom add -m -d=\/media\/cdrom\//echo "dummy"/g' /etc/calamar
 # Set Vanilla First Setup autostart and blacklist in live session
 mkdir -p /etc/skel/.config/autostart
 mkdir -p /home/vanillaos/.local/share/applications/
+chmod -R 755 /home/vanillaos/.local/
 if [ -f /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop ]; then
     # autostart
     cp /usr/share/applications/io.github.vanilla-os.FirstSetup.desktop /etc/skel/.config/autostart/
