@@ -153,3 +153,5 @@ ntfs-3g
 samba-common-bin
 btrfs-progs
 wireplumber
+ibus-pinyin 
+ibus-cangjie
