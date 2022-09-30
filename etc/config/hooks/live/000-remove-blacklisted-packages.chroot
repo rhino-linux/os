@@ -35,6 +35,7 @@ touch /etc/skel/.local/share/applications/gnome-session-properties.desktop
 touch /etc/skel/.local/share/applications/nm-connection-editor.desktop
 touch /etc/skel/.local/share/applications/gnome-language-selector.desktop
 touch /etc/skel/.local/share/applications/gnome-printers-panel.desktop
+touch /etc/skel/.local/share/applications/calamares.desktop
 
 cp /etc/rc.local /etc/rc.local.orig
 sed -i "s/exit 0/rm -fR \/var\/lib\/apt\/lists\/*/" /etc/rc.local
