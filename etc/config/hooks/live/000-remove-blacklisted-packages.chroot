@@ -25,7 +25,16 @@ apt-get autoremove --purge -f -q -y \
     update-manager \
     update-notifier \
     gparted
+
 rm -R ../ubuntu-seeds ../platform
+
+# fake desktop entries to prevent some applications from displaying
+mkdir -p /etc/skel/.local/share/applications
+touch /etc/skel/.local/share/applications/software-properties-drivers.desktop
+touch /etc/skel/.local/share/applications/gnome-session-properties.desktop
+touch /etc/skel/.local/share/applications/nm-connection-editor.desktop
+touch /etc/skel/.local/share/applications/gnome-language-selector.desktop
+touch /etc/skel/.local/share/applications/gnome-printers-panel.desktop
 
 cp /etc/rc.local /etc/rc.local.orig
 sed -i "s/exit 0/rm -fR \/var\/lib\/apt\/lists\/*/" /etc/rc.local

@@ -32,7 +32,6 @@ gnome-shell
 gnome-shell-extensions
 gnome-shell-extension-manager
 gnome-themes-extra
-gnome-tweaks
 gnome-user-docs
 gnome-user-share
 gsettings-desktop-schemas
@@ -106,6 +105,7 @@ gnome-music
 gnome-photos
 gnome-software
 gnome-system-monitor
+xterm
 gnome-console
 gpg-agent
 gvfs-fuse
