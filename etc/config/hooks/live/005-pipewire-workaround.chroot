@@ -1,5 +1,0 @@
-#!/bin/sh
-# https://github.com/Vanilla-OS/testing-issues/issues/1
-
-sudo mkdir -p /usr/share/pipewire/media-session.d/
-sudo touch /usr/share/pipewire/media-session.d/with-pulseaudio
