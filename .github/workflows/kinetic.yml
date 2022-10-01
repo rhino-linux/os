@@ -6,9 +6,9 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     container:
-      image: debian:latest
+      image: ubuntu:latest
       volumes:
         - /proc:/proc
       options: --privileged -it
