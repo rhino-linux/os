@@ -17,7 +17,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Install debootstrap/git
-      run: apt update && apt install git debootstrap -y
+      run: apt update apt install git debootstrap -y  wget -q http://http.us.debian.org/debian/pool/main/l/live-build/live-build_20220505_all.deb sudo dpkg -i live-build/live-build_20220505_all.deb rm -f live-build/live-build_20220505_all.deb
 
     - name: Build ISO
       run: |
