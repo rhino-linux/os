@@ -9,7 +9,8 @@ sudo apt install -y \
     plymouth-theme-vanilla plymouth-theme-vanilla-logo plymouth-theme-vanilla-text \
     vanilla-distrologo \
     vanilla-first-setup \
-    calamares-settings-vanilla
+    calamares-settings-vanilla \
+    vanilla-beta-notice
 
 # WORKAROUND: <https://github.com/Vanilla-OS/testing-issues/issues/3>
 sudo sed -i 's/apt-cdrom add -m -d=\/media\/cdrom\//echo "dummy"/g' /etc/calamares/modules/before_bootloader_context.conf
