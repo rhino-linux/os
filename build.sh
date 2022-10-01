@@ -24,7 +24,7 @@ echo -e "
 "
 
 apt-get update
-apt-get install -y patch gnupg2 binutils zstd ubuntu-keyring
+apt-get install -y patch gnupg2 binutils zstd ubuntu-keyring apt-utils
 
 # TODO: Remove this once debootstrap has a script to build kinetic images in our container:
 # https://salsa.debian.org/installer-team/debootstrap/blob/master/debian/changelog
