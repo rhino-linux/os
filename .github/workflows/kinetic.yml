@@ -21,7 +21,7 @@ jobs:
         apt update
         apt install git debootstrap -y
         wget -q http://http.us.debian.org/debian/pool/main/l/live-build/live-build_20220505_all.deb -o ./live-build.deb
-        sudo dpkg -i live-build.deb
+        dpkg -i live-build.deb
         rm -f live-build.deb
 
     - name: Build ISO
