@@ -1,8 +1,7 @@
 name: VanillaOS kinetic
 
 on:
-  workflow_dispatch:
-    branches: [ kinetic ]
+  workflow_dispatch
 
 jobs:
   build:
@@ -16,17 +15,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install debootstrap/git
-      run: apt update && apt install git debootstrap -y
+    - name: Install needed packages
+      run: apt update && apt install debootstrap -y
 
     - name: Build ISO
-      run: |
-        cd /
-        git clone https://github.com/Vanilla-OS/iso-builder
-        cd iso-builder
-        ./build.sh etc/terraform.conf
+      run: ./build.sh etc/terraform.conf
 
     - uses: actions/upload-artifact@v2
       with:
         name: VanillaOS 22.10
-        path: /iso-builder/builds/
+        path: builds/
