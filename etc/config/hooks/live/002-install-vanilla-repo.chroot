@@ -6,7 +6,7 @@ sudo curl -s --compressed -o /etc/apt/sources.list.d/vanilla-os.list "https://va
 sudo apt update
 
 sudo apt install -y \
-    plymouth-theme-vanilla plymouth-theme-vanilla-logo plymouth-theme-vanilla-text \
+    plymouth-theme-vanilla plymouth-theme-vanilla-bgrt plymouth-theme-vanilla-text \
     vanilla-distrologo \
     vanilla-first-setup \
     calamares-settings-vanilla \
