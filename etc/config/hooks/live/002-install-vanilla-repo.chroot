@@ -11,7 +11,8 @@ sudo apt install -y \
     vanilla-first-setup \
     calamares-settings-vanilla \
     vanilla-beta-notice \
-    vanilla-control-center
+    vanilla-control-center \
+    apx
 
 # WORKAROUND: <https://github.com/Vanilla-OS/testing-issues/issues/3>
 sudo sed -i 's/apt-cdrom add -m -d=\/media\/cdrom\//echo "dummy"/g' /etc/calamares/modules/before_bootloader_context.conf
