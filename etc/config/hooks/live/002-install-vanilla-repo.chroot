@@ -12,6 +12,7 @@ sudo apt install -y \
     calamares-settings-vanilla \
     vanilla-beta-notice \
     vanilla-control-center \
+    micro-distrobox \
     apx \
     almost
 
