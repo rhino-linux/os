@@ -16,6 +16,9 @@ sudo apt install -y \
     apx \
     almost
 
+sudo almost enter rw
+sudo almost config set almost::PersistModeStatus 1
+
 # WORKAROUND: <https://github.com/Vanilla-OS/testing-issues/issues/3>
 sudo sed -i 's/apt-cdrom add -m -d=\/media\/cdrom\//echo "dummy"/g' /etc/calamares/modules/before_bootloader_context.conf
 
