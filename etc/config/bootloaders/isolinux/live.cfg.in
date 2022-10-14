@@ -5,14 +5,14 @@ MENU AUTOBOOT Booting Vanilla OS live disk in # seconds
 timeout 50
 
 label live-@FLAVOUR@
-	menu label ^Try or install Vanilla OS
+	menu label ^Try or install RR OS
 	menu default
 	linux /casper/vmlinuz
 	initrd /casper/initrd.lz
 	append @APPEND_LIVE@
 
 label live-failsafe
-	menu label Start Vanilla OS (Safe Graphics)
+	menu label Start RR OS (Safe Graphics)
 	set gfxpayload=keep
 	linux /casper/vmlinuz
 	initrd /casper/initrd.lz
