@@ -1,7 +1,7 @@
 b43-fwcutter
 bcmwl-kernel-source
 dkms
-intel-microcode
+microcode-initrd
 iucode-tool
 setserial
 user-setup
