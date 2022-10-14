@@ -1,4 +1,4 @@
-name: VanillaOS kinetic
+name: RRR OS ISO Generation
 
 on:
   workflow_dispatch
@@ -23,5 +23,5 @@ jobs:
 
     - uses: actions/upload-artifact@v2
       with:
-        name: VanillaOS 22.10
+        name: Rolling Rhino Remix OS 2023
         path: builds/
