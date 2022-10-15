@@ -22,8 +22,11 @@ jobs:
         dpkg -i live-build_*_all.deb
         rm -f live-build_*_all.deb
 
+    - name: Make scripts executable
+      run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
+
     - name: Build ISO
-      run: chmod +x ./build.sh && ./build.sh etc/terraform.conf
+      run: ./build.sh etc/terraform.conf
 
     - uses: actions/upload-artifact@v3.1.0
       with:
