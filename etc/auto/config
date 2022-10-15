@@ -8,6 +8,7 @@ lb config noauto \
     --architectures "$ARCH" \
     --mode ubuntu \
     --initramfs none \
+    --initsystem systemd \
     --distribution "$BASECODENAME" \
     --parent-distribution "$BASECODENAME" \
     --archive-areas "main restricted universe multiverse" \
@@ -27,7 +28,7 @@ lb config noauto \
     --apt-options "--yes --option Acquire::Retries=5 --option Acquire::http::Timeout=100" \
     --cache-packages false \
     --uefi-secure-boot enable \
-    --binary-images iso-hybrid \
+    --binary-image iso-hybrid \
     --iso-application "$NAME" \
     --iso-volume "$NAME" \
     --firmware-binary false \
@@ -38,6 +39,9 @@ lb config noauto \
     --debootstrap-options "--exclude=pinephone-tweaks,mobile-tweaks-common,librem5-tweaks,pinetab-tweaks" \
     --checksums sha256 \
     --swap-file-path /swapfile \
+    --interactive false \
+    --debconf-frontend noninteractive \
+    --compression xz \
     "${@}"
 
 
