@@ -1,5 +1,8 @@
 #!/bin/sh
-# Description: Cleanup apt cache files that add ~100MB to the .iso and aren't needed
+# Description: Cleanup apt cache files that add ~100MB to the .iso that aren't needed
+
+apt-get autopurge -y
+apt-get clean
 
 rm -f /var/lib/apt/lists/*_Packages
 rm -f /var/lib/apt/lists/*_Sources
