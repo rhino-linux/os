@@ -3,5 +3,10 @@
 
 ls /home
 
+sed -i 's/kinetic/devel/g' /etc/apt/sources.list
+
+apt-get --allow-releaseinfo-change update -y
+apt-get --allow-releaseinfo-change dist-upgrade -y
+
 # WORKAROUND: <https://github.com/Vanilla-OS/testing-issues/issues/3>
 sudo sed -i 's/apt-cdrom add -m -d=\/media\/cdrom\//echo "dummy"/g' /etc/calamares/modules/before_bootloader_context.conf
