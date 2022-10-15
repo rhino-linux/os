@@ -2,6 +2,7 @@ gpg
 curl
 bash-completion
 adwaita-icon-theme-full
+lightdm
 lightdm-gtk-greeter
 xfce4
 xfce4-goodies
