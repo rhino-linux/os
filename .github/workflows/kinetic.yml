@@ -23,7 +23,7 @@ jobs:
         rm -f live-build_*_all.deb
 
     - name: Build ISO
-      run: ./build.sh etc/terraform.conf
+      run: chmod +x ./build.sh && ./build.sh etc/terraform.conf
 
     - uses: actions/upload-artifact@v3.1.0
       with:
