@@ -24,15 +24,7 @@ echo -e "
 "
 
 apt-get update
-apt-get install -y live-build patch gnupg2 binutils zstd
-dpkg -i debs/*.deb
-
-# TODO: This patch was submitted upstream at:
-# https://salsa.debian.org/live-team/live-build/-/merge_requests/255
-# This can be removed when our Debian container has a version containing this fix
-patch /usr/lib/live/build/binary_grub-efi < live-build-fix-shim-remove.patch
-
-# For some reason devel isn't system linked
+apt-get install -y patch gnupg2 binutils zstd ubuntu-keyring apt-utils
 ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/devel
 
 build () {
