@@ -32,9 +32,8 @@ dpkg -i debs/*.deb
 # This can be removed when our Debian container has a version containing this fix
 patch /usr/lib/live/build/binary_grub-efi < live-build-fix-shim-remove.patch
 
-# TODO: Remove this once debootstrap has a script to build kinetic images in our container:
-# https://salsa.debian.org/installer-team/debootstrap/blob/master/debian/changelog
-ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/kinetic
+# For some reason devel isn't system linked
+ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/devel
 
 build () {
   BUILD_ARCH="$1"

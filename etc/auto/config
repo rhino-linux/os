@@ -4,23 +4,18 @@ set -e
 
 . ./terraform.conf
 
-if [ "$HWE_KERNEL" = "yes" ]; then
-    KERNEL_FLAVORS="generic-hwe-${BASEVERSION}"
-else
-    KERNEL_FLAVORS="generic"
-fi
-
 lb config noauto \
     --architectures "$ARCH" \
     --mode ubuntu \
     --initramfs none \
+    --initsystem systemd \
     --distribution "$BASECODENAME" \
     --parent-distribution "$BASECODENAME" \
     --archive-areas "main restricted universe multiverse" \
     --parent-archive-areas "main restricted universe multiverse" \
     --linux-packages linux-image \
-    --linux-flavours "$KERNEL_FLAVORS" \
-    --bootappend-live "boot=casper maybe-ubiquity quiet splash" \
+    --linux-flavours "generic" \
+    --bootappend-live "boot=casper quiet splash" \
     --mirror-bootstrap "$MIRROR_URL" \
     --parent-mirror-bootstrap "$MIRROR_URL" \
     --mirror-chroot-security "http://security.ubuntu.com/ubuntu/" \
@@ -33,7 +28,7 @@ lb config noauto \
     --apt-options "--yes --option Acquire::Retries=5 --option Acquire::http::Timeout=100" \
     --cache-packages false \
     --uefi-secure-boot enable \
-    --binary-images iso-hybrid \
+    --binary-image iso-hybrid \
     --iso-application "$NAME" \
     --iso-volume "$NAME" \
     --firmware-binary false \
@@ -42,7 +37,11 @@ lb config noauto \
     --security true \
     --updates true \
     --debootstrap-options "--exclude=pinephone-tweaks,mobile-tweaks-common,librem5-tweaks,pinetab-tweaks" \
-    --checksums md5 \
+    --checksums sha256 \
+    --swap-file-path /swapfile \
+    --interactive false \
+    --debconf-frontend noninteractive \
+    --compression xz \
     "${@}"
 
 
@@ -63,5 +62,3 @@ sed -i "s/@VERSION/$VERSION/" config/hooks/live/004-set-os-info.chroot
 sed -i "s/@CHANNEL/$CHANNEL/" config/hooks/live/004-set-os-info.chroot
 sed -i "s/@CODENAME/$CODENAME/" config/hooks/live/004-set-os-info.chroot
 sed -i "s/@BASECODENAME/$BASECODENAME/" config/hooks/live/004-set-os-info.chroot
-
-# sed -i "s/@XORG_HWE/$XORG_HWE/" config/package-lists/desktop.list.chroot_install

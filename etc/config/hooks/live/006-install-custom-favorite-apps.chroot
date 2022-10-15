@@ -1,8 +1,6 @@
 #!/bin/sh
-# Description: Install custom Favorite Apps
+# Description: Install custom Pacstall apps and others + XFCE
 
-cat > /usr/share/glib-2.0/schemas/90-vanilla-settings.gschema.override <<EOF
-[org.gnome.shell]
-favorite-apps = [ 'vanilla-calamares.desktop', 'org.gnome.Epiphany.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop', 'yelp.desktop', 'org.gnome.Console.desktop' ]
-EOF
-glib-compile-schemas /usr/share/glib-2.0/schemas/
+sudo apt-get install nala -y
+
+
