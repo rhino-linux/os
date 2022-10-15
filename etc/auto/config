@@ -25,7 +25,7 @@ lb config noauto \
     --mirror-binary "http://archive.ubuntu.com/ubuntu/" \
     --parent-mirror-binary "http://archive.ubuntu.com/ubuntu/" \
     --keyring-packages ubuntu-keyring \
-    --apt-options "--option Acquire::Retries=5 --option Acquire::http::Timeout=100" \
+    --apt-options "--option Acquire::Retries=5 --option Acquire::http::Timeout=100 --yes" \
     --cache-packages false \
     --uefi-secure-boot enable \
     --binary-image iso-hybrid \
