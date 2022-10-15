@@ -61,7 +61,7 @@ build () {
 # LIVE-BUILD BUILD #
 #------------------#
 "
-  lb build
+  lb --force build
 
   echo -e "
 #---------------------------#
