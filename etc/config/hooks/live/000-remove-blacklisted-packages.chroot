@@ -35,7 +35,7 @@ apt-get autoremove --purge -f -q -y \
     update-notifier \
     gparted
 
-rm -R ../ubuntu-seeds ../platform
+rm -rf ../ubuntu-seeds ../platform
 
 # Fake desktop entries to prevent some applications from displaying
 mkdir -p /etc/skel/.local/share/applications
