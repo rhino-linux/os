@@ -69,7 +69,6 @@ build () {
 #---------------------------#
 "
 
-  YYYYMMDD="$(date -I)"
   OUTPUT_DIR="$BASE_DIR/builds/$BUILD_ARCH"
   mkdir -p "$OUTPUT_DIR"
   FNAME="Rolling-Linux-OS-$VERSION$OUTPUT_SUFFIX"
