@@ -1,7 +1,7 @@
 prompt 0
 
 MENU HIDDEN
-MENU AUTOBOOT Booting Vanilla OS live disk in # seconds
+MENU AUTOBOOT Booting Rolling Linux OS live disk in # seconds
 timeout 50
 
 label live-@FLAVOUR@
