@@ -1,7 +1,7 @@
 #!/bin/sh
 # Description: Add/install Pacstall
 
-ls /home
+# Will use a deb once Pacstall is updated
 
 sed -i 's/kinetic/devel/g' /etc/apt/sources.list
 
