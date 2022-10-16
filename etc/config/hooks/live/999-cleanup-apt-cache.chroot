@@ -8,3 +8,5 @@ rm -f /var/lib/apt/lists/*_Packages
 rm -f /var/lib/apt/lists/*_Sources
 rm -f /var/lib/apt/lists/*_Translation-*
 
+du -h --one-file-system --summarize --block-size=mB / 2> /dev/null | sed 's%     /%%g'
+exit 1
