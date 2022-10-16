@@ -4,4 +4,4 @@
 sudo apt-get install nala -y
 
 # These are not needed
-sudo apt-get purge aspell-en aspell bolt
+sudo apt-get autoremove --purge -f -q -y aspell-en aspell bolt
