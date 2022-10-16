@@ -1,0 +1,57 @@
+#!/bin/sh
+# Description: Cleanup chroot stuff. From https://git.launchpad.net/livecd-rootfs/tree/live-build/ubuntu-cpc/hooks.d/chroot/099-cleanup.chroot
+
+rm /etc/ssh/ssh_host*key*      		|| echo "No SSH keys to remove"
+
+# Fix LP: #1047707, 1019338
+# Truncate logs that are owned, otherwise remove
+whitelisted_logs=(/var/log/btmp /var/log/lastlog /var/log/wtmp /var/log/fsck/checkfs /var/log/fsck/checkroot)
+
+for log in $(find /var/log -type f)
+do
+    whitelisted=$(echo "${whitelisted_logs[@]}" | grep -o ${log})
+
+    if [ -n "${whitelisted}" ]; then
+        : > ${log} &&
+            echo "Truncated whitelisted log ${log}" ||
+            echo "Failed to truncate whitelisted log ${log}"
+    else
+
+       dpkg -S ${log} > /dev/null 2>&1 &&
+           { : > ${log} ||
+                echo "Failed to truncate $f"; } ||
+           { rm ${log} &&
+               echo "Removed ${log} as an orphaned log file" ||
+               echo "Failed to remove unnecessary log $f"; }
+    fi
+done
+
+# Remove un-owned log directories
+whitelisted_dirs=(/var/log/fsck /var/log/journal)
+
+for log_d in $(find /var/log/* -type d)
+do
+    whitelisted=$(echo "${whitelisted_dirs[@]}" | grep -o "${log_d}")
+    if [ -z "${whitelisted}" ]; then
+        dpkg -S ${log_d} > /dev/null 2>&1 &&
+            echo "Preserving log directory ${log_d}" ||
+            { rm -rf ${log_d} &&
+                echo "Removed log directory ${log_d} as orphaned log dir" ||
+                echo "Failed to remove unnessasary log dir ${log_d}"; }
+
+    else
+        echo "Preserving whitelisted directory ${log_d}"
+    fi
+
+done
+
+
+rm -rf /var/run/*       	        || echo "Failed to clean /var/run/*"
+rm /etc/passwd-  	                || echo "No spare passwd file to cleanup"
+rm /etc/shadow-     				|| echo "No spare shadow file to cleanup"
+rm /etc/gshadow-		        	|| echo "No spare gshadow file to cleanup"
+rm /etc/group- 	        			|| echo "No spare group file to clenaup"
+rm -f /etc/apt/conf.d/00secure  	|| echo "No apt cache to cleanup"
+
+# Truncate instead of delete, LP: #707311
+truncate --size=0 -c /etc/popularity-contest.conf
