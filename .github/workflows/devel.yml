@@ -17,6 +17,11 @@ jobs:
 
     - name: Install needed packages
       run: |
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
         apt-get update && apt install debootstrap -y
         wget -q http://http.us.debian.org/debian/pool/main/l/live-build/live-build_20220505_all.deb
         dpkg -i live-build_*_all.deb
