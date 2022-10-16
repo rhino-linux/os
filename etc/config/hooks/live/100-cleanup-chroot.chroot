@@ -1,7 +1,5 @@
-#!/bin/sh
+#!/bin/bash
 # Description: Cleanup chroot stuff. From https://git.launchpad.net/livecd-rootfs/tree/live-build/ubuntu-cpc/hooks.d/chroot/099-cleanup.chroot
-
-rm /etc/ssh/ssh_host*key*      		|| echo "No SSH keys to remove"
 
 # Fix LP: #1047707, 1019338
 # Truncate logs that are owned, otherwise remove
