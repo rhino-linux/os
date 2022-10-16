@@ -1,6 +1,7 @@
 #!/bin/sh
-# Description: Install custom Pacstall apps and others + XFCE
+# Description: Install custom Pacstall apps and others
 
 sudo apt-get install nala -y
 
-
+# These are not needed
+sudo apt-get purge aspell-en aspell bolt
