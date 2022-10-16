@@ -43,6 +43,7 @@ lb config noauto \
     --interactive false \
     --debconf-frontend noninteractive \
     --compression xz \
+    --debug \
     "${@}"
 
 
