@@ -7,12 +7,12 @@ if [ "$IMAGEFORMAT" == "none" ]; then
         mkdir -p /var/log/installer
         touch /var/log/installer/debug
         touch /var/log/syslog
-        mkdir -p /home/vanilla-os/.cache/calamares
-        mkdir -p /home/vanillaos/.cache/calamares
-        touch /home/vanilla-os/.cache/calamares/session.log
-        touch /home/vanillaos/.cache/calamares/session.log
-        chmod 777 /home/vanilla-os/.cache/calamares
-        chmod 777 /home/vanillaos/.cache/calamares
+        mkdir -p /home/rolling/.cache/calamares
+        mkdir -p /home/rolling/.cache/calamares
+        touch /home/rolling/.cache/calamares/session.log
+        touch /home/rolling/.cache/calamares/session.log
+        chmod 777 /home/rolling/.cache/calamares
+        chmod 777 /home/rolling/.cache/calamares
         chown syslog:adm /var/log/syslog
 
         # Create the oem user account
