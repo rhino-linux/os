@@ -19,4 +19,4 @@ HOME_URL="https://rollingrhino.org/"
 SUPPORT_URL="https://github.com/rollingrhinoremix"
 BUG_REPORT_URL="https://github.com/rollingrhinoremix"
 PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
-UBUNTU_CODENAME="@BASECODENAME"' > /etc/os-release
+UBUNTU_CODENAME="@CODENAME"' > /etc/os-release
