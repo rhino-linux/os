@@ -3,10 +3,18 @@
 
 # Will use a deb once Pacstall is updated
 
+# Debootstrap adly breaks because of this because of devel thinking it's kinetic. So manually changing sources.
 sed -i 's/kinetic/devel/g' /etc/apt/sources.list
-
 apt-get update -yq
 apt-get dist-upgrade -yq
+
+# Install Pacstall
+wget -q https://github.com/pacstall/pacstall/releases/download/3.0.0/pacstall-3.0.0.deb
+sudo dpkg -i ./pacstall-*.deb
+rm ./pacstall-*.deb
+
+# Add the repo
+pacstall -A https://raw.githubusercontent.com/rhino-linux/repo/master
 
 # WORKAROUND: <https://github.com/Vanilla-OS/testing-issues/issues/3> may not be an issue now
 #sudo sed -i 's/apt-cdrom add -m -d=\/media\/cdrom\//echo "dummy"/g' /etc/calamares/modules/before_bootloader_context.conf
