@@ -4,7 +4,10 @@
 # Pacstall doesn't like root so create a user that IS root with a different EUID
 sudo useradd -rm -d /home/pacstall -s /bin/bash -g root -u 1001 pacstall
 
-sudo -s -u pacstall pacstall --disable-prompts -I linux-kernel nala-deb
+export SUDO_USER=pacstall
+export DEBIAN_FRONTEND=noninteractive
+export GITHUB_ACTIONS=true
+sudo -E -u pacstall pacstall --disable-prompts -I linux-kernel nala-deb
 
 userdel --remove pacstall
 
