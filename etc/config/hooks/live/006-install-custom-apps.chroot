@@ -1,10 +1,9 @@
 #!/bin/sh
 # Description: Install custom Pacstall apps and others
 
-sudo apt-get install -yq fakeroot
 export DEBIAN_FRONTEND=noninteractive
 export GITHUB_ACTIONS=true
-fakeroot -- pacstall --disable-prompts -I linux-kernel nala-deb
+unshare -U pacstall --disable-prompts -I linux-kernel nala-deb
 sudo chmod -R 755 "/usr/src/pacstall"
 sudo chmod -R o+r /var/cache/pacstall
 
