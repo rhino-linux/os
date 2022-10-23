@@ -1,7 +1,12 @@
 #!/bin/sh
 # Description: Install custom Pacstall apps and others
 
+# Pacstall doesn't like root so create a user that IS root with a different EUID
+sudo useradd -rm -d /home/test -s /bin/bash -g root -u 1001 test
+
 pacstall --disable-prompts -I linux-kernel nala-deb
+
+userdel --remove pacstall
 
 # These are not needed
 sudo apt-get autoremove --purge -f -yq aspell-en aspell bolt
