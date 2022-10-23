@@ -9,7 +9,7 @@ apt-get update -yq
 apt-get dist-upgrade -yq
 
 # Install Pacstall
-curl --location -s https://github.com/pacstall/pacstall/releases/download/3.0.0/pacstall-3.0.0.deb -o ./pacstall.deb
+curl --location -s https://github.com/pacstall/pacstall/releases/download/3.0.1/pacstall-3.0.1.deb -o ./pacstall.deb
 sudo dpkg -i ./pacstall.deb
 sudo apt-get install -yf
 rm ./pacstall.deb
