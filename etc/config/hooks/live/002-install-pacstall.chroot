@@ -20,7 +20,7 @@ sudo useradd -rm -d /home/pacstall -s /bin/bash -g root -u 1001 pacstall
 export SUDO_USER=pacstall
 export DEBIAN_FRONTEND=noninteractive
 export GITHUB_ACTIONS=true
-cd /home/pacstall && HOME=/home/pacstall runuser -m -u pacstall -A https://raw.githubusercontent.com/rhino-linux/repo/master
+cd /home/pacstall && HOME=/home/pacstall runuser -m -u pacstall -- sh -c 'pacstall -A https://raw.githubusercontent.com/rhino-linux/repo/master'
 
 # WORKAROUND: <https://github.com/Vanilla-OS/testing-issues/issues/3> may not be an issue now
 #sudo sed -i 's/apt-cdrom add -m -d=\/media\/cdrom\//echo "dummy"/g' /etc/calamares/modules/before_bootloader_context.conf
