@@ -1,17 +1,21 @@
 #!/bin/sh
 # Description: Install custom Pacstall apps and others
 
-sudo sed -i '363d' /usr/bin/pacstall
+#sudo sed -i '363d' /usr/bin/pacstall
+sudo useradd -rm -d /home/pacstall -s /bin/bash -g root -u 1001 pacstall
 
+export SUDO_USER=pacstall
 export DEBIAN_FRONTEND=noninteractive
 export GITHUB_ACTIONS=true
-pacstall -PI nala-deb
 
-sudo chmod -R 755 "/usr/src/pacstall"
-sudo chmod -R o+r /var/cache/pacstall
+cd /home/pacstall && HOME=/home/pacstall runuser -m -u pacstall -- sh -c 'pacstall -PA https://raw.githubusercontent.com/rhino-linux/repo/master'
+cd /home/pacstall && HOME=/home/pacstall runuser -m -u pacstall -- sh -c 'pacstall -PI nala-deb linux-kernel xfce4-deb'
 
-sudo sed -i '/Please run as a normal user."/a _    exit 1' /usr/bin/pacstall
-sed -ie '363s/^.//' /usr/bin/pacstall
+#sudo chmod -R 755 "/usr/src/pacstall"
+#sudo chmod -R o+r /var/cache/pacstall
+
+#sudo sed -i '/Please run as a normal user."/a _    exit 1' /usr/bin/pacstall
+#sed -ie '363s/^.//' /usr/bin/pacstall
 
 # These are not needed
 sudo apt-get autoremove --purge -f -yq aspell-en aspell bolt
