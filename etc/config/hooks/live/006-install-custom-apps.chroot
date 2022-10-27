@@ -1,16 +1,17 @@
 #!/bin/sh
 # Description: Install custom Pacstall apps and others
 
-# Pacstall doesn't like root so create a user that IS root with a different EUID
-sudo useradd -rm -d /home/pacstall -s /bin/bash -g root -u 1001 pacstall
+sudo sed -i '363d' /usr/bin/pacstall
 
-export SUDO_USER=pacstall
 export DEBIAN_FRONTEND=noninteractive
 export GITHUB_ACTIONS=true
-cd /home/pacstall && HOME=/home/pacstall runuser -m -u pacstall -- sh -c 'pacstall -PI nala-deb'
-#sudo chmod -R 755 "/usr/src/pacstall"
-#sudo chmod -R o+r /var/cache/pacstall
+pacstall -PI nala-deb
 
-userdel --remove pacstall
+sudo chmod -R 755 "/usr/src/pacstall"
+sudo chmod -R o+r /var/cache/pacstall
+
+sudo sed -i '/Please run as a normal user."/a _    exit 1' /usr/bin/pacstall
+sed -ie '363s/^.//' /usr/bin/pacstall
+
 # These are not needed
 sudo apt-get autoremove --purge -f -yq aspell-en aspell bolt
