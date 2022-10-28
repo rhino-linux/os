@@ -4,7 +4,7 @@
 # This done later on but lets do it now for pacstall
 sudo adduser --disabled-password --gecos '' rolling
 #sudo useradd -rm -d /home/rolling -s /bin/bash -g root -u 1001 --disabled-password --gecos '' rolling
-sudo adduser rolling pacstall
+sudo adduser rolling sudo
 echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # For pacstall
 
 # This is for during live boot
@@ -12,10 +12,12 @@ cat >> /etc/rc.d/init.d/livesys << EOF
 echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 EOF
 
+export SUDO_USER=rolling
 export DEBIAN_FRONTEND=noninteractive
 export GITHUB_ACTIONS=true
 sudo mv /usr/bin/axel /usr/bin/axel.bak
 
+sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PA https://raw.githubusercontent.com/rhino-linux/repo/master'
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI linux-kernel nala-deb'
 
