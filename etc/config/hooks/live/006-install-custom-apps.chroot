@@ -2,15 +2,25 @@
 # Description: Install custom Pacstall apps and others
 
 # This done later on but lets do it now for pacstall
-sudo useradd -rm -d /home/rolling -s /bin/bash -g root -u 1001 rolling
+sudo adduser --disabled-password --gecos '' rolling
+#sudo useradd -rm -d /home/rolling -s /bin/bash -g root -u 1001 --disabled-password --gecos '' rolling
+sudo adduser rolling pacstall
+echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # For pacstall
+
+# This is for during live boot
+cat >> /etc/rc.d/init.d/livesys << EOF
+echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+EOF
 
 export DEBIAN_FRONTEND=noninteractive
 export GITHUB_ACTIONS=true
-
 sudo mv /usr/bin/axel /usr/bin/axel.bak
+
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PA https://raw.githubusercontent.com/rhino-linux/repo/master'
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI linux-kernel nala-deb'
+
 sudo mv /usr/bin/axel.bak /usr/bin/axel
+sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
 # These are not needed maybe
 #sudo apt-get autoremove --purge -f -yq aspell-en aspell bolt
