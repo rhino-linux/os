@@ -11,6 +11,7 @@ echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # Pacstall has issues with s
 sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /etc/rc.d/init.d /tmp/pacstall
 sudo chown "rolling" -R "/var/log/pacstall"
 sudo chown "rolling" -R "/tmp/pacstall"
+sudo chown "rolling" -R "/usr/share/pacstall"
 
 
 # This is for during live boot
