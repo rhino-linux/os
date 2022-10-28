@@ -4,7 +4,6 @@
 # This done later on but lets do it now for pacstall
 sudo useradd -rm -d /home/rolling -s /bin/bash -g root -u 1001 rolling
 
-export SUDO_USER=rolling
 export DEBIAN_FRONTEND=noninteractive
 export GITHUB_ACTIONS=true
 
