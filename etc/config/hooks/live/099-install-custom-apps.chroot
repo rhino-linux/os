@@ -8,16 +8,11 @@ sudo adduser rolling sudo
 echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # Pacstall has issues with sudo despite the user not having a password
 
 # Sadly the Pacstall deb doesn't do this as it is a bit broken for now.
-sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /etc/rc.d/init.d /tmp/pacstall
+sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /tmp/pacstall
 sudo chown "rolling" -R "/var/log/pacstall"
 sudo chown "rolling" -R "/tmp/pacstall"
 sudo chown "rolling" -R "/usr/share/pacstall"
-
-
-# This is for during live boot
-cat >> /etc/rc.d/init.d/livesys << EOF
-echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-EOF
+sudo chown "rolling" -R "/home/rolling"
 
 # More pacstall things
 export SUDO_USER=rolling
