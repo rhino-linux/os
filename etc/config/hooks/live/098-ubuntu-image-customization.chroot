@@ -28,7 +28,6 @@ if [ "$IMAGEFORMAT" == "none" ]; then
         #dd if=/dev/zero of=/swapfile bs=1G count=1
         #chmod 0600 /swapfile
         #mkswap /swapfile
-
         #echo "/swapfile         none  swap    sw    0 0" >>/etc/fstab
     fi
 fi
