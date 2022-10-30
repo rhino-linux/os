@@ -3,7 +3,7 @@
 
 # This done later on but lets do it now for pacstall
 #sudo adduser --disabled-password --gecos '' rolling
-sudo useradd -rm -d /home/rolling -s /bin/bash -g root -u 1001 --disabled-password rolling
+sudo useradd -rm -d /home/rolling -s /bin/bash -g root -u 1001 rolling
 sudo adduser rolling sudo
 echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # Pacstall has issues with sudo despite the user not having a password
 
