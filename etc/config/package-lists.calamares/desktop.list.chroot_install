@@ -5,8 +5,7 @@ adwaita-icon-theme-full
 policykit-1-gnome
 blueman
 network-manager-gnome
-lightdm
-lightdm-gtk-greeter
+gdm3
 xfce4
 xfce4-goodies
 xfce4-power-manager
