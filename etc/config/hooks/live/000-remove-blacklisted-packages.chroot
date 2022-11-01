@@ -38,7 +38,7 @@ apt-get autoremove --purge -f -q -y \
 rm -rf ../ubuntu-seeds ../platform
 
 # Fake desktop entries to prevent some applications from displaying
-mkdir -p /etc/skel/.local/share/applications
+mkdir -p "/etc/skel/.local/share/applications" "/root"
 touch /etc/skel/.local/share/applications/software-properties-drivers.desktop
 touch /etc/skel/.local/share/applications/gnome-session-properties.desktop
 touch /etc/skel/.local/share/applications/nm-connection-editor.desktop
