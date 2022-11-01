@@ -16,7 +16,8 @@ sudo chmod -R 777 /tmp/pacstall
 sudo chown "rolling" -cR "/usr/share/pacstall"
 sudo chown "rolling" -cR "/home/rolling"
 sudo chown "rolling" -cR "/var/cache/pacstall"
-
+# Update this
+sudo xdg-user-dirs-update
 # More pacstall things
 export SUDO_USER=rolling
 export DEBIAN_FRONTEND=noninteractive
