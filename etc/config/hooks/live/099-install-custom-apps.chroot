@@ -26,7 +26,7 @@ export GITHUB_ACTIONS=true
 sudo mv /usr/bin/axel /usr/bin/axel.bak
 
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PA https://raw.githubusercontent.com/rhino-linux/repo/master'
-cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI linux-kernel nala-deb'
+cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI linux-kernel nala-deb os-installer-git'
 
 sudo mv /usr/bin/axel.bak /usr/bin/axel
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
