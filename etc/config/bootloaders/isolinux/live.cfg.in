@@ -7,15 +7,15 @@ timeout 50
 label live-@FLAVOUR@
 	menu label ^Try or install Rolling Linux OS
 	menu default
-	linux /casper/vmlinuz
-	initrd /casper/initrd.lz
+	linux /boot/vmlinuz
+	initrd /boot/initrd.img
 	append @APPEND_LIVE@
 
 label live-failsafe
 	menu label Start Rolling Linux OS (Safe Graphics)
 	set gfxpayload=keep
-	linux /casper/vmlinuz
-	initrd /casper/initrd.lz
+	linux /boot/vmlinuz
+	initrd /boot/initrd.img
 	append @APPEND_LIVE@ nomodeset
 
 label hd
