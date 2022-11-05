@@ -42,5 +42,7 @@ xorg
 xterm
 x11-common
 zip
-xubuntu-default-settings
+dbus-user-session
+dconf-gsettings-backend
 systemd
+libxfce4ui-utils
