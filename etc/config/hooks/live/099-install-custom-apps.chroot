@@ -16,19 +16,18 @@ sudo chown "rolling" -cR "/tmp/pacstall"
 sudo chown "rolling" -cR "/usr/share/pacstall"
 sudo chown "rolling" -cR "/home/rolling"
 sudo chown "rolling" -cR "/var/cache/pacstall"
-# Update this for xfce
-sudo xdg-user-dirs-update
+
 # More pacstall things
 export SUDO_USER=rolling
 export DEBIAN_FRONTEND=noninteractive
 export GITHUB_ACTIONS=true
-# Axel creates a unreadable/hug log so temporarily moving it
+# Axel creates a unreadable/hug output so temporarily moving it
 sudo mv /usr/bin/axel /usr/bin/axel.bak
 
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PA https://raw.githubusercontent.com/rhino-linux/repo/master'
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI linux-kernel'
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI nala-deb'
-cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI os-installer-git'
+cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI os-installer-commit'
 cd /
 
 sudo mv /usr/bin/axel.bak /usr/bin/axel
