@@ -33,6 +33,7 @@ xdg-utils
 xfce4-appfinder
 xfce4-notifyd
 xfce4-panel
+xfce4-terminal
 xfce4-session
 xfce4-settings
 xfdesktop4
@@ -43,3 +44,4 @@ x11-common
 zip
 xubuntu-default-settings
 systemd
+mousepad
