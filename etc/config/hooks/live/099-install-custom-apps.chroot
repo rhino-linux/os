@@ -10,7 +10,7 @@ echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # Pacstall has issues with s
 # Sadly the Pacstall deb doesn't do this as it is a bit broken for now.
 sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /tmp/pacstall /var/cache/pacstall /usr/src/pacstall
 sudo chown "rolling" -cR "/var/log/pacstall"
-sudo chown "rolling" -cR "/tmp/pacstall"
+sudo chmod -R 777 "/tmp/pacstall"
 sudo chown "rolling" -cR "/usr/src/pacstall"
 sudo chown "rolling" -cR "/tmp/pacstall"
 sudo chown "rolling" -cR "/usr/share/pacstall"
@@ -25,9 +25,9 @@ export GITHUB_ACTIONS=true
 # Axel creates a unreadable/hug log so temporarily moving it
 sudo mv /usr/bin/axel /usr/bin/axel.bak
 
-git config --global --add safe.directory *
+#git config --global --add safe.directory *
 
-cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'git config --global --add safe.directory *'
+#cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'git config --global --add safe.directory *'
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PA https://raw.githubusercontent.com/rhino-linux/repo/master'
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI linux-kernel'
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI nala-deb'
