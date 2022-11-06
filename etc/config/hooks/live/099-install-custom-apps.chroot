@@ -3,7 +3,7 @@
 
 # This done later on but lets do it now for pacstall
 #sudo adduser --disabled-password --gecos '' rolling
-sudo useradd -rm -d /home/rolling -s /bin/bash -g root -u 1001 rolling
+sudo useradd -rm -d /home/rolling -s /bin/bash -u 1001 rolling
 sudo adduser rolling sudo
 echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # Pacstall has issues with sudo despite the user not having a password
 
@@ -16,7 +16,7 @@ sudo chown "rolling" -cR "/tmp/pacstall"
 sudo chown "rolling" -cR "/usr/share/pacstall"
 sudo chown "rolling" -cR "/home/rolling"
 sudo chown "rolling" -cR "/var/cache/pacstall"
-# Update this
+# Update this for xfce
 sudo xdg-user-dirs-update
 # More pacstall things
 export SUDO_USER=rolling
@@ -25,9 +25,6 @@ export GITHUB_ACTIONS=true
 # Axel creates a unreadable/hug log so temporarily moving it
 sudo mv /usr/bin/axel /usr/bin/axel.bak
 
-#git config --global --add safe.directory *
-
-#cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'git config --global --add safe.directory *'
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PA https://raw.githubusercontent.com/rhino-linux/repo/master'
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI linux-kernel'
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI nala-deb'
