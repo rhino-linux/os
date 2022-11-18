@@ -17,16 +17,17 @@ sudo chown "rolling" -cR "/usr/share/pacstall"
 sudo chown "rolling" -cR "/home/rolling"
 sudo chown "rolling" -cR "/var/cache/pacstall"
 
-# More pacstall things
+# More pacstall specific things
 export SUDO_USER=rolling
 export DEBIAN_FRONTEND=noninteractive
 export GITHUB_ACTIONS=true
-# Axel creates a unreadable/hug output so temporarily moving it
+# Axel creates a unreadable/hug output so temporarily moving it so pacstall won't detect
 sudo mv /usr/bin/axel /usr/bin/axel.bak
 
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI linux-kernel'
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI nala-deb'
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI os-installer-commit'
+cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI rhino-linux-xfce4-config'
 cd /
 
 sudo mv /usr/bin/axel.bak /usr/bin/axel
