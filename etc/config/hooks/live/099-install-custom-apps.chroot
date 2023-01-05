@@ -1,22 +1,6 @@
 #!/bin/sh
 # Description: Install custom Pacstall apps and others
 
-# This done later on but lets do it now for pacstall
-#sudo adduser --disabled-password --gecos '' rolling
-sudo useradd -rm -d /home/rolling -g root -s /bin/bash -u 1001 rolling
-sudo adduser rolling sudo
-echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # Pacstall has issues with sudo despite the user not having a password
-
-# Sadly the Pacstall deb doesn't do this as it is a bit broken for now.
-sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /tmp/pacstall /var/cache/pacstall /usr/src/pacstall
-sudo chown "rolling" -cR "/var/log/pacstall"
-sudo chmod -R 777 "/tmp/pacstall"
-sudo chown "rolling" -cR "/usr/src/pacstall"
-sudo chown "rolling" -cR "/tmp/pacstall"
-sudo chown "rolling" -cR "/usr/share/pacstall"
-sudo chown "rolling" -cR "/home/rolling"
-sudo chown "rolling" -cR "/var/cache/pacstall"
-
 # More pacstall specific things
 export SUDO_USER=rolling
 export DEBIAN_FRONTEND=noninteractive
