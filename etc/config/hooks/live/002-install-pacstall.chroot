@@ -3,17 +3,31 @@
 
 # Will use a deb once Pacstall is updated
 
-# Debootstrap badly breaks because of this because of devel thinking it's kinetic. So manually change sources.
+# Debootstrap badly breaks because of this because of devel thinking it's lunar. So manually change sources.
 sed -i 's/lunar/devel/g' /etc/apt/sources.list
 apt-get update -yq
 apt-get dist-upgrade -yq
+apt-get install axel -yq
 
-# Install Pacstall
+# Create user
+sudo useradd -rm -d /home/rolling -g root -s /bin/bash -u 1001 rolling
+sudo adduser rolling sudo
+echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # Pacstall has issues with sudo despite the user not having a password
+
+# More pacstall specific things
 export SUDO_USER=rolling
+export DEBIAN_FRONTEND=noninteractive
+export GITHUB_ACTIONS=true
+# Axel creates a unreadable/hug output so temporarily moving it so pacstall won't detect
+sudo mv /usr/bin/axel /usr/bin/axel.bak
+
+# Install pacstall
 curl -fsSL https://git.io/JsADh > pacstall-install.sh
 chmod +x ./pacstall-install.sh
 echo N\n | sudo -E ./pacstall-install.sh
 rm ./pacstall-install.sh
+
+sudo mv /usr/bin/axel.bak /usr/bin/axel
 
 # WORKAROUND to trust CD Add
 #sudo sed -i 's/apt-cdrom add -m -d=\/media\/cdrom\//echo "dummy"/g' /etc/calamares/modules/before_bootloader_context.conf
