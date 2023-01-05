@@ -9,10 +9,11 @@ apt-get update -yq
 apt-get dist-upgrade -yq
 
 # Install Pacstall
-curl --location -s https://github.com/pacstall/pacstall/releases/download/3.0.2/pacstall-3.0.2.deb -o ./pacstall.deb
-sudo dpkg -i ./pacstall.deb
-sudo apt-get install -yf
-rm ./pacstall.deb
+export SUDO_USER=rolling
+curl -fsSL https://git.io/JsADh > pacstall-install.sh
+chmod +x ./pacstall-install.sh
+echo N\n | sudo -E ./pacstall-install.sh
+rm ./pacstall-install.sh
 
 # WORKAROUND to trust CD Add
 #sudo sed -i 's/apt-cdrom add -m -d=\/media\/cdrom\//echo "dummy"/g' /etc/calamares/modules/before_bootloader_context.conf
