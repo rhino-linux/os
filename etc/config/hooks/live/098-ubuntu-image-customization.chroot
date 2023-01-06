@@ -22,3 +22,5 @@ if [ "$IMAGEFORMAT" == "none" ]; then
         #echo "/swapfile         none  swap    sw    0 0" >>/etc/fstab
     fi
 fi
+# Fails probably cause we are using sha256 instead of md5
+systemctl disable casper-md5check.service
