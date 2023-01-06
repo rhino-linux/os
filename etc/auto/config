@@ -37,12 +37,12 @@ lb config noauto \
     --security true \
     --updates true \
     --debootstrap-options "--exclude=pinephone-tweaks,mobile-tweaks-common,librem5-tweaks,pinetab-tweaks" \
-    --checksums sha256 \
     --swap-file-path /swapfile \
     --swap-file-size 256 \
     --interactive false \
     --debconf-frontend noninteractive \
     --compression xz \
+    --checksums sha256 md5 \
     "${@}"
 
 
