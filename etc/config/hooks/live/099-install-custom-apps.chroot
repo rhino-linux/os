@@ -8,6 +8,15 @@ export GITHUB_ACTIONS=true
 # Axel creates a unreadable/hug output so temporarily moving it so pacstall won't detect
 sudo mv /usr/bin/axel /usr/bin/axel.bak
 
+sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /tmp/pacstall /var/cache/pacstall /usr/src/pacstall
+sudo chown "rolling" -cR "/var/log/pacstall"
+sudo chmod -R 777 "/tmp/pacstall"
+sudo chown "rolling" -cR "/usr/src/pacstall"
+sudo chown "rolling" -cR "/tmp/pacstall"
+sudo chown "rolling" -cR "/usr/share/pacstall"
+sudo chown "rolling" -cR "/home/rolling"
+sudo chown "rolling" -cR "/var/cache/pacstall"
+
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI linux-kernel'
 cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI nala-deb'
 cd /
