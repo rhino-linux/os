@@ -42,7 +42,8 @@ lb config noauto \
     --interactive false \
     --debconf-frontend noninteractive \
     --compression xz \
-    --checksums sha256 md5 \
+    --checksums sha256 \
+    --checksums md5 \
     "${@}"
 
 
