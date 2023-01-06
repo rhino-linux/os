@@ -16,7 +16,7 @@ sudo mv /usr/bin/axel.bak /usr/bin/axel
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
 # Install debs
-sudo apt-get install xfce4-whiskermenu-plugin yaru-theme-icon yaru-theme-gtk gnome-disk-utility epiphany-browser libgnome-desktop-4-2 libadwaita-1-0 libgweather-4-0 python3-yaml libudisks2-0 libvte-2.91-gtk4-0 gir1.2-gnomedesktop-4.0 gir1.2-vte-3.91 -yq
+sudo apt-get install xfce4-pulseaudio-plugin xfce4-whiskermenu-plugin yaru-theme-icon yaru-theme-gtk gnome-disk-utility epiphany-browser libgnome-desktop-4-2 libadwaita-1-0 libgweather-4-0 python3-yaml libudisks2-0 libvte-2.91-gtk4-0 gir1.2-gnomedesktop-4.0 gir1.2-vte-3.91 -yq
 sudo dpkg -i /etc/rhino-linux-xfce4-config-git.deb
 sudo dpkg -i /etc/os-installer-git.deb
 rm -f /etc/rhino-linux-xfce4-config-git.deb /etc/os-installer-git.deb
