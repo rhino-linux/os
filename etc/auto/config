@@ -6,7 +6,7 @@ set -e
 
 lb config noauto \
     --architectures "$ARCH" \
-    --mode ubuntu \
+    --mode debian \
     --initramfs none \
     --initsystem systemd \
     --distribution "$BASECODENAME" \
@@ -22,11 +22,12 @@ lb config noauto \
     --parent-mirror-chroot-security "http://security.ubuntu.com/ubuntu/" \
     --mirror-binary-security "http://security.ubuntu.com/ubuntu/" \
     --parent-mirror-binary-security "http://security.ubuntu.com/ubuntu/" \
-    --mirror-binary "http://archive.ubuntu.com/ubuntu/" \
-    --parent-mirror-binary "http://archive.ubuntu.com/ubuntu/" \
+    --mirror-binary "mirror://mirrors.ubuntu.com/mirrors.txt" \
+    --parent-mirror-binary "mirror://mirrors.ubuntu.com/mirrors.txt" \
     --keyring-packages ubuntu-keyring \
-    --apt-options "--option Acquire::Retries=5 --option Acquire::http::Timeout=100 --yes" \
+    --apt-options "--option Acquire::Retries=2 --option Acquire::http::Timeout=45 --yes" \
     --cache-packages false \
+    --cache-stages false \
     --uefi-secure-boot enable \
     --binary-image iso-hybrid \
     --iso-application "$NAME" \
@@ -42,7 +43,6 @@ lb config noauto \
     --interactive false \
     --debconf-frontend noninteractive \
     --compression xz \
-    --checksums sha256 \
     --checksums md5 \
     "${@}"
 
