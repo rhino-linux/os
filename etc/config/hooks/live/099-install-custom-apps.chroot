@@ -16,7 +16,7 @@ sudo mv /usr/bin/axel.bak /usr/bin/axel
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
 # Install debs
-sudo apt-get install gnome-disk-utility epiphany-browser libgnome-desktop-4-2 libadwaita-1-0 libgweather-4-0 python3-yaml libudisks2-0 libvte-2.91-gtk4-0 gir1.2-gnomedesktop-4.0 gir1.2-vte-3.91 -yq
+sudo apt-get install xfce4-whiskermenu-plugin yaru-theme-icon yaru-theme-gtk gnome-disk-utility epiphany-browser libgnome-desktop-4-2 libadwaita-1-0 libgweather-4-0 python3-yaml libudisks2-0 libvte-2.91-gtk4-0 gir1.2-gnomedesktop-4.0 gir1.2-vte-3.91 -yq
 sudo dpkg -i /etc/rhino-linux-xfce4-config.deb
 sudo dpkg -i /etc/os-installer-git.deb
 rm -f /etc/rhino-linux-xfce4-config.deb /etc/os-installer-git.deb
@@ -25,5 +25,9 @@ rm -f /etc/rhino-linux-xfce4-config.deb /etc/os-installer-git.deb
 rm -rf /home/rolling/.config/xfce4
 mkdir -p /home/rolling/.config/xfce4
 cp -r /etc/skel/.config/xfce4/* /home/rolling/.config/xfce4
+ln -s "/home/rolling/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rolling/.config/xfce4/desktop/icons.screen.latest.rc"
+# Make sure the user (rolling) has wrx permissions
+chmod -R 777 /home/rolling/.config/xfce4
+
 # These are not needed maybe
 #sudo apt-get autoremove --purge -f -yq aspell-en aspell bolt
