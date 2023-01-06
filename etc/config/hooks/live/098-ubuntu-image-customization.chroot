@@ -24,3 +24,6 @@ if [ "$IMAGEFORMAT" == "none" ]; then
 fi
 # Fails probably cause we are using sha256 instead of md5
 systemctl disable casper-md5check.service
+# The default apt-cdrom can't find the Release file but adding it manually it can
+sed -i '1d' /etc/apt/sources.list
+echo 'deb [trusted=yes] file:/media/cdrom lunar contrib main non-free' >> /etc/apt/sources.list
