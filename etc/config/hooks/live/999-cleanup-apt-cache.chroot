@@ -7,3 +7,4 @@ apt-get clean -q
 rm -f /var/lib/apt/lists/*_Packages
 rm -f /var/lib/apt/lists/*_Sources
 rm -f /var/lib/apt/lists/*_Translation-*
+sed -i '1d' /etc/apt/sources.list
