@@ -25,7 +25,6 @@ jobs:
         sudo mv /usr/share/debootstrap/functions functions
         sudo patch -i 0002-remove-WRONGSUITE-error.patch
         sudo mv functions /usr/share/debootstrap/functions
-        rm functions
 
     - name: Make scripts executable
       run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
