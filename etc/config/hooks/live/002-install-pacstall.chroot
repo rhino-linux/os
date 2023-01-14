@@ -4,7 +4,7 @@
 # Will use a deb once Pacstall is updated
 
 # Debootstrap badly breaks because of this because of devel thinking it's lunar. So manually change sources.
-sed -i 'sQlunarQ./develQg' /etc/apt/sources.list
+#sed -i 'sQlunarQ./develQg' /etc/apt/sources.list
 apt-get update -yq
 apt-get dist-upgrade -yq
 apt-get install axel -yq
