@@ -1,0 +1,16 @@
+diff --git a/functions b/functions
+index 0ff5379..dd41db4 100644
+--- a/functions
++++ b/functions
+@@ -570,11 +570,6 @@ validate_suite () {
+ 			return 0
+ 		fi
+ 	done
+-	if [ "$EXTRA_SUITES" = "" ]; then
+-		error 1 WRONGSUITE "Asked to install suite %s, but got %s (codename: %s) from mirror" "$SUITE" "$suite" "$CODENAME"
+-	else
+-		error 1 WRONGSUITE "Asked to install suites %s %s, but got %s (codename: %s) from mirror" "$SUITE" "$EXTRA_SUITES" "$suite" "$CODENAME"
+-	fi
+ }
+ 
+ split_inline_sig () {
