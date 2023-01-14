@@ -22,6 +22,9 @@ jobs:
         wget -q http://http.us.debian.org/debian/pool/main/l/live-build/live-build_20220505_all.deb
         sudo dpkg -i live-build_*_all.deb
         rm -f live-build_*_all.deb
+        mv /usr/share/debootstrap/functions functions
+        sudo patch -i 0002-remove-WRONGSUITE-error.patch --output=/usr/share/debootstrap/functions
+        rm functions
 
     - name: Make scripts executable
       run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
