@@ -1,0 +1,18 @@
+diff --git a/scripts/build/chroot_archives b/scripts/build/chroot_archives
+index 952fbea22..86d03ba7d 100755
+--- a/scripts/build/chroot_archives
++++ b/scripts/build/chroot_archives
+@@ -212,6 +212,13 @@ case "${_ACTION}" in
+ 				Echo_warning "Local packages must be named with suffix '_all.deb' or '_\$architecture.deb'."
+ 			fi
+ 		fi
++		
++		sed -i "s/^deb-src/#deb-src/g" "chroot/etc/apt/sources.list"
++		# The default apt-cdrom can't find the Release file but adding it manually it can
++		sed -i 's!devel!./devel!' chroot/etc/apt/sources.list
++		sed -i '1d' chroot/etc/apt/sources.list
++		echo 'deb [trusted=yes] file:/media/cdrom devel contrib main non-free' >> chroot/etc/apt/sources.list
++		
+ 
+ 		if Find_files chroot/root/packages/*.deb
+ 		then
