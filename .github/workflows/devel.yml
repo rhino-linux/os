@@ -34,5 +34,5 @@ jobs:
 
     - uses: actions/upload-artifact@v3.1.0
       with:
-        name: Rolling Linux OS
+        name: Rolling Rhino Linux OS
         path: builds/amd64/
