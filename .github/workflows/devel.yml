@@ -24,7 +24,13 @@ jobs:
         rm -f live-build_*_all.deb
         sudo mv /usr/share/debootstrap/functions functions
         sudo patch -i 0002-remove-WRONGSUITE-error.patch
-        sudo patch /usr/lib/live/build/chroot_archives -i 0003-Update-apt-sources.patch
+        
+        sudo mv 0003-Update-apt-sources.patch /
+        pushd /
+        sudo patch -i 0003-Update-apt-sources.patch -p1
+        sudo rm 0003-Update-apt-sources.patch
+        popd
+        
         sudo mv functions /usr/share/debootstrap/functions
 
     - name: Make scripts executable
