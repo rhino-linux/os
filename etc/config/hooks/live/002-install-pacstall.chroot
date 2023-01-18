@@ -5,7 +5,7 @@
 
 # Debootstrap badly breaks because of this because of devel thinking it's lunar. So manually change sources.
 #sed -i 'sQlunarQ./develQg' /etc/apt/sources.list
-ls -a /etc/apt
+ls -a /etc/apt/sources.list.d
 cat /etc/apt/sources.list
 exit 1
 
