@@ -7,8 +7,8 @@ index 952fbea22..1d8b9fec0 100755
  			fi
  		fi
 +		
-+		sed -i "s/^deb-src/#deb-src/g" "chroot/etc/apt/zz-sources.list"
-+		sed -i 's!devel!./devel!' chroot/etc/apt/zz-sources.list
++		sed -i "s/^deb-src/#deb-src/g" "chroot/etc/apt/sources.list"
++		sed -i 's!devel!./devel!' chroot/etc/apt/sources.list
  
  		if Find_files chroot/root/packages/*.deb
  		then
@@ -20,8 +20,8 @@ index 56aa48caf..6045022e6 100755
  xorriso ${XORRISO_OPTIONS} -o source.iso source
  EOF
  
-+sed -i '1d' chroot/etc/apt/sources.list
-+echo 'deb [trusted=yes] file:/media/cdrom devel contrib main non-free' >> chroot/etc/apt/zz-sources.list
++#sed -i '1d' chroot/etc/apt/sources.list
++#echo 'deb [trusted=yes] file:/media/cdrom devel contrib main non-free' >> chroot/etc/apt/sources.list
 +
  Chroot chroot "sh source.sh"
  
