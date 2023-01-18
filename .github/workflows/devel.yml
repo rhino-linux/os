@@ -25,11 +25,11 @@ jobs:
         sudo mv /usr/share/debootstrap/functions functions
         sudo patch -i 0002-remove-WRONGSUITE-error.patch
         
-        sudo mv 0003-Update-apt-sources.patch /
-        pushd /
-        sudo patch -i 0003-Update-apt-sources.patch -p1
-        sudo rm 0003-Update-apt-sources.patch
-        popd
+        #sudo mv 0003-Update-apt-sources.patch /
+        #pushd /
+        #sudo patch -i 0003-Update-apt-sources.patch -p1
+        #sudo rm 0003-Update-apt-sources.patch
+        #popd
         
         sudo mv functions /usr/share/debootstrap/functions
 
