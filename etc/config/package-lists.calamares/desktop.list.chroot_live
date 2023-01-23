@@ -3,7 +3,6 @@ expect
 gparted
 cifs-utils
 language-pack-en
-language-pack-gnome-en
 xfsprogs
 jfsutils
 reiserfsprogs
@@ -15,7 +14,7 @@ dmraid
 wamerican
 fwupdate
 mokutil
-calamares-settings-debian
+calamares-settings-lubuntu
 calamares
 zram-config
 rsync
