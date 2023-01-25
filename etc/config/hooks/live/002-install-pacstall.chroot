@@ -17,7 +17,7 @@ echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # Pacstall has issues with s
 # More pacstall specific things
 export SUDO_USER=rolling
 export DEBIAN_FRONTEND=noninteractive
-export PACSTALL_DOWNLOADER=wget
+export PACSTALL_DOWNLOADER=curl
 export GITHUB_ACTIONS=true
 
 # Install pacstall
