@@ -17,17 +17,14 @@ echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # Pacstall has issues with s
 # More pacstall specific things
 export SUDO_USER=rolling
 export DEBIAN_FRONTEND=noninteractive
+export PACSTALL_DOWNLOADER=wget
 export GITHUB_ACTIONS=true
-# Axel creates a unreadable/hug output so temporarily moving it so pacstall won't detect
-sudo mv /usr/bin/axel /usr/bin/axel.bak
 
 # Install pacstall
 curl -fsSL https://git.io/JsADh > pacstall-install.sh
 chmod +x ./pacstall-install.sh
 echo N\n | sudo -E ./pacstall-install.sh
 rm ./pacstall-install.sh
-
-sudo mv /usr/bin/axel.bak /usr/bin/axel
 
 # WORKAROUND to trust CD Add
 #sudo sed -i 's/apt-cdrom add -m -d=\/media\/cdrom\//echo "dummy"/g' /etc/calamares/modules/before_bootloader_context.conf
