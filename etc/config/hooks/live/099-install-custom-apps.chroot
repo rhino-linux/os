@@ -17,9 +17,9 @@ sudo chown "rolling" -cR "/usr/share/pacstall"
 sudo chown "rolling" -cR "/home/rolling"
 sudo chown "rolling" -cR "/var/cache/pacstall"
 
-cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI linux-kernel'
-cd /home/rolling && HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI nala-deb firefox-deb'
-cd /
+pushd /home/rolling
+HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI nala-deb firefox-bin linux-kernel'
+popd
 
 sudo mv /usr/bin/axel.bak /usr/bin/axel
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
