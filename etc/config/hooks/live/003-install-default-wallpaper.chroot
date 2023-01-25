@@ -5,8 +5,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
 <wallpapers>
   <wallpaper>
-    <name>Rolling-Rhino</name>
-    <name xml:lang="en_GB">Rolling-Rhino</name>
+    <name>Rolling Rhino Linux</name>
+    <name xml:lang="en_GB">Rolling Rhino Linux</name>
     <filename>/usr/share/backgrounds/rolling_rhino.png</filename>
     <filename-dark>/usr/share/backgrounds/rolling_rhino-dark.png</filename-dark>
     <options>zoom</options>
