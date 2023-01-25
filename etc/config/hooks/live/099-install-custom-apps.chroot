@@ -17,7 +17,7 @@ sudo chown "rolling" -cR "/home/rolling"
 sudo chown "rolling" -cR "/var/cache/pacstall"
 
 pushd /home/rolling
-HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI nala-deb firefox-bin rhino-linux-xfce4-config-git linux-kernel'
+HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI nala-deb firefox-bin rhino-linux-xfce4-config-git quintom-cursor-theme-git linux-kernel'
 popd
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
