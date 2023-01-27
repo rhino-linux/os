@@ -9,7 +9,6 @@ alsa-base
 alsa-utils
 bc
 ca-certificates
-dmz-cursor-theme
 doc-base
 ghostscript-x
 gtk2-engines-pixbuf
