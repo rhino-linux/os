@@ -38,5 +38,6 @@ ln -s "/home/rolling/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rol
 # Make sure the user (rolling) has wrx permissions
 chmod -R 777 /home/rolling/.config/xfce4
 
+sudo apt-get clean
 # These are not needed maybe
 #sudo apt-get autoremove --purge -f -yq aspell-en aspell bolt
