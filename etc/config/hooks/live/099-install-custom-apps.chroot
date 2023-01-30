@@ -41,3 +41,4 @@ chmod -R 777 /home/rolling/.config/xfce4
 sudo apt-get clean
 # These are not needed maybe
 #sudo apt-get autoremove --purge -f -yq aspell-en aspell bolt
+sudo apt-get remove linux*5.19* -yq
