@@ -23,7 +23,7 @@ popd
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
 # Install debs
-sudo apt-get install xfce4-power-manager xfce4-pulseaudio-plugin xfce4-whiskermenu-plugin yaru-theme-icon yaru-theme-gtk gnome-disk-utility -yq
+sudo apt-get install xfce4-power-manager xfce4-pulseaudio-plugin xfce4-whiskermenu-plugin yaru-theme-icon yaru-theme-gtk -yq
 
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Snow/cursor.theme 55
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Ink/cursor.theme 55
