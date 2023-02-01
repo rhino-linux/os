@@ -17,22 +17,21 @@ sudo chown "rolling" -cR "/home/rolling"
 sudo chown "rolling" -cR "/var/cache/pacstall"
 
 pushd /home/rolling
-HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI nala-deb firefox-bin rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git linux-kernel'
+HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI nala-deb firefox-bin rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git linux-kernel'
 popd
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
-# Install debs
-sudo apt-get install xfce4-power-manager xfce4-pulseaudio-plugin xfce4-whiskermenu-plugin yaru-theme-icon yaru-theme-gtk -yq
-
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Snow/cursor.theme 55
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Ink/cursor.theme 55
+sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth 100
+sudo update-alternatives --set default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/Quintom_Ink/cursor.theme
 sudo xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Quintom_Ink"
 sudo xfconf-query -c xfwm4 -p /general/theme -s "Yaru-dark"
 echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
 mkdir -p /home/rolling/.config/Kvantum
-echo "theme=KvYaru" | tee /home/rolling/.config/Kvantum/kvantum.kvconfig
+echo "theme=KvRhino" | sudo tee -a /home/rolling/.config/Kvantum/kvantum.kvconfig > /dev/null
 
 mkdir -p /home/rolling/Desktop
 echo '[Desktop Entry]
@@ -81,6 +80,7 @@ StartupNotify=true
 Categories=Qt;System;
 Keywords=installer;calamares;system;' | tee -a /home/rolling/Desktop/Install\ Rhino\ Linux.desktop > /dev/null
 chmod 755 /home/rolling/Desktop/Install\ Rhino\ Linux.desktop
+sudo chown "rolling" -cR "/home/rolling/Desktop/Install\ Rhino\ Linux.desktop"
 
 # The rolling user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
 rm -rf /home/rolling/.config/xfce4
@@ -93,5 +93,6 @@ ln -s "/home/rolling/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rol
 chmod -R 777 /home/rolling/.config/xfce4
 
 sudo apt-get clean
+sudo apt-get remove linux*5.19* -yq
 # These are not needed maybe
 #sudo apt-get autoremove --purge -f -yq aspell-en aspell bolt
