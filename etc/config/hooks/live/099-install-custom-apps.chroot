@@ -31,7 +31,7 @@ sudo xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Quintom_Ink"
 sudo xfconf-query -c xfwm4 -p /general/theme -s "Yaru-dark"
 echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
 mkdir -p /home/rolling/.config/Kvantum
-echo "theme=KvRhino" | sudo tee -a /home/rolling/.config/Kvantum/kvantum.kvconfig > /dev/null
+echo "theme=KvRhinoDark" | sudo tee -a /home/rolling/.config/Kvantum/kvantum.kvconfig > /dev/null
 
 mkdir -p /home/rolling/Desktop
 echo '[Desktop Entry]
