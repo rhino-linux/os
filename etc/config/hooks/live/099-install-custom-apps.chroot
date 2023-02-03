@@ -81,6 +81,7 @@ StartupNotify=true
 Categories=Qt;System;
 Keywords=installer;calamares;system;' | tee -a /home/rolling/Desktop/install.desktop > /dev/null
 chmod 755 /home/rolling/Desktop/install.desktop
+chmod +x /home/rolling/Desktop/install.desktop
 f=/home/rolling/Desktop/install.desktop; gio set -t string $f metadata::xfce-exe-checksum "$(sha256sum $f | awk '{print $1}')"
 
 echo '#!/bin/sh
