@@ -97,6 +97,7 @@ cp -r /etc/skel/.config/Kvantum/* /home/rolling/.config/Kvantum
 ln -s "/home/rolling/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rolling/.config/xfce4/desktop/icons.screen.latest.rc"
 # Make sure the user (rolling) has wrx permissions
 chmod -R 777 /home/rolling/.config/xfce4
+sudo chown "rolling" -cR /home/rolling/Desktop
 
 sudo apt-get clean
 sudo apt-get remove linux*5.19* -yq
