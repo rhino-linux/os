@@ -80,10 +80,17 @@ Icon=/usr/share/icons/logo.svg
 Terminal=false
 StartupNotify=true
 Categories=Qt;System;
-Keywords=installer;calamares;system;' | tee -a /home/rolling/Desktop/install.desktop > /dev/null
-chmod 755 /home/rolling/Desktop/install.desktop
-chmod +x /home/rolling/Desktop/install.desktop
-f=/home/rolling/Desktop/install.desktop; gio set -t string $f metadata::xfce-exe-checksum "$(sha256sum $f | awk '{print $1}')"
+Keywords=installer;calamares;system;' | tee -a /usr/share/applications/install.desktop > /dev/null
+sudo chmod 755 /usr/share/applications/install.desktop
+sudo ln -s /usr/share/applications/install.desktop /home/rolling/Desktop/install.desktop
+sudo chown "rolling" -cR /usr/share/applications/install.desktop
+
+sudo rm /etc/calamares/modules/after_bootloader_context.conf
+echo '---
+dontChroot: false
+timeout: 120
+firmwareType:
+    "*": "-rm /usr/share/applications/install.desktop"' | sudo tee -a /etc/calamares/modules/after_bootloader_context.conf > /dev/null
 
 echo '#!/bin/sh
 true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
