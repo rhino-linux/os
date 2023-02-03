@@ -32,7 +32,8 @@ sudo xfconf-query -c xfwm4 -p /general/theme -s "Yaru-dark"
 echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
 mkdir -p /home/rolling/.config/Kvantum
 mkdir -p /etc/skel/.config/Kvantum
-echo "theme=KvRhinoDark" | sudo tee -a /home/rolling/.config/Kvantum/kvantum.kvconfig /etc/skel/.config/Kvantum/kvantum.kvconfig > /dev/null
+echo "theme=KvRhinoDark" >> /home/rolling/.config/Kvantum/kvantum.kvconfig
+echo "theme=KvRhinoDark" >> /etc/skel/.config/Kvantum/kvantum.kvconfig
 
 mkdir -p /home/rolling/Desktop
 echo '[Desktop Entry]
