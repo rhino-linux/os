@@ -98,6 +98,9 @@ true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
 ( cd /etc/calamares/branding && sudo git clone https://github.com/rhino-linux/calamares rhino )
 sudo sed -i 's/lubuntu/rhino/g' /etc/calamares/settings.conf
 
+sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
+( cd /etc/lightdm/ && sudo git clone https://github.com/rhino-linux/lightdm . )
+
 # The rolling user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
 rm -rf /home/rolling/.config/xfce4
 mkdir -p /home/rolling/.config/xfce4
