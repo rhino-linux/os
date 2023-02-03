@@ -83,6 +83,7 @@ Categories=Qt;System;
 Keywords=installer;calamares;system;' | tee -a /usr/share/applications/install.desktop > /dev/null
 sudo chmod 755 /usr/share/applications/install.desktop
 sudo ln -s /usr/share/applications/install.desktop /home/rolling/Desktop/install.desktop
+sudo chown "rolling" -cR /usr/share/applications/install.desktop
 
 echo '#!/bin/sh
 true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
