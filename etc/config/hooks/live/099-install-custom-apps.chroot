@@ -78,12 +78,12 @@ Icon=/usr/share/icons/logo.svg
 Terminal=false
 StartupNotify=true
 Categories=Qt;System;
-Keywords=installer;calamares;system;' | tee -a /home/rolling/Desktop/Install\ Rhino\ Linux.desktop > /dev/null
-chmod 755 /home/rolling/Desktop/Install\ Rhino\ Linux.desktop
-sudo chown "rolling" -cR "/home/rolling/Desktop/Install\ Rhino\ Linux.desktop"
+Keywords=installer;calamares;system;' | tee -a /home/rolling/Desktop/install.desktop > /dev/null
+chmod 755 /home/rolling/Desktop/install.desktop
+f=/home/rolling/Desktop/install.desktop; gio set -t string $f metadata::xfce-exe-checksum "$(sha256sum $f | awk '{print $1}')"
 
 echo '#!/bin/sh
-true' | sudo tee /usr/bin/calamares-log-helper > /dev/null
+true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
 
 ( cd /etc/calamares/branding && sudo git clone https://github.com/rhino-linux/calamares rhino )
 sudo sed -i 's/lubuntu/rhino/g' /etc/calamares/settings.conf
