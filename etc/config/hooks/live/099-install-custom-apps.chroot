@@ -17,7 +17,7 @@ sudo chown "rolling" -cR "/home/rolling"
 sudo chown "rolling" -cR "/var/cache/pacstall"
 
 pushd /home/rolling
-HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI nala-deb firefox-bin rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git linux-kernel'
+HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI nala-deb firefox-bin rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git linux-kernel'
 popd
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
@@ -85,12 +85,15 @@ sudo chmod 755 /usr/share/applications/install.desktop
 sudo ln -s /usr/share/applications/install.desktop /home/rolling/Desktop/install.desktop
 sudo chown "rolling" -cR /usr/share/applications/install.desktop
 
+mkdir -p etc/skel/.config/autostart
 sudo rm /etc/calamares/modules/after_bootloader_context.conf
 echo '---
 dontChroot: false
 timeout: 120
 firmwareType:
-    "*": "-rm /usr/share/applications/install.desktop"' | sudo tee -a /etc/calamares/modules/after_bootloader_context.conf > /dev/null
+    "*":
+        - "-rm /usr/share/applications/install.desktop"
+        - command: "-ln -s /usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop /home/$USER/.config/autostart/setup.desktop"' | sudo tee -a /etc/calamares/modules/after_bootloader_context.conf > /dev/null
 
 echo '#!/bin/sh
 true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
