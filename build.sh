@@ -11,7 +11,7 @@ set -e
 }
 
 # get config
-if [ -n "$1" ]; then
+if [[ -n "$1" ]]; then
   CONFIG_FILE="$1"
 else
   CONFIG_FILE="etc/terraform.conf"
