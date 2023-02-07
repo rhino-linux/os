@@ -3,10 +3,12 @@
 set -e
 
 # check for root permissions
-if [[ "$(id -u)" != 0 ]]; then
-  echo "E: Requires root permissions" > /dev/stderr
-  exit 1
-fi
+(( EUID )) && {
+
+    echo "E: Requires root permissions" > /dev/stderr
+
+    exit 1
+}
 
 # get config
 if [ -n "$1" ]; then
