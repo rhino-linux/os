@@ -5,7 +5,7 @@ set -e
 # check for root permissions
 (( EUID )) && {
 
-    echo "E: Requires root permissions" > /dev/stderr
+    echo "E: Requires root permissions" >&2
 
     exit 1
 }
