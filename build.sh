@@ -79,10 +79,10 @@ build () {
   # cd into output to so {FNAME}.sha256.txt only
   # includes the filename and not the path to
   # our file.
-  cd ${OUTPUT_DIR}
+  cd "${OUTPUT_DIR}"
   sha512sum "${FNAME}.iso" > "${FNAME}.sha512"
   sha256sum "${FNAME}.iso" > "${FNAME}.sha256"
-  cd ${BASE_DIR}
+  cd "${BASE_DIR}"
 }
 
 if [[ "${ARCH}" == "all" ]]; then
