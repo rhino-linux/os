@@ -18,12 +18,12 @@ lb config noauto \
     --bootappend-live "boot=casper quiet splash" \
     --mirror-bootstrap "$MIRROR_URL" \
     --parent-mirror-bootstrap "$MIRROR_URL" \
-    --mirror-chroot-security "http://security.ubuntu.com/ubuntu/" \
-    --parent-mirror-chroot-security "http://security.ubuntu.com/ubuntu/" \
-    --mirror-binary-security "http://security.ubuntu.com/ubuntu/" \
-    --parent-mirror-binary-security "http://security.ubuntu.com/ubuntu/" \
-    --mirror-binary "http://archive.ubuntu.com/ubuntu/" \
-    --parent-mirror-binary "http://archive.ubuntu.com/ubuntu/" \
+    --mirror-chroot-security "$MIRROR_URL" \
+    --parent-mirror-chroot-security "$MIRROR_URL" \
+    --mirror-binary-security "$MIRROR_URL" \
+    --parent-mirror-binary-security "$MIRROR_URL" \
+    --mirror-binary "$MIRROR_URL" \
+    --parent-mirror-binary "$MIRROR_URL" \
     --keyring-packages ubuntu-keyring \
     --apt-options "--option Acquire::Retries=2 --option Acquire::http::Timeout=45 --yes" \
     --cache-packages false \
