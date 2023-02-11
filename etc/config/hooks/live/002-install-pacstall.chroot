@@ -4,7 +4,7 @@
 # Will use a deb once Pacstall is updated
 
 # fixed the expected devel warnings
-sed -i 'sQdevelQ./develQg' /etc/apt/sources.list
+#sed -i 'sQdevelQ./develQg' /etc/apt/sources.list
 
 # The default apt-cdrom can't find the Release file but adding it manually it can
 #sed -i '1d' /etc/apt/sources.list
@@ -32,4 +32,27 @@ echo N\n | sudo -E ./pacstall-install.sh
 rm ./pacstall-install.sh
 
 # WORKAROUND to trust CD Add
-#sudo sed -i 's/apt-cdrom add -m -d=\/media\/cdrom\//echo "dummy"/g' /etc/calamares/modules/before_bootloader_context.conf
+sudo rm /etc/calamares/modules/before_bootloader_context.conf
+sudo touch /etc/calamares/modules/before_bootloader_context.conf
+sudo cat > /etc/calamares/modules/before_bootloader_context.conf << __EOF__
+# Make sure the correct bootloader package is installed for EFI.
+# Also pull in shim so secureboot has a chance at working.
+# Because of edge cases, we ignore BIOS, and do the same
+# procedure for all EFI types.
+---
+firmwareType:
+    bios:    "-/bin/true"
+    "*":
+        -    command: apt-cdrom add -m -d=/media/cdrom/
+             timeout: 10
+        -    command: sed -i '/deb http/d' /etc/apt/sources.list
+             timeout: 10
+        -    command: sed -i 's/ cdrom/ [trusted=yes] cdrom/g' /etc/apt/sources.list
+        -    timeout: 10
+        -    command: apt-get update
+             timeout: 120
+        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict grub-efi-$(dpkg --print-architecture)-signed
+             timeout: 300
+        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict shim-signed
+             timeout: 300'
+__EOF__
