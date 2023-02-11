@@ -9,7 +9,7 @@ lb config noauto \
     --mode debian \
     --initramfs none \
     --initsystem systemd \
-    --distribution "./devel" \
+    --distribution "./$BASECODENAME" \
     --parent-distribution "./devel" \
     --archive-areas "main restricted universe multiverse" \
     --parent-archive-areas "main restricted universe multiverse" \
