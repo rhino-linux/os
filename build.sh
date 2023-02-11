@@ -71,7 +71,7 @@ build () {
 
   OUTPUT_DIR="$BASE_DIR/builds/$BUILD_ARCH"
   mkdir -p "$OUTPUT_DIR"
-  FNAME="Rolling-Linux-OS-$VERSION$OUTPUT_SUFFIX"
+  FNAME="Rhino-Linux-OS-$VERSION$OUTPUT_SUFFIX"
   mv "$BASE_DIR/tmp/$BUILD_ARCH/live-image-$BUILD_ARCH.hybrid.iso" "$OUTPUT_DIR/${FNAME}.iso"
 
   # cd into output to so {FNAME}.sha256.txt only
