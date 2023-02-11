@@ -1,18 +1,18 @@
 prompt 0
 
 MENU HIDDEN
-MENU AUTOBOOT Booting Rolling Linux OS live disk in # seconds
+MENU AUTOBOOT Booting Rhino Linux OS live disk in # seconds
 timeout 50
 
 label live-@FLAVOUR@
-	menu label ^Try or install Rolling Linux OS
+	menu label ^Try or install Rhino Linux OS
 	menu default
 	linux /casper/vmlinuz
 	initrd /casper/initrd.lz
 	append @APPEND_LIVE@
 
 label live-failsafe
-	menu label Start Rolling Linux OS (Safe Graphics)
+	menu label Start Rhino Linux OS (Safe Graphics)
 	set gfxpayload=keep
 	linux /casper/vmlinuz
 	initrd /casper/initrd.lz
