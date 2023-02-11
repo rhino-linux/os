@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: buildjet-4vcpu-ubuntu-2204-arm
 
     steps:
     - uses: actions/checkout@v3.1.0
@@ -40,4 +40,4 @@ jobs:
     - uses: actions/upload-artifact@v3.1.0
       with:
         name: Rhino Linux OS
-        path: builds/amd64/
+        path: builds/arm64/
