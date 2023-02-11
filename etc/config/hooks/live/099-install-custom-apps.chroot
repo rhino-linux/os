@@ -2,22 +2,22 @@
 # Description: Install custom Pacstall apps and others
 
 # More pacstall specific things
-export SUDO_USER=rolling
+export SUDO_USER=rhino
 export DEBIAN_FRONTEND=noninteractive
 export PACSTALL_DOWNLOADER=curl
 export GITHUB_ACTIONS=true
 
 sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /tmp/pacstall /var/cache/pacstall /usr/src/pacstall
-sudo chown "rolling" -cR "/var/log/pacstall"
+sudo chown "rhino" -cR "/var/log/pacstall"
 sudo chmod -R 777 "/tmp/pacstall"
-sudo chown "rolling" -cR "/usr/src/pacstall"
-sudo chown "rolling" -cR "/tmp/pacstall"
-sudo chown "rolling" -cR "/usr/share/pacstall"
-sudo chown "rolling" -cR "/home/rolling"
-sudo chown "rolling" -cR "/var/cache/pacstall"
+sudo chown "rhino" -cR "/usr/src/pacstall"
+sudo chown "rhino" -cR "/tmp/pacstall"
+sudo chown "rhino" -cR "/usr/share/pacstall"
+sudo chown "rhino" -cR "/home/rhino"
+sudo chown "rhino" -cR "/var/cache/pacstall"
 
-pushd /home/rolling
-HOME=/home/rolling sudo runuser -m -u rolling -- sh -c 'pacstall -PI nala-deb firefox-bin rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git rhino-pkg-git linux-kernel rhino-neofetch-git'
+pushd /home/rhino
+HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'pacstall -PI nala-deb firefox-bin rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git rhino-pkg-git linux-kernel rhino-neofetch-git'
 popd
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
@@ -30,12 +30,12 @@ sudo update-alternatives --set x-cursor-theme /usr/share/icons/Quintom_Ink/curso
 sudo xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Quintom_Ink"
 sudo xfconf-query -c xfwm4 -p /general/theme -s "Yaru-dark"
 echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
-mkdir -p /home/rolling/.config/Kvantum
+mkdir -p /home/rhino/.config/Kvantum
 mkdir -p /etc/skel/.config/Kvantum
-echo "theme=KvRhinoDark" >> /home/rolling/.config/Kvantum/kvantum.kvconfig
+echo "theme=KvRhinoDark" >> /home/rhino/.config/Kvantum/kvantum.kvconfig
 echo "theme=KvRhinoDark" >> /etc/skel/.config/Kvantum/kvantum.kvconfig
 
-mkdir -p /home/rolling/Desktop
+mkdir -p /home/rhino/Desktop
 echo '[Desktop Entry]
 Type=Application
 Version=1.0
@@ -82,8 +82,8 @@ StartupNotify=true
 Categories=Qt;System;
 Keywords=installer;calamares;system;' | tee -a /usr/share/applications/install.desktop > /dev/null
 sudo chmod 755 /usr/share/applications/install.desktop
-sudo ln -s /usr/share/applications/install.desktop /home/rolling/Desktop/install.desktop
-sudo chown "rolling" -cR /usr/share/applications/install.desktop
+sudo ln -s /usr/share/applications/install.desktop /home/rhino/Desktop/install.desktop
+sudo chown "rhino" -cR /usr/share/applications/install.desktop
 
 mkdir -p etc/skel/.config/autostart
 sudo rm /etc/calamares/modules/after_bootloader_context.conf
@@ -104,16 +104,16 @@ sudo sed -i 's/lubuntu/rhino/g' /etc/calamares/settings.conf
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
 ( cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png )
 
-# The rolling user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
-rm -rf /home/rolling/.config/xfce4
-mkdir -p /home/rolling/.config/xfce4
-mkdir -p /home/rolling/.config/Kvantum
-cp -r /etc/skel/.config/xfce4/* /home/rolling/.config/xfce4
-cp -r /etc/skel/.config/Kvantum/* /home/rolling/.config/Kvantum
-ln -s "/home/rolling/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rolling/.config/xfce4/desktop/icons.screen.latest.rc"
-# Make sure the user (rolling) has wrx permissions
-chmod -R 777 /home/rolling/.config/xfce4
-sudo chown "rolling" -cR /home/rolling/Desktop
+# The rhino user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
+rm -rf /home/rhino/.config/xfce4
+mkdir -p /home/rhino/.config/xfce4
+mkdir -p /home/rhino/.config/Kvantum
+cp -r /etc/skel/.config/xfce4/* /home/rhino/.config/xfce4
+cp -r /etc/skel/.config/Kvantum/* /home/rhino/.config/Kvantum
+ln -s "/home/rhino/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino/.config/xfce4/desktop/icons.screen.latest.rc"
+# Make sure the user (rhino) has wrx permissions
+chmod -R 777 /home/rhino/.config/xfce4
+sudo chown "rhino" -cR /home/rhino/Desktop
 
 sudo apt-get clean
 sudo apt-get remove linux*5.19* -yq

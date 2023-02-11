@@ -15,12 +15,12 @@ apt-get dist-upgrade -yq
 apt-get install axel -yq
 
 # Create user
-sudo useradd -rm -d /home/rolling -g root -s /bin/bash -u 1001 rolling
-sudo adduser rolling sudo
+sudo useradd -rm -d /home/rhino -g root -s /bin/bash -u 1001 rhino
+sudo adduser rhino sudo
 echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # Pacstall has issues with sudo despite the user not having a password
 
 # More pacstall specific things
-export SUDO_USER=rolling
+export SUDO_USER=rhino
 export DEBIAN_FRONTEND=noninteractive
 export PACSTALL_DOWNLOADER=curl
 export GITHUB_ACTIONS=true
