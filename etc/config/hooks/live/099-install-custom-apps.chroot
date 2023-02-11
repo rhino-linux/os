@@ -17,10 +17,18 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
-HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'pacstall -PI nala-deb firefox-bin rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git rhino-pkg-git linux-kernel rhino-neofetch-git'
+HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'pacstall -PI nala-deb firefox-bin rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git rhino-pkg-git rhino-neofetch-git'
 popd
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
+
+
+sudo wget https://kernel.ubuntu.com/~kernel-ppa/mainline/v6.2-rc7/arm64/linux-headers-6.2.0-060200rc7-generic_6.2.0-060200rc7.202302052230_arm64.deb
+sudo wget https://kernel.ubuntu.com/~kernel-ppa/mainline/v6.2-rc7/arm64/linux-image-unsigned-6.2.0-060200rc7-generic_6.2.0-060200rc7.202302052230_arm64.deb
+sudo wget https://kernel.ubuntu.com/~kernel-ppa/mainline/v6.2-rc7/arm64/linux-modules-6.2.0-060200rc7-generic_6.2.0-060200rc7.202302052230_arm64.deb
+sudo wget https://kernel.ubuntu.com/~kernel-ppa/mainline/v6.2-rc7/amd64/linux-headers-6.2.0-060200rc7_6.2.0-060200rc7.202302052230_all.deb
+sudo dpkg -i linux-*.deb
+sudo rm linux-*.deb
 
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Snow/cursor.theme 55
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Ink/cursor.theme 55
