@@ -3,8 +3,8 @@
 
 # Will use a deb once Pacstall is updated
 
-# Debootstrap badly breaks because of this because of devel thinking it's lunar. So manually change sources.
-sed -i 'sQlunarQ./develQg' /etc/apt/sources.list
+# fixed the expected devel warnings
+sed -i 'sQdevelQ./develQg' /etc/apt/sources.list
 
 # The default apt-cdrom can't find the Release file but adding it manually it can
 #sed -i '1d' /etc/apt/sources.list
