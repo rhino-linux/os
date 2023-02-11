@@ -9,8 +9,8 @@ lb config noauto \
     --mode debian \
     --initramfs none \
     --initsystem systemd \
-    --distribution "$BASECODENAME" \
-    --parent-distribution "$BASECODENAME" \
+    --distribution "./devel" \
+    --parent-distribution "./devel" \
     --archive-areas "main restricted universe multiverse" \
     --parent-archive-areas "main restricted universe multiverse" \
     --linux-packages linux-image \
