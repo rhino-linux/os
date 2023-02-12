@@ -35,6 +35,7 @@ mkdir -p /etc/skel/.config/Kvantum
 echo "theme=KvRhinoDark" >> /home/rhino/.config/Kvantum/kvantum.kvconfig
 echo "theme=KvRhinoDark" >> /etc/skel/.config/Kvantum/kvantum.kvconfig
 gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+sudo xfconf-query -c xsettings -p /Net/ThemeName --set "Yaru-purple-dark"
 
 mkdir -p /home/rhino/Desktop
 echo '[Desktop Entry]
