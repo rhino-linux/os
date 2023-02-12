@@ -41,6 +41,10 @@ gtk-application-prefer-dark-theme=1" >> /home/rhino/.config/gtk-4.0/settings.ini
 xfconf-query -c xsettings -p /Net/ThemeName --set "Yaru-purple-dark"
 xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Quintom_Ink"
 xfconf-query -c xfwm4 -p /general/theme -s "Yaru-dark"
+sudo sed -i "s/'default'/'prefer-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
+cd /usr/share/glib-2.0/schemas
+sudo glib-compile-schemas .
+cd ~
 
 mkdir -p /home/rhino/Desktop
 echo '[Desktop Entry]
