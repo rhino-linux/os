@@ -95,7 +95,6 @@ firmwareType:
         - "-rm /usr/share/applications/install.desktop"
         - command: "-ln -s /usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop /home/$USER/.config/autostart/setup.desktop"' | sudo tee -a /etc/calamares/modules/after_bootloader_context.conf > /dev/null
 
-sudo rm /etc/calamares/modules/automirror.conf
 sudo echo '---
 dontChroot: false
 timeout: 30
@@ -113,7 +112,7 @@ deb-src http://security.ubuntu.com/ubuntu/ ./devel-security main universe multiv
 # deb http://archive.ubuntu.com/ubuntu/ ./devel-backports main universe multiverse restricted
 # deb-src http://archive.ubuntu.com/ubuntu/ ./devel-backports main universe multiverse restricted
 deb http://archive.ubuntu.com/ubuntu/ ./devel-proposed multiverse universe restricted main
-__EOF__"' | sudo tee -a /etc/calamares/modules/automirror.conf
+__EOF__"' | sudo tee -a /etc/calamares/modules/after_automirror_context.conf
 
 echo '#!/bin/sh
 true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
