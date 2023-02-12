@@ -96,7 +96,7 @@ sudo chmod 755 /usr/share/applications/install.desktop
 sudo ln -s /usr/share/applications/install.desktop /home/rhino/Desktop/install.desktop
 sudo chown "rhino" -cR /usr/share/applications/install.desktop
 
-mkdir -p etc/skel/.config/autostart
+mkdir -p /etc/skel/.config/autostart
 sudo rm /etc/calamares/modules/after_bootloader_context.conf
 echo '---
 dontChroot: false
