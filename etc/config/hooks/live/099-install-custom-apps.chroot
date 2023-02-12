@@ -27,15 +27,15 @@ sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor
 sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth 100
 sudo update-alternatives --set default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/Quintom_Ink/cursor.theme
-sudo xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Quintom_Ink"
-sudo xfconf-query -c xfwm4 -p /general/theme -s "Yaru-dark"
 echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
 mkdir -p /home/rhino/.config/Kvantum
 mkdir -p /etc/skel/.config/Kvantum
 echo "theme=KvRhinoDark" >> /home/rhino/.config/Kvantum/kvantum.kvconfig
 echo "theme=KvRhinoDark" >> /etc/skel/.config/Kvantum/kvantum.kvconfig
 gsettings set org.gnome.desktop.interface color-scheme prefer-dark
-sudo xfconf-query -c xsettings -p /Net/ThemeName --set "Yaru-purple-dark"
+xfconf-query -c xsettings -p /Net/ThemeName --set "Yaru-purple-dark"
+xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Quintom_Ink"
+xfconf-query -c xfwm4 -p /general/theme -s "Yaru-dark"
 
 mkdir -p /home/rhino/Desktop
 echo '[Desktop Entry]
