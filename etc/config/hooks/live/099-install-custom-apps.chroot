@@ -95,6 +95,25 @@ firmwareType:
         - "-rm /usr/share/applications/install.desktop"
         - command: "-ln -s /usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop /home/$USER/.config/autostart/setup.desktop"' | sudo tee -a /etc/calamares/modules/after_bootloader_context.conf > /dev/null
 
+sudo echo '---
+dontChroot: false
+timeout: 30
+script:
+    "*":
+        - command: "-rm /etc/apt/sources.list"
+        - command: "-touch /etc/apt/sources.list"
+        - command: "-cat >> /etc/apt/sources.list << __EOF__
+deb http://archive.ubuntu.com/ubuntu/ ./devel main universe multiverse restricted
+deb-src http://archive.ubuntu.com/ubuntu/ ./devel main universe multiverse restricted
+deb http://archive.ubuntu.com/ubuntu/ ./devel-updates main universe multiverse restricted
+deb-src http://archive.ubuntu.com/ubuntu/ ./devel-updates main universe multiverse restricted
+deb http://security.ubuntu.com/ubuntu/ ./devel-security main universe multiverse restricted
+deb-src http://security.ubuntu.com/ubuntu/ ./devel-security main universe multiverse restricted
+# deb http://archive.ubuntu.com/ubuntu/ ./devel-backports main universe multiverse restricted
+# deb-src http://archive.ubuntu.com/ubuntu/ ./devel-backports main universe multiverse restricted
+deb http://archive.ubuntu.com/ubuntu/ ./devel-proposed multiverse universe restricted main
+__EOF__"' | sudo tee -a /etc/calamares/modules/shellprocess_fixapt.conf
+
 echo '#!/bin/sh
 true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
 
