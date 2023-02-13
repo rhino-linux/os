@@ -17,6 +17,11 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
+HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'pacstall -U pacstall develop'
+popd
+export PACSTALL_DOWNLOADER=quiet-wget
+
+pushd /home/rhino
 HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'pacstall -PI nala-deb firefox-bin rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git rhino-pkg-git linux-kernel rhino-neofetch-git'
 popd
 
