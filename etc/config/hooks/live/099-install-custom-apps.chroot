@@ -22,7 +22,7 @@ popd
 export PACSTALL_DOWNLOADER=quiet-wget
 
 pushd /home/rhino
-HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'pacstall -PI nala-deb firefox-bin rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git rhino-pkg-git linux-kernel rhino-neofetch-git'
+HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-bin rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git rhino-pkg-git linux-kernel rhino-neofetch-git'
 popd
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
