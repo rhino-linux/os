@@ -32,7 +32,7 @@ echo N\n | sudo -E ./pacstall-install.sh
 rm ./pacstall-install.sh
 
 pacstall -U pacstall develop
-export PACSTALL_DOWNLOADER=silent-wget
+export PACSTALL_DOWNLOADER=quiet-wget
 
 # WORKAROUND to trust CD Add
 sudo rm /etc/calamares/modules/before_bootloader_context.conf
