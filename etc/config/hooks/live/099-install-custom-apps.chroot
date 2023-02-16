@@ -109,18 +109,18 @@ firmwareType:
         - "-rm /usr/share/applications/install.desktop"
         - command: "-ln -s /usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop /home/$USER/.config/autostart/setup.desktop"' | sudo tee -a /etc/calamares/modules/after_bootloader_context.conf > /dev/null
 
-echo '#!/bin/sh
-true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
-
-( cd /etc/calamares/branding && sudo git clone https://github.com/rhino-linux/calamares rhino )
-sudo sed -i 's/lubuntu/rhino/g' /etc/calamares/settings.conf
-
 sudo rm /etc/calamares/modules/automirror.conf
 sudo rm /lib/x86_64-linux-gnu/calamares/modules/automirror -r
 cd /lib/x86_64-linux-gnu/calamares/modules/
 sudo git clone https://github.com/oklopfer/automirror/ -b amd64
 sudo cp /lib/x86_64-linux-gnu/calamares/modules/automirror/automirror.conf /etc/calamares/modules/automirror.conf
 cd ~
+
+echo '#!/bin/sh
+true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
+
+( cd /etc/calamares/branding && sudo git clone https://github.com/rhino-linux/calamares rhino )
+sudo sed -i 's/lubuntu/rhino/g' /etc/calamares/settings.conf
 
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
 ( cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png )
