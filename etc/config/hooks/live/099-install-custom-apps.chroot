@@ -129,7 +129,7 @@ if [ $(dpkg --print-architecture) = arm64 ]; then sudo rm /etc/calamares/modules
 sudo rm /etc/calamares/modules/automirror.conf
 sudo rm /lib/"$GNU"64-linux-gnu/calamares/modules/automirror -r
 cd /lib/"$GNU"-linux-gnu/calamares/modules/
-sudo git clone https://github.com/oklopfer/automirror/ -b "$ARCH"
+sudo git clone https://github.com/oklopfer/automirror/ -b $(dpkg --print-architecture)
 sudo cp /lib/"$GNU"-linux-gnu/calamares/modules/automirror/automirror.conf /etc/calamares/modules/automirror.conf
 cd ~
 
