@@ -1,11 +1,6 @@
 #!/bin/sh
 # Description: Install custom Pacstall apps and others
 
-ARCH="$(dpkg --print-architecture)"
-if [ $ARCH = arm64 ]; then 
-ARM="-arm64"; else ARM="";
-fi
-
 # More pacstall specific things
 export SUDO_USER=rhino
 export DEBIAN_FRONTEND=noninteractive
@@ -23,7 +18,11 @@ sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
 HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'pacstall -U pacstall develop'
-HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox"$ARM"-bin linux-headers-deb linux-headers-generic"$ARM"-deb linux-modules"$ARM"-deb linux-image-unsigned"$ARM"-deb'
+if [ $(dpkg --print-architecture) = arm64 ]; then
+HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-bin linux-headers-deb linux-headers-generic-arm64-deb linux-modules-arm64-deb linux-image-unsigned-arm64-deb';
+else
+HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-bin linux-headers-deb linux-headers-generic-deb linux-modules-deb linux-image-unsigned-deb';
+fi
 HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'pacstall -PI rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git rhino-pkg-git rhino-neofetch-git'
 popd
 
@@ -120,11 +119,13 @@ true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
 ( cd /etc/calamares/branding && sudo git clone https://github.com/rhino-linux/calamares rhino )
 sudo sed -i 's/lubuntu/rhino/g' /etc/calamares/settings.conf
 
-if [ $ARCH = arm64 ]; then 
-GNU="aarch"; else GNU="x86_";
+if [ $(dpkg --print-architecture) = arm64 ]; then
+GNU="aarch"; 
+else 
+GNU="x86_";
 fi
 
-if [ $ARCH = arm64 ]; then sudo rm /etc/calamares/modules/*386*.conf; fi
+if [ $(dpkg --print-architecture) = arm64 ]; then sudo rm /etc/calamares/modules/*386*.conf; fi
 sudo rm /etc/calamares/modules/automirror.conf
 sudo rm /lib/"$GNU"64-linux-gnu/calamares/modules/automirror -r
 cd /lib/"$GNU"-linux-gnu/calamares/modules/
@@ -138,7 +139,7 @@ sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
 
 # The rhino user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
 
-if [ $ARCH = arm64 ]; then 
+if [ $(dpkg --print-architecture) = arm64 ]; then 
 rm -rf /etc/skel/.config/dconf
 rm -rf /home/rhino/.config/dconf
 cd /etc/skel/.config/
