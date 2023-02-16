@@ -23,7 +23,7 @@ sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
 HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'pacstall -U pacstall develop'
-HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox$ARM-bin linux-headers-deb linux-headers-generic$ARM-deb linux-modules$ARM-deb linux-image-unsigned$ARM-deb'
+HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox"$ARM"-bin linux-headers-deb linux-headers-generic"$ARM"-deb linux-modules"$ARM"-deb linux-image-unsigned"$ARM"-deb'
 HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'pacstall -PI rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git rhino-pkg-git rhino-neofetch-git'
 popd
 
@@ -121,7 +121,7 @@ true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
 sudo sed -i 's/lubuntu/rhino/g' /etc/calamares/settings.conf
 
 if [ $ARCH = arm64 ]; then 
-GNU="-aarch"; else GNU="x86_";
+GNU="aarch"; else GNU="x86_";
 fi
 
 if [ $ARCH = arm64 ]; then sudo rm /etc/calamares/modules/*386*.conf; fi
