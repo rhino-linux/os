@@ -2,9 +2,11 @@
 
 ARCH="$(dpkg --print-architecture)"
 
-if [ $ARCH = arm64 ]; then initramfs-tools; 
-else bcmwl-kernel-source microcode-initrd iucode-tool; 
-fi
+$(if [ $ARCH = arm64 ]; then 
+    initramfs-tools; else 
+    bcmwl-kernel-source 
+    microcode-initrd 
+    iucode-tool; fi)
 
 b43-fwcutter
 dkms
