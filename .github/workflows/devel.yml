@@ -4,7 +4,7 @@ on:
   workflow_dispatch
 
 jobs:
-  build:
+  build_amd64:
     runs-on: ubuntu-latest
 
     steps:
@@ -39,5 +39,42 @@ jobs:
 
     - uses: actions/upload-artifact@v3.1.0
       with:
-        name: Rhino Linux OS
+        name: Rhino Linux OS (AMD64/x86_64)
         path: builds/amd64/
+        
+  build_arm64:
+    runs-on: buildjet-4vcpu-ubuntu-2204-arm
+
+    steps:
+    - uses: actions/checkout@v3.1.0
+
+    - name: Install needed packages
+      run: |
+        sudo apt-get update && sudo apt-get install debootstrap -y
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/lunar
+        sudo dpkg -i live-build_*_all.deb
+        sudo mv /usr/share/debootstrap/functions functions
+        sudo patch -i 0002-remove-WRONGSUITE-error.patch
+        
+        #sudo mv 0003-Update-apt-sources.patch /
+        #pushd /
+        #sudo patch -i 0003-Update-apt-sources.patch -p1
+        #sudo rm 0003-Update-apt-sources.patch
+        #popd
+        
+        sudo mv functions /usr/share/debootstrap/functions
+    - name: Make scripts executable
+      run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
+
+    - name: Build ISO
+      run: sudo ./build.sh etc/terraform.conf
+
+    - uses: actions/upload-artifact@v3.1.0
+      with:
+        name: Rhino Linux OS (ARM64)
+        path: builds/arm64/
