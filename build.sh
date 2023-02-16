@@ -17,6 +17,21 @@ fi
 BASE_DIR="$PWD"
 source "$BASE_DIR"/"$CONFIG_FILE"
 
+# do arch-dep adjustment
+if [ $ARCH = amd64 ]; then
+echo 'bcmwl-kernel-source
+microcode-initrd
+iucode-tool
+grub-efi-amd64
+grub-efi-amd64-bin
+grub-efi-amd64-signed' | sudo tee -a etc/config/package-lists.calamares/pool.list.binary; 
+else
+echo 'initramfs-tools
+grub-efi-arm64
+grub-efi-arm64-bin
+grub-efi-arm64-signed' | sudo tee -a etc/config/package-lists.calamares/pool.list.binary; 
+fi
+
 echo -e "
 #----------------------#
 # INSTALL DEPENDENCIES #
