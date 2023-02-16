@@ -128,9 +128,9 @@ fi
 if [ $(dpkg --print-architecture) = arm64 ]; then sudo rm /etc/calamares/modules/*386*.conf; fi
 sudo rm /etc/calamares/modules/automirror.conf
 sudo rm /lib/"$GNU"64-linux-gnu/calamares/modules/automirror -r
-cd /lib/"$GNU"-linux-gnu/calamares/modules/
+cd /lib/"$GNU"64-linux-gnu/calamares/modules/
 sudo git clone https://github.com/oklopfer/automirror/ -b $(dpkg --print-architecture)
-sudo cp /lib/"$GNU"-linux-gnu/calamares/modules/automirror/automirror.conf /etc/calamares/modules/automirror.conf
+sudo cp /lib/"$GNU"64-linux-gnu/calamares/modules/automirror/automirror.conf /etc/calamares/modules/automirror.conf
 cd ~
 
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
@@ -162,6 +162,6 @@ sudo chown "rhino" -cR /home/rhino/Desktop
 
 sudo apt-get clean
 sudo apt-get remove linux*5.19* -yq
-sudo update-initramfs -c -k all
+sudo update-initramfs -u
 # These are not needed maybe
 #sudo apt-get autoremove --purge -f -yq aspell-en aspell bolt
