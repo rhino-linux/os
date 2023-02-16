@@ -1,3 +1,11 @@
+#!/bin/sh
+
+ARCH="$(dpkg --print-architecture)"
+
+if [ $ARCH = arm64 ]; then initramfs-tools; 
+else bcmwl-kernel-source microcode-initrd iucode-tool; 
+fi
+
 b43-fwcutter
 dkms
 initramfs-tools
@@ -7,8 +15,8 @@ user-setup
 efibootmgr
 secureboot-db
 
-grub-efi-arm64
-grub-efi-arm64-bin
-grub-efi-arm64-signed
+grub-efi-$ARCH
+grub-efi-$ARCH-bin
+grub-efi-$ARCH-signed
 shim
 shim-signed
