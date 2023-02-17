@@ -32,6 +32,9 @@ grub-efi-arm64-bin
 grub-efi-arm64-signed' | sudo tee -a etc/config/package-lists.calamares/pool.list.binary; 
 fi
 
+#VanillaOS patch to yeet ia32
+sudo sed -i '/gen_efi_boot_img "i386-efi" "ia32" "debian-live\/i386"/d' /usr/lib/live/build/binary_grub-efi
+
 echo -e "
 #----------------------#
 # INSTALL DEPENDENCIES #
