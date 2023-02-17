@@ -33,7 +33,7 @@ grub-efi-arm64-signed' | sudo tee -a etc/config/package-lists.calamares/pool.lis
 fi
 
 #VanillaOS patch to yeet ia32
-sudo sed -i '/Check_package chroot /usr/lib/grub/i386-efi/configfile.mod grub-efi-ia32-bin/d' /usr/lib/live/build/binary_grub-efi
+sudo sed -i '/"Check_package chroot /usr/lib/grub/i386-efi/configfile.mod grub-efi-ia32-bin"/d' /usr/lib/live/build/binary_grub-efi
 
 echo -e "
 #----------------------#
