@@ -46,7 +46,6 @@ lb config noauto \
     --checksums md5 \
     --binary-filesystem fat32 \
     --chroot-filesystem squashfs \
-    --chroot-squashfs-compression-level 9 \
     --bootloaders "syslinux grub-efi" \
     "${@}"
 
