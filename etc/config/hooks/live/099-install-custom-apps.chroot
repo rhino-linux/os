@@ -165,3 +165,8 @@ sudo apt-get remove linux*5.19* -yq
 sudo update-initramfs -u
 # These are not needed maybe
 #sudo apt-get autoremove --purge -f -yq aspell-en aspell bolt
+
+sudo wget https://github.com/rhino-linux/os/raw/main/debs/mtools_4.0.42_$(dpkg --print-architecture).deb
+sudo dpkg -i mtools*.deb
+sudo rm mtools*.deb
+sudo apt-mark hold mtools
