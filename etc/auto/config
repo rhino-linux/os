@@ -7,7 +7,7 @@ set -e
 lb config noauto \
     --architectures "$ARCH" \
     --mode debian \
-    --initramfs none \
+    --initramfs live-boot \
     --initsystem systemd \
     --distribution "./$BASECODENAME" \
     --parent-distribution "./$BASECODENAME" \
@@ -44,7 +44,7 @@ lb config noauto \
     --debconf-frontend noninteractive \
     --compression xz \
     --checksums md5 \
-    --bootloaders grub-efi \
+    --bootloaders "grub-efi grub-pc" \
     "${@}"
 
 
