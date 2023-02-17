@@ -4,7 +4,7 @@ This is the new Rhino Linux (RL) ISO builder (replaces the formerly known [RRR-b
 
 1. `sudo apt-get update && sudo apt-get install debootstrap -y`
 2. `sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/lunar`
-3. `sudo dpkg -i live-build_*_all.deb`
+3. `sudo dpkg -i debs/live-build_*_all.deb && sudo dpkg -i debs/*$(dpkg --print-architecture).deb`
 4. `sudo chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/`
 5. `sudo ./build.sh etc/terraform.conf`
 

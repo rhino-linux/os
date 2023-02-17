@@ -19,7 +19,8 @@ jobs:
         sudo rm -rf "/usr/local/share/boost"
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/lunar
-        sudo dpkg -i live-build_*_all.deb
+        sudo dpkg -i debs/live-build_*_all.deb
+        sudo dpkg -i debs/*$(dpkg --print-architecture).deb
         sudo mv /usr/share/debootstrap/functions functions
         sudo patch -i 0002-remove-WRONGSUITE-error.patch
         
@@ -57,7 +58,8 @@ jobs:
         sudo rm -rf "/usr/local/share/boost"
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/lunar
-        sudo dpkg -i live-build_*_all.deb
+        sudo dpkg -i debs/live-build_*_all.deb
+        sudo dpkg -i debs/*$(dpkg --print-architecture).deb
         sudo mv /usr/share/debootstrap/functions functions
         sudo patch -i 0002-remove-WRONGSUITE-error.patch
         
