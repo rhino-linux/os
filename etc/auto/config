@@ -44,7 +44,7 @@ lb config noauto \
     --debconf-frontend noninteractive \
     --compression xz \
     --checksums md5 \
-    --bootloaders "grub-pc grub-efi" \
+    --bootloaders grub-efi \
     "${@}"
 
 
