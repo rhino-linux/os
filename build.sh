@@ -32,6 +32,7 @@ grub-efi-arm64-bin
 grub-efi-arm64-signed' | sudo tee -a etc/config/package-lists.calamares/pool.list.binary; 
 fi
 
+sudo chmod +x binary_grub-efi
 sudo cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
 
 #VanillaOS patch to yeet ia32
