@@ -17,7 +17,6 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
-HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'pacstall -U pacstall develop'
 if [ $(dpkg --print-architecture) = arm64 ]; then
 HOME=/home/rhino sudo runuser -m -u rhino -- sh -c 'PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-bin linux-headers-deb linux-headers-generic-arm64-deb linux-modules-arm64-deb linux-image-unsigned-arm64-deb';
 else
