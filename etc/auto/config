@@ -7,7 +7,7 @@ set -e
 lb config noauto \
     --architectures "$ARCH" \
     --mode debian \
-    --initramfs none \
+    --initramfs live-boot \
     --initsystem systemd \
     --distribution "./$BASECODENAME" \
     --parent-distribution "./$BASECODENAME" \
