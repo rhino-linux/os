@@ -5,8 +5,10 @@ on:
 
 jobs:
   build_amd64:
-    runs-on: [buildjet-4vcpu-ubuntu-2204, buildjet-8vcpu-ubuntu-2204, buildjet-16vcpu-ubuntu-2204, buildjet-32vcpu-ubuntu-2204]
-
+    strategy:
+      matrix:
+        runs-on: [buildjet-4vcpu-ubuntu-2204, buildjet-8vcpu-ubuntu-2204, buildjet-16vcpu-ubuntu-2204, buildjet-32vcpu-ubuntu-2204]
+    runs-on: ${{matrix.runs-on}}
     steps:
     - uses: actions/checkout@v3.1.0
 
@@ -43,8 +45,10 @@ jobs:
         path: builds/amd64/
         
   build_arm64:
-    runs-on: [buildjet-4vcpu-ubuntu-2204-arm, buildjet-8vcpu-ubuntu-2204-arm, buildjet-16vcpu-ubuntu-2204-arm, buildjet-32vcpu-ubuntu-2204-arm]
-
+    strategy:
+      matrix:
+        runs-on: [buildjet-4vcpu-ubuntu-2204-arm, buildjet-8vcpu-ubuntu-2204-arm, buildjet-16vcpu-ubuntu-2204-arm, buildjet-32vcpu-ubuntu-2204-arm]
+    runs-on: ${{matrix.runs-on}}
     steps:
     - uses: actions/checkout@v3.1.0
 
