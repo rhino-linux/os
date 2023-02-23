@@ -104,13 +104,26 @@ sudo chown "rhino" -cR /usr/share/applications/install.desktop
 
 mkdir -p /etc/skel/.config/autostart
 sudo rm /etc/calamares/modules/after_bootloader_context.conf
-echo '---
+sudo cat > /etc/calamares/modules/after_bootloader_context.conf << __EOF__
+---
 dontChroot: false
 timeout: 120
 firmwareType:
     "*":
         - "-rm /usr/share/applications/install.desktop"
-        - command: "-ln -s /usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop /home/$USER/.config/autostart/setup.desktop"' | sudo tee -a /etc/calamares/modules/after_bootloader_context.conf > /dev/null
+        - command: "-ln -s /usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop /home/\$USER/.config/autostart/setup.desktop"
+        - command: "-wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
+        - command: "-mv Microsoft.VisualStudio.Services.VSIXPackage omni-dracula.vsix"
+        - command: "-mkdir /home/\$USER/.config/VSCodium/"
+        - command:  "-mkdir /home/\$USER/.config/VSCodium/User/"
+        - command: "-chown -cR \$USER /home/\$USER/.config/VSCodium/"
+        - command: "-HOME=/home/\$USER runuser -m -u \$USER -- sh -c  'codium --install-extension omni-dracula.vsix'"
+        - command: "-rm omni-dracula.vsix"
+        - command: "-echo '{' | tee -a /home/\$USER/.config/VSCodium/User/settings.json"
+        - command: "-echo '    \"workbench.colorTheme\": \"Omni Dracula Theme\"' | tee -a /home/\$USER/.config/VSCodium/User/settings.json"
+        - command: "-echo '}' | tee -a /home/\$USER/.config/VSCodium/User/settings.json"
+        - command: "-chown -cR \$USER /home/\$USER/.config/VSCodium/"
+__EOF__
 
 echo '#!/bin/sh
 true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
