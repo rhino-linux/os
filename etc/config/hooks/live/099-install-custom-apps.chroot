@@ -149,15 +149,15 @@ sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
 ( cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png )
 
 
-wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage && mv Microsoft.VisualStudio.Services.VSIXPackage omni-dracula.vsix
-sudo chown -cR rhino omni-dracula.vsix
+wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage && mv Microsoft.VisualStudio.Services.VSIXPackage /home/rhino/omni-dracula.vsix
+sudo chown -cR rhino /home/rhino/omni-dracula.vsix
 sudo mkdir /etc/skel/.config/VSCodium/
 sudo mkdir /etc/skel/.config/VSCodium/User/
 sudo mkdir /home/rhino/.config/VSCodium/
 sudo mkdir /home/rhino/.config/VSCodium/User/
 sudo chown -cR rhino /home/rhino/.config/VSCodium/
-HOME=/home/rhino runuser -m -u rhino -- sh -c  'codium --install-extension omni-dracula.vsix --user-data-dir /etc/skel/.config/VSCodium/ --no-sandbox'
-rm omni-dracula.vsix
+HOME=/home/rhino runuser -m -u rhino -- sh -c  'codium --install-extension /home/rhino/omni-dracula.vsix --user-data-dir /etc/skel/.config/VSCodium/ --no-sandbox'
+rm /home/rhino/omni-dracula.vsix
 echo '{
     "workbench.colorTheme": "Omni Dracula Theme"
 }' | sudo tee -a /etc/skel/.config/VSCodium/User/settings.json
