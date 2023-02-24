@@ -99,17 +99,18 @@ build () {
   sha512sum "${FNAME}.iso" > "${FNAME}.sha512"
   sha256sum "${FNAME}.iso" > "${FNAME}.sha256"
   cd $BASE_DIR
-  cat > etc/config/package-lists.calamares/pool.list.binary << __EOF__
-  b43-fwcutter
-  dkms
-  setserial
-  user-setup
-  efibootmgr
-  secureboot-db
-  shim
-  shim-signed
-  __EOF__
 }
+
+cat > etc/config/package-lists.calamares/pool.list.binary << __EOF__
+b43-fwcutter
+dkms
+setserial
+user-setup
+efibootmgr
+secureboot-db
+shim
+shim-signed
+__EOF__
 
 if [[ "$ARCH" == "all" ]]; then
     build amd64
