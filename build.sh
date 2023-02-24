@@ -32,7 +32,6 @@ grub-efi-amd64-bin
 grub-efi-amd64-signed' | sudo tee -a etc/config/package-lists.calamares/pool.list.binary; 
 fi
 
-sudo chmod +x binary_grub-efi
 sudo cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
 
 #VanillaOS patch to yeet ia32
@@ -102,6 +101,16 @@ build () {
   sha512sum "${FNAME}.iso" > "${FNAME}.sha512"
   sha256sum "${FNAME}.iso" > "${FNAME}.sha256"
   cd $BASE_DIR
+  cat > etc/config/package-lists.calamares/pool.list.binary << __EOF__
+  b43-fwcutter
+  dkms
+  setserial
+  user-setup
+  efibootmgr
+  secureboot-db
+  shim
+  shim-signed
+  __EOF__
 }
 
 if [[ "$ARCH" == "all" ]]; then
