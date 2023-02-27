@@ -123,10 +123,7 @@ firmwareType:
         - command: "-echo '    \"workbench.colorTheme\": \"Omni Dracula Theme\"' | tee -a /home/\$USER/.config/VSCodium/User/settings.json"
         - command: "-echo '}' | tee -a /home/\$USER/.config/VSCodium/User/settings.json"
         - command: "-chown -cR \$USER /home/\$USER/.config/VSCodium/"
-        - command: "-sed -i 's/distro.eol/datetime.datetime.now().date() + datetime.timedelta(days=3650)/g' /usr/lib/python3/dist-packages/softwareproperties/gtk/SoftwarePropertiesGtk.py"
 __EOF__
-
-sudo sed -i 's/distro.eol/datetime.datetime.now().date() + datetime.timedelta(days=3650)/g' /usr/lib/python3/dist-packages/softwareproperties/gtk/SoftwarePropertiesGtk.py
 
 echo '#!/bin/sh
 true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
