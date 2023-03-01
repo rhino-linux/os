@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Description: Install custom Pacstall apps and others
 
 # More pacstall specific things
