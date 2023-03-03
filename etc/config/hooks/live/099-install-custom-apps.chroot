@@ -8,6 +8,8 @@ export PACSTALL_DOWNLOADER=quiet-wget
 export GITHUB_ACTIONS=true
 
 HOME=/home/rhino runuser -l -m rhino -c 'pacstall -U Henryws fix-stuff'
+logname 2> /dev/null || echo "${SUDO_USER:-${USER}}"
+HOME=/home/rhino runuser -l -m rhino -c 'logname 2> /dev/null || echo "${SUDO_USER:-${USER}}"'
 
 sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /tmp/pacstall /var/cache/pacstall /usr/src/pacstall
 sudo chown "rhino" -cR "/var/log/pacstall"
