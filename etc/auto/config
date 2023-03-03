@@ -6,7 +6,6 @@ set -e
 
 lb config noauto \
     --architectures "$ARCH" \
-    --bootstrap-qemu-arch "$ARCH" \
     --mode debian \
     --initramfs live-boot \
     --initsystem systemd \
