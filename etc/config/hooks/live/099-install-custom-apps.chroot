@@ -188,7 +188,7 @@ chmod -R 777 /home/rhino/.config/xfce4
 sudo chown "rhino" -cR /home/rhino/Desktop
 
 sudo apt-get clean
-sudo apt-get remove linux*5.19* -yq
+sudo apt-get remove linux*6.1* -yq
 sudo update-initramfs -u
 # These are not needed maybe
 #sudo apt-get autoremove --purge -f -yq aspell-en aspell bolt
