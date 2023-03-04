@@ -20,11 +20,11 @@ sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
 if [ $(dpkg --print-architecture) = arm64 ]; then
-HOME=/home/rhino runuser -m -u rhino -c 'PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb thorium-arm64-deb vscodium-arm64-deb linux-headers-deb linux-headers-generic-arm64-deb linux-modules-arm64-deb linux-image-unsigned-arm64-deb';
+HOME=/home/rhino runuser -l rhino -c 'PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb thorium-arm64-deb vscodium-arm64-deb linux-headers-deb linux-headers-generic-arm64-deb linux-modules-arm64-deb linux-image-unsigned-arm64-deb';
 else
-HOME=/home/rhino runuser -m -u rhino -c 'PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-bin vscodium-deb linux-headers-deb linux-headers-generic-deb linux-modules-deb linux-image-unsigned-deb';
+HOME=/home/rhino runuser -l rhino -c 'PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-bin vscodium-deb linux-headers-deb linux-headers-generic-deb linux-modules-deb linux-image-unsigned-deb';
 fi
-HOME=/home/rhino runuser -m -u rhino -c 'pacstall -PI rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git rhino-pkg-git rhino-neofetch-git'
+HOME=/home/rhino runuser -l rhino -c 'pacstall -PI rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git rhino-pkg-git rhino-neofetch-git'
 popd
 
 HOME=/home/rhino runuser -l -m rhino -c 'pacstall -U'
