@@ -122,10 +122,6 @@ firmwareType:
         - command: "-chown -cR \$USER /home/\$USER/.config/VSCodium/"
         - command: "-HOME=/home/\$USER runuser -m -u \$USER -- sh -c  'codium --install-extension omni-dracula.vsix'"
         - command: "-rm omni-dracula.vsix"
-        - command: "-echo '{' | tee -a /home/\$USER/.config/VSCodium/User/settings.json"
-        - command: "-echo '    \"workbench.colorTheme\": \"Omni Dracula Theme\"' | tee -a /home/\$USER/.config/VSCodium/User/settings.json"
-        - command: "-echo '}' | tee -a /home/\$USER/.config/VSCodium/User/settings.json"
-        - command: "-chown -cR \$USER /home/\$USER/.config/VSCodium/"
 __EOF__
 
 echo '#!/bin/sh
