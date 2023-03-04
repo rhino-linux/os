@@ -27,7 +27,7 @@ fi
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git rhino-pkg-git rhino-neofetch-git'
 popd
 
-HOME=/home/rhino runuser -l arhino -c 'pacstall -U'
+HOME=/home/rhino runuser -l rhino -c 'pacstall -U'
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Snow/cursor.theme 55
