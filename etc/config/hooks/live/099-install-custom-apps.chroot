@@ -27,6 +27,13 @@ fi
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git rhino-pkg-git rhino-neofetch-git'
 popd
 
+if [ $(dpkg --print-architecture) = arm64 ]; then
+echo "" >> /etc/apt/preferences.d/rhino.pref
+echo "Package: firefox" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref; fi
+
 HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall master'
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
