@@ -24,7 +24,7 @@ lb config noauto \
     --parent-mirror-binary-security "$SECURITY_URL" \
     --mirror-binary "$MIRROR_URL" \
     --parent-mirror-binary "$MIRROR_URL" \
-    --keyring-packages "ubuntu-keyring debian-keyring debian-archive-keyring debian-ports-archive-keyring" \
+    --keyring-packages ubuntu-keyring \
     --apt-options "--option Acquire::Retries=2 --option Acquire::http::Timeout=45 --yes" \
     --cache-packages false \
     --cache-stages false \
