@@ -3,6 +3,7 @@ expect
 gparted
 cifs-utils
 language-pack-en
+language-pack-ko
 xfsprogs
 jfsutils
 reiserfsprogs
