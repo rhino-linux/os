@@ -7,7 +7,7 @@ export DEBIAN_FRONTEND=noninteractive
 export PACSTALL_DOWNLOADER=quiet-wget
 export GITHUB_ACTIONS=true
 
-HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall develop'
+HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall 3.6.1'
 
 sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /tmp/pacstall /var/cache/pacstall /usr/src/pacstall
 sudo chown "rhino" -cR "/var/log/pacstall"
