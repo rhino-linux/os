@@ -7,8 +7,6 @@ export DEBIAN_FRONTEND=noninteractive
 export PACSTALL_DOWNLOADER=quiet-wget
 export GITHUB_ACTIONS=true
 
-HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall 3.6.1'
-
 sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /tmp/pacstall /var/cache/pacstall /usr/src/pacstall
 sudo chown "rhino" -cR "/var/log/pacstall"
 sudo chmod -R 777 "/tmp/pacstall"
@@ -34,7 +32,6 @@ echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino
 echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
 echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref; fi
 
-HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall master'
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Snow/cursor.theme 55
