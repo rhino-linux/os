@@ -1,0 +1,9 @@
+[Unit]
+Description=start resize script to increase rootfs to its partitions full size
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/resizefs.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Wait until the modem is found
+/usr/share/ofono/scripts/list-modems | grep -q "quectelqmi"
+while [ $? -ne 0 ]; do
+    sleep 1
+/usr/share/ofono/scripts/list-modems | grep -q "quectelqmi"
+done
+
+sleep 2
+
+# Set modem audio configs
+if echo "AT+QDAI=1,0,0,2,0,1,1,1" | atinout - /dev/EG25.AT - | grep -q OK; then
+	echo "Successfully configured modem audio"
+else
+	echo "Failed to set modem audio up: $?"
+fi
+
+# Wait until the modem is enabled
+/usr/share/ofono/scripts/enable-modem | grep -q "quectelqmi"
+while [ $? -ne 0 ]; do
+    sleep 1
+    /usr/share/ofono/scripts/enable-modem
+done
+
+sleep 2
+/usr/share/ofono/scripts/online-modem

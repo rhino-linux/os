@@ -18,12 +18,19 @@ sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
 if [ $(dpkg --print-architecture) = arm64 ]; then
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb linux-headers-deb linux-headers-generic-arm64-deb linux-modules-arm64-deb linux-image-unsigned-arm64-deb';
+HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb';
 else
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-bin vscodium-deb linux-headers-deb linux-headers-generic-deb linux-modules-deb linux-image-unsigned-deb';
 fi
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-setup-git rhino-pkg-git rhino-neofetch-git'
 popd
+
+git clone https://github.com/oklopfer/dotfiles
+rm /usr/share/onboard/themes/Droid.theme
+mv dotfiles/onboard/themes/Droid.theme /usr/share/onboard/themes/Droid.theme
+rm -r /etc/skel/.config/xfce4
+mv dotfiles/xfce4 /etc/skel/.config
+rm -r dotfiles
 
 if [ $(dpkg --print-architecture) = arm64 ]; then
 echo "" >> /etc/apt/preferences.d/rhino.pref
@@ -149,7 +156,7 @@ sudo cp /lib/"$GNU"64-linux-gnu/calamares/modules/automirror/automirror.conf /et
 cd ~
 
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
-( cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png )
+( cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/oklopfer/lightdm-rhino/mobile/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png )
 
 wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage && mv Microsoft.VisualStudio.Services.VSIXPackage /home/rhino/omni-dracula.vsix
 sudo chown -cR rhino /home/rhino/omni-dracula.vsix
@@ -166,6 +173,15 @@ echo '{
 sudo cp -r /etc/skel/.config/VSCodium/ /home/rhino/.config/
 sudo chown -cR rhino /home/rhino/.config/VSCodium/
 
+git clone https://github.com/oklopfer/xfce4-settings
+cd xfce4-settings
+./autogen.sh
+make
+make install
+cd ..
+rm -r xfce4-settings
+
+git
 
 # The rhino user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
 
@@ -173,7 +189,7 @@ if [ $(dpkg --print-architecture) = arm64 ]; then
 rm -rf /etc/skel/.config/dconf
 rm -rf /home/rhino/.config/dconf
 cd /etc/skel/.config/
-git clone https://github.com/oklopfer/dconf
+git clone https://github.com/oklopfer/dconf -b mobile
 mkdir /home/rhino/.config/dconf
 cp -r /etc/skel/.config/dconf/user /home/rhino/.config/dconf/user
 cd ~;
