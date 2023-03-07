@@ -32,9 +32,10 @@ rm -r /etc/skel/.config/xfce4
 mv dotfiles/xfce4 /etc/skel/.config
 rm -r dotfiles
 
-wget https://github.com/oklopfer/rhino-os/raw/pinephone/debs/u-boot-menu_4.2.1mobian1_all.deb
-dpkg -i u-boot-menu*.deb
-rm u-boot-menu*.deb
+wget https://cdn.discordapp.com/attachments/702362478595670026/1078022392812683456/artifacts-17.zip -O kernel.zip
+unzip kernel.zip
+dpkg -i linux*okpine-pro*.deb
+rm linux*okpine-pro*.deb
 
 if [ $(dpkg --print-architecture) = arm64 ]; then
 echo "" >> /etc/apt/preferences.d/rhino.pref
