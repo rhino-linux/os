@@ -2,10 +2,6 @@
 
 mkdir casper || true
 
-cp -r ../../../../../debs/u-boot*.deb u-boot-mobian.deb
-dpkg -i u-boot*.deb
-rm u-boot*.deb
-
 cp -r ../../../chroot/boot/dtb-6.2.0-okpine-pro live/dtb-6.2.0-okpine-pro
 mv live/filesystem.squashfs casper/filesystem.squashfs
 mv live/filesystem.size casper/filesystem.size
