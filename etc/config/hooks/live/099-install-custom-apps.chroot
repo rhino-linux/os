@@ -48,6 +48,13 @@ echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino
 echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
 echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref; fi
 
+if [ $(dpkg --print-architecture) = arm64 ]; then
+echo "" >> /etc/apt/preferences.d/rhino.pref
+echo "Package: u-boot-menu" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref; fi
+
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Snow/cursor.theme 55
