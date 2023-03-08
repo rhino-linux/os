@@ -2,7 +2,7 @@
 
 mkdir casper || true
 
-cp -r ../../../../../debs/u-boot*.deb
+cp -r ../../../../../debs/u-boot*.deb u-boot-mobian.deb
 dpkg -i u-boot*.deb
 rm u-boot*.deb
 
