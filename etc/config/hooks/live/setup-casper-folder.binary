@@ -1,6 +1,7 @@
 #!/bin/sh
 
 mkdir casper || true
+cp -r tmp/arm64/chroot/boot/dtb-6.2.0-okpine-pro live/dtb-6.2.0-okpine-pro
 mv live/filesystem.squashfs casper/filesystem.squashfs
 mv live/filesystem.size casper/filesystem.size
 mv live/initrd.img-* casper/initrd.lz
