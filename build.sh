@@ -19,10 +19,7 @@ source "$BASE_DIR"/"$CONFIG_FILE"
 
 # do arch-dep adjustment
 if [ $ARCH = arm64 ]; then
-echo 'initramfs-tools
-grub-efi-arm64
-grub-efi-arm64-bin
-grub-efi-arm64-signed' | sudo tee -a etc/config/package-lists.calamares/pool.list.binary; 
+echo 'initramfs-tools' | sudo tee -a etc/config/package-lists.calamares/pool.list.binary; 
 else
 echo 'bcmwl-kernel-source
 microcode-initrd
