@@ -27,10 +27,9 @@ lb config noauto \
     --cache-packages false \
     --cache-stages false \
     --uefi-secure-boot enable \
-    --binary-image iso-hybrid \
+    --binary-image hdd \
     --binary-filesystem ext4 \
-    --iso-application "$NAME" \
-    --iso-volume "$NAME" \
+    --hdd-label "$NAME" \
     --firmware-binary false \
     --firmware-chroot false \
     --zsync false \
