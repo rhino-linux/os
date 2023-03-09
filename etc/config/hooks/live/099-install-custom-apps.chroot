@@ -193,7 +193,7 @@ apt-get install xfce4-dev-tools libexo-2-dev libgarcon-1-dev libxfce4ui-2-dev -y
 git clone https://github.com/oklopfer/xfce4-settings
 cd xfce4-settings
 ./autogen.sh
-make
+make -j($nproc)
 make install
 cd ..
 rm -r xfce4-settings
