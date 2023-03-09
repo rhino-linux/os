@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cp -r ../chroot/boot boot/
-bash ../chroot/etc/kernel/postinst.d/zzz-okpine-pro
+bash ../chroot/etc/kernel/postinst.d/zzz-u-boot-pinepro
