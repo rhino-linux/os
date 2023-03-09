@@ -197,8 +197,6 @@ make install
 cd ..
 rm -r xfce4-settings
 
-git
-
 # The rhino user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
 
 if [ $(dpkg --print-architecture) = arm64 ]; then 
