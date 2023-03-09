@@ -11,6 +11,7 @@ lb config noauto \
     --initsystem systemd \
     --distribution "./$BASECODENAME" \
     --parent-distribution "./$BASECODENAME" \
+    --linux-flavours "generic" \
     --archive-areas "main restricted universe multiverse" \
     --parent-archive-areas "main restricted universe multiverse" \
     --mirror-bootstrap "$MIRROR_URL" \
