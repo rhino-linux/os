@@ -27,6 +27,7 @@ lb config noauto \
     --cache-packages false \
     --cache-stages false \
     --uefi-secure-boot enable \
+    --system normal \
     --binary-image hdd \
     --binary-filesystem ext4 \
     --chroot-filesystem ext4 \
