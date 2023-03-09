@@ -28,9 +28,9 @@ lb config noauto \
     --cache-stages false \
     --uefi-secure-boot enable \
     --system normal \
-    --binary-image tar \
+    --binary-image hdd \
     --binary-filesystem ext4 \
-    --chroot-filesystem plain \
+    --chroot-filesystem ext4 \
     --hdd-label "RHINO_LINUX" \
     --firmware-binary false \
     --firmware-chroot false \
