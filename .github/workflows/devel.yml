@@ -11,6 +11,7 @@ jobs:
 
     - name: Install needed packages
       run: |
+        ls /etc/apt/sources.list.d
         sudo rm -rf /var/lib/apt/lists/*
         sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
         sudo apt-get update && sudo apt-get install --reinstall debootstrap -y
