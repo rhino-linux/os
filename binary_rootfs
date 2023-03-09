@@ -150,6 +150,9 @@ case "${LB_CHROOT_FILESYSTEM}" in
 				dd if=/dev/zero of=binary/${INITFS}/filesystem.${LB_CHROOT_FILESYSTEM} bs=1024k count=0 seek=${REAL_DIM}
 				mkfs.${LB_CHROOT_FILESYSTEM} -F -b 1024 -N ${REAL_INODES} -m 0 binary/${INITFS}/filesystem.${LB_CHROOT_FILESYSTEM}
 
+				chroot binary/${INITFS}/filesystem.${LB_CHROOT_FILESYSTEM}
+				bash 'U_BOOT_PARAMETERS="console=ttyS2,115200n8 consoleblank=0 loglevel=7 rw splash plymouth.ignore-serial-consoles vt.global_cursor_default=0" /etc/kernel/postinst.d/zz-u-boot-menu 6.2.0-okpine-pro'
+				exit
 				mkdir -p filesystem.tmp
 				mount -o loop binary/${INITFS}/filesystem.${LB_CHROOT_FILESYSTEM} filesystem.tmp
 				cp -a chroot/* filesystem.tmp
