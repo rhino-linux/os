@@ -7,15 +7,13 @@ set -e
 lb config noauto \
     --architectures "$ARCH" \
     --mode debian \
-    --initramfs live-boot \
+    --initramfs none \
     --initsystem systemd \
     --distribution "./$BASECODENAME" \
     --parent-distribution "./$BASECODENAME" \
+    --linux-flavours "generic" \
     --archive-areas "main restricted universe multiverse" \
     --parent-archive-areas "main restricted universe multiverse" \
-    --linux-packages linux-image \
-    --linux-flavours "generic" \
-    --bootappend-live "boot=casper quiet splash" \
     --mirror-bootstrap "$MIRROR_URL" \
     --parent-mirror-bootstrap "$MIRROR_URL" \
     --mirror-chroot-security "$SECURITY_URL" \
@@ -29,22 +27,23 @@ lb config noauto \
     --cache-packages false \
     --cache-stages false \
     --uefi-secure-boot enable \
-    --binary-image iso-hybrid \
-    --iso-application "$NAME" \
-    --iso-volume "$NAME" \
+    --binary-image hdd \
+    --binary-filesystem ext4 \
+    --chroot-filesystem ext4 \
+    --build-with-chroot true \
+    --hdd-label "RHINO_LINUX" \
     --firmware-binary false \
     --firmware-chroot false \
     --zsync false \
     --security true \
     --updates true \
-    --debootstrap-options "--exclude=pinephone-tweaks,mobile-tweaks-common,librem5-tweaks,pinetab-tweaks" \
+    --debootstrap-options "--include=mobile-tweaks-common" \
     --swap-file-path /swapfile \
     --swap-file-size 512 \
     --interactive false \
     --debconf-frontend noninteractive \
     --compression xz \
     --checksums md5 \
-    --bootloaders "$BOOTLOADERS" \
     "${@}"
 
 

@@ -3,10 +3,10 @@
 
 apt-get update -yq
 apt-get dist-upgrade -yq
-apt-get install axel nano gnome-disk-utility -yq
+apt-get install axel nano gnome-disk-utility onboard iio-sensor-proxy sxmo-utils -yq
 
 # Create user
-sudo useradd -rm -d /home/rhino -g root -s /bin/bash -u 1001 rhino
+sudo useradd -rm -d /home/rhino -g root -s /bin/bash -p $(openssl passwd -1 1234) -u 1001 rhino
 sudo adduser rhino sudo
 echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # Pacstall has issues with sudo despite the user not having a password
 
@@ -22,28 +22,4 @@ chmod +x ./pacstall-install.sh
 echo N\n | sudo -E ./pacstall-install.sh
 rm ./pacstall-install.sh
 
-# WORKAROUND to trust CD Add
-sudo rm /etc/calamares/modules/before_bootloader_context.conf
-sudo touch /etc/calamares/modules/before_bootloader_context.conf
-sudo cat > /etc/calamares/modules/before_bootloader_context.conf << __EOF__
-# Make sure the correct bootloader package is installed for EFI.
-# Also pull in shim so secureboot has a chance at working.
-# Because of edge cases, we ignore BIOS, and do the same
-# procedure for all EFI types.
----
-firmwareType:
-    bios:    "-/bin/true"
-    "*":
-        -    command: apt-cdrom add -m -d=/media/cdrom/
-             timeout: 10
-        -    command: sed -i '/deb http/d' /etc/apt/sources.list
-             timeout: 10
-        -    command: sed -i 's/ cdrom/ [trusted=yes] cdrom/g' /etc/apt/sources.list
-        -    timeout: 10
-        -    command: apt-get update
-             timeout: 120
-        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict grub-efi-$(dpkg --print-architecture)-signed
-             timeout: 300
-        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict shim-signed
-             timeout: 300'
-__EOF__
+# sed -i 's/ cdrom/ [trusted=yes] cdrom/g' /etc/apt/sources.list

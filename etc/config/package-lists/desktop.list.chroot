@@ -53,3 +53,10 @@ mpv
 language-pack-ko
 fonts-noto-cjk
 fonts-noto-cjk-extra
+zram-config
+rsync
+libglib2.0-bin
+shim-signed
+shim
+language-pack-en
+language-pack-ko

@@ -17,20 +17,6 @@ fi
 BASE_DIR="$PWD"
 source "$BASE_DIR"/"$CONFIG_FILE"
 
-# do arch-dep adjustment
-if [ $ARCH = arm64 ]; then
-echo 'initramfs-tools
-grub-efi-arm64
-grub-efi-arm64-bin
-grub-efi-arm64-signed' | sudo tee -a etc/config/package-lists.calamares/pool.list.binary; 
-else
-echo 'bcmwl-kernel-source
-microcode-initrd
-iucode-tool
-grub-efi-amd64
-grub-efi-amd64-bin
-grub-efi-amd64-signed' | sudo tee -a etc/config/package-lists.calamares/pool.list.binary; 
-fi
 
 #VanillaOS patch to yeet ia32
 #sudo sed -i '/Check_package chroot \/usr\/lib\/grub\/i386-efi\/configfile.mod grub-efi-ia32-bin/d' /usr/lib/live/build/binary_grub-efi
@@ -90,27 +76,18 @@ build () {
   OUTPUT_DIR="$BASE_DIR/builds/$BUILD_ARCH"
   mkdir -p "$OUTPUT_DIR"
   FNAME="Rhino-Linux-OS-$VERSION$OUTPUT_SUFFIX-$BUILD_ARCH"
-  mv "$BASE_DIR/tmp/$BUILD_ARCH/live-image-$BUILD_ARCH.hybrid.iso" "$OUTPUT_DIR/${FNAME}.iso"
+  ls $BASE_DIR/tmp/$BUILD_ARCH/
+  mv "$BASE_DIR/tmp/$BUILD_ARCH/live-image-$BUILD_ARCH.img" "$OUTPUT_DIR/${FNAME}.img"
 
   # cd into output to so {FNAME}.sha256.txt only
   # includes the filename and not the path to
   # our file.
   cd $OUTPUT_DIR
-  sha512sum "${FNAME}.iso" > "${FNAME}.sha512"
-  sha256sum "${FNAME}.iso" > "${FNAME}.sha256"
+  sha512sum "${FNAME}.img" > "${FNAME}.sha512"
+  sha256sum "${FNAME}.img" > "${FNAME}.sha256"
   cd $BASE_DIR
 }
 
-cat > etc/config/package-lists.calamares/pool.list.binary << __EOF__
-b43-fwcutter
-dkms
-setserial
-user-setup
-efibootmgr
-secureboot-db
-shim
-shim-signed
-__EOF__
 
 if [[ "$ARCH" == "all" ]]; then
     build amd64

@@ -22,5 +22,3 @@ if [ "$IMAGEFORMAT" == "none" ]; then
         #echo "/swapfile         none  swap    sw    0 0" >>/etc/fstab
     fi
 fi
-
-systemctl enable casper-md5check.service
