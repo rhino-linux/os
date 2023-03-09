@@ -11,7 +11,7 @@ lb config noauto \
     --initsystem systemd \
     --distribution "./$BASECODENAME" \
     --parent-distribution "./$BASECODENAME" \
-    --bootstrap-qemu-arch arm64 \
+    --bootstrap-qemu-arch aarch64 \
     --linux-flavours "generic" \
     --archive-areas "main restricted universe multiverse" \
     --parent-archive-areas "main restricted universe multiverse" \
