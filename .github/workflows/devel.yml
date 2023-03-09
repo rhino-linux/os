@@ -12,7 +12,7 @@ jobs:
     - name: Install needed packages
       run: |
         sudo rm -rf /var/lib/apt/lists/*
-        sudo apt update && sudo apt-get install --reinstall debootstrap -y
+        sudo apt-get update && sudo apt-get install --reinstall debootstrap -y
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/lunar
         sudo dpkg -i debs/live-build_*_all.deb
         sudo mv /usr/share/debootstrap/functions functions
