@@ -32,7 +32,7 @@ lb config noauto \
     --system normal \
     --binary-image hdd \
     --binary-filesystem ext4 \
-    --chroot-filesystem ext4 \
+    --chroot-filesystem none \
     --hdd-label "RHINO_LINUX" \
     --firmware-binary false \
     --firmware-chroot false \
