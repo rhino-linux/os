@@ -11,7 +11,8 @@ jobs:
 
     - name: Install needed packages
       run: |
-        ls /etc/apt/sources.list.d
+        sudo sed -i 's/22.04/23.04/g' /etc/apt/sources.list.d/microsoft-prod.list
+        sudo sed -i 's/jammy/lunar/g' /etc/apt/sources.list.d/microsoft-prod.list
         sudo rm -rf /var/lib/apt/lists/*
         sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
         sudo apt-get update && sudo apt-get install --reinstall debootstrap -y
