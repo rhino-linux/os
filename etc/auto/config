@@ -29,6 +29,7 @@ lb config noauto \
     --uefi-secure-boot enable \
     --binary-image hdd \
     --binary-filesystem ext4 \
+    --chroot-filesystem none \
     --hdd-label "RHINO_LINUX" \
     --firmware-binary false \
     --firmware-chroot false \
@@ -42,7 +43,6 @@ lb config noauto \
     --debconf-frontend noninteractive \
     --compression xz \
     --checksums md5 \
-    --bootloaders "$BOOTLOADERS" \
     "${@}"
 
 
