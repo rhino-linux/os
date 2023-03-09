@@ -76,8 +76,15 @@ build () {
   OUTPUT_DIR="$BASE_DIR/builds/$BUILD_ARCH"
   mkdir -p "$OUTPUT_DIR"
   FNAME="Rhino-Linux-OS-$VERSION$OUTPUT_SUFFIX-$BUILD_ARCH"
-  ls $BASE_DIR/tmp/$BUILD_ARCH/
   mv "$BASE_DIR/tmp/$BUILD_ARCH/live-image-$BUILD_ARCH.img" "$OUTPUT_DIR/${FNAME}.img"
+  
+  mkdir -p /tmp/extfix
+  sudo mount "$OUTPUT_DIR/${FNAME}.img" /tmp/extfix
+  sudo chroot /tmp/extfix
+  bash 'U_BOOT_PARAMETERS="console=ttyS2,115200n8 consoleblank=0 loglevel=7 rw splash plymouth.ignore-serial-consoles vt.global_cursor_default=0" /etc/kernel/postinst.d/zz-u-boot-menu 6.2.0-okpine-pro'
+  exit
+  sudo umount /tmp/extfix
+  sudo rm -r /tmp/extfix
 
   # cd into output to so {FNAME}.sha256.txt only
   # includes the filename and not the path to
