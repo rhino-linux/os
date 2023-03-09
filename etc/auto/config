@@ -12,6 +12,7 @@ lb config noauto \
     --distribution "./$BASECODENAME" \
     --parent-distribution "./$BASECODENAME" \
     --bootstrap-qemu-arch aarch64 \
+    --bootstrap-qemu-static aarch64 \
     --linux-flavours "generic" \
     --archive-areas "main restricted universe multiverse" \
     --parent-archive-areas "main restricted universe multiverse" \
