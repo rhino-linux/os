@@ -88,14 +88,14 @@ build () {
   mkdir -p "$OUTPUT_DIR"
   FNAME="Rhino-Linux-OS-$VERSION$OUTPUT_SUFFIX-$BUILD_ARCH"
   ls $BASE_DIR/tmp/$BUILD_ARCH/
-  mv "$BASE_DIR/tmp/$BUILD_ARCH/*.img" "$OUTPUT_DIR/${FNAME}.img"
+  mv "$BASE_DIR/tmp/$BUILD_ARCH/live-image-$BUILD_ARCH.hybrid.iso" "$OUTPUT_DIR/${FNAME}.iso"
 
   # cd into output to so {FNAME}.sha256.txt only
   # includes the filename and not the path to
   # our file.
   cd $OUTPUT_DIR
-  sha512sum "${FNAME}.img" > "${FNAME}.sha512"
-  sha256sum "${FNAME}.img" > "${FNAME}.sha256"
+  sha512sum "${FNAME}.iso" > "${FNAME}.sha512"
+  sha256sum "${FNAME}.iso" > "${FNAME}.sha256"
   cd $BASE_DIR
 }
 
