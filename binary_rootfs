@@ -105,7 +105,6 @@ case "${LB_CHROOT_FILESYSTEM}" in
 			true)
 				dd if=/dev/zero of=chroot/filesystem.${LB_CHROOT_FILESYSTEM} bs=1024k count=0 seek=${REAL_DIM}
 
-				fi
 				BLOCK_SIZE=1024
 				if [ "${LB_DM_VERITY}" = "true" ]
 				then
