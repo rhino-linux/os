@@ -21,6 +21,7 @@ jobs:
         sudo patch -i 0002-remove-WRONGSUITE-error.patch
         sudo mv functions /usr/share/debootstrap/functions
         sudo cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
+        sudo cp binary_rootfs /usr/lib/live/build/binary_rootfs
         
     - name: Make scripts executable
       run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
