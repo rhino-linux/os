@@ -1,5 +1,7 @@
 #!/bin/sh
 
+ROOTDIR="$(cat ../../../chroot/boot/extlinux/extlinux.conf | grep root= | tail -n1 | awk '{print $2}')"
+sed -i 's/REPTHIS/$ROOTDIR/g' ../config/bootloaders/extlinux/live.cfg.in
 cp -r ../../../chroot/boot/dtb-6.2.0-okpine-pro boot/dtb-6.2.0-okpine-pro
 #mv live/filesystem.squashfs casper/filesystem.squashfs
 #mv live/filesystem.size casper/filesystem.size
