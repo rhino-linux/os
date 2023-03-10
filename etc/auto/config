@@ -38,8 +38,6 @@ lb config noauto \
     --security true \
     --updates true \
     --debootstrap-options "--include=mobile-tweaks-common" \
-    --swap-file-path /swapfile \
-    --swap-file-size 512 \
     --interactive false \
     --debconf-frontend noninteractive \
     --checksums md5 \
