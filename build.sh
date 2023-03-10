@@ -81,7 +81,7 @@ build () {
   mkdir -p /tmp/extfix
   sudo mount -t auto -o loop,rw,sync,offset=1048576 "$OUTPUT_DIR/${FNAME}.img" /tmp/extfix
   sudo chroot /tmp/extfix
-  bash 'U_BOOT_PARAMETERS="console=ttyS2,115200n8 consoleblank=0 loglevel=7 rw splash plymouth.ignore-serial-consoles vt.global_cursor_default=0" /etc/kernel/postinst.d/zz-u-boot-menu 6.2.0-okpine-pro'
+  U_BOOT_PARAMETERS="console=ttyS2,115200n8 consoleblank=0 loglevel=7 rw splash plymouth.ignore-serial-consoles vt.global_cursor_default=0" /etc/kernel/postinst.d/zz-u-boot-menu 6.2.0-okpine-pro
   exit
   sudo umount /tmp/extfix
   sudo rm -r /tmp/extfix
