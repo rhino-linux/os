@@ -42,7 +42,6 @@ lb config noauto \
     --swap-file-size 512 \
     --interactive false \
     --debconf-frontend noninteractive \
-    --compression xz \
     --checksums md5 \
     --bootstrap-qemu-arch "$QEMU_ARCH" \
     --bootstrap-qemu-static "$QEMU_STATIC" \
