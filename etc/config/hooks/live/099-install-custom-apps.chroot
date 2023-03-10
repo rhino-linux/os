@@ -49,6 +49,7 @@ echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref
  unzip kernel.zip
  dpkg -i linux*okpine-pro*.deb
  rm linux*okpine-pro*.deb
+ rm kernel.zip
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
