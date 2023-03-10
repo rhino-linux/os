@@ -11,8 +11,6 @@ lb config noauto \
     --initsystem systemd \
     --distribution "./$BASECODENAME" \
     --parent-distribution "./$BASECODENAME" \
-    --bootstrap-qemu-arch arm64 \
-    --bootstrap-qemu-static /usr/bin/qemu-aarch64-static \
     --linux-flavours "generic" \
     --archive-areas "main restricted universe multiverse" \
     --parent-archive-areas "main restricted universe multiverse" \
@@ -46,6 +44,9 @@ lb config noauto \
     --debconf-frontend noninteractive \
     --compression xz \
     --checksums md5 \
+    if [ $(dpkg --print-architecture) = amd64]; then
+    --bootstrap-qemu-arch arm64 \
+    --bootstrap-qemu-static /usr/bin/qemu-aarch64-static \; fi
     "${@}"
 
 
