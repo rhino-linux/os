@@ -28,9 +28,6 @@ jobs:
 
     - name: Build tarball
       run: sudo ./build.sh etc/terraform.conf
-      
-    - name: install docker
-      run: sudo ./dwndock.sh
 
     - name: Deploy to partition
       run: ./debos-docker pinephonepro.yaml 
