@@ -33,6 +33,12 @@ wget https://github.com/oklopfer/rhino-os/raw/pinephone/debs/u-boot-menu_4.2.1mo
 dpkg -i u-boot*.deb
 rm u-boot*.deb
 
+wget https://cdn.discordapp.com/attachments/702362478595670026/1078022392812683456/artifacts-17.zip -O kernel.zip
+unzip kernel.zip
+dpkg -i linux*okpine-pro*.deb
+rm linux*okpine-pro*.deb
+rm kernel.zip
+
 echo "" >> /etc/apt/preferences.d/rhino.pref
 echo "Package: firefox" >> /etc/apt/preferences.d/rhino.pref
 echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino.pref
