@@ -28,11 +28,18 @@ jobs:
 
     - name: Build tarball
       run: sudo ./build.sh etc/terraform.conf
+      
+    - name: install docker
+      run: sudo ./dwndock.sh
 
     - name: Deploy to partition
-      run: |
-        ./debos-docker pinephonepro.yaml
-	mv rhino-touch*.img builds/pine/
+      run: ./debos-docker pinephonepro.yaml 
+      
+    - name: Place output folder
+      run: mkdir -p builds/pine
+      
+    - name: Move to output folder
+      run: mv rhino-touch*.img builds/pine/
 
     - uses: actions/upload-artifact@v3.1.0
       with:
