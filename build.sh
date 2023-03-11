@@ -73,7 +73,7 @@ build () {
 #---------------------------#
 "
 
-  OUTPUT_DIR="$BASE_DIR/builds/$BUILD_ARCH"
+  OUTPUT_DIR="$BASE_DIR"
   mkdir -p "$OUTPUT_DIR"
   FNAME="Rhino-Linux-OS-$VERSION$OUTPUT_SUFFIX-$BUILD_ARCH"
   mv "$BASE_DIR/tmp/$BUILD_ARCH/live-image-$BUILD_ARCH.tar.tar" "$OUTPUT_DIR/${FNAME}.tar"
@@ -85,6 +85,7 @@ build () {
   sha512sum "${FNAME}.tar" > "${FNAME}.sha512"
   sha256sum "${FNAME}.tar" > "${FNAME}.sha256"
   cd $BASE_DIR
+  tar --numeric-owner -xf "${FNAME}.tar" && rm "${FNAME}.tar"
 }
 
 
