@@ -27,26 +27,12 @@ jobs:
       run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
 
     - name: Build tarball
-      run: |
-        sudo apt-get update && sudo apt-get install wget ca-certificates curl -y
-	wget https://download.docker.com/linux/ubuntu/dists/kinetic/pool/stable/arm64/containerd.io_1.6.18-1_arm64.deb
-	wget https://download.docker.com/linux/ubuntu/dists/kinetic/pool/stable/arm64/docker-buildx-plugin_0.10.2-1~ubuntu.22.10~kinetic_arm64.deb
-	wget https://download.docker.com/linux/ubuntu/dists/kinetic/pool/stable/arm64/docker-ce-cli_23.0.1-1~ubuntu.22.10~kinetic_arm64.deb
-	wget https://download.docker.com/linux/ubuntu/dists/kinetic/pool/stable/arm64/docker-ce-rootless-extras_23.0.1-1~ubuntu.22.10~kinetic_arm64.deb
-	wget https://download.docker.com/linux/ubuntu/dists/kinetic/pool/stable/arm64/docker-ce_23.0.1-1~ubuntu.22.10~kinetic_arm64.deb
-	wget https://download.docker.com/linux/ubuntu/dists/kinetic/pool/stable/arm64/docker-compose-plugin_2.16.0-1~ubuntu.22.10~kinetic_arm64.deb
-	sudo dpkg -i docker*.deb containerd*.deb
-	sudo rm *.deb
-	sudo service docker start
-
-    - name: Install docker
       run: sudo ./build.sh etc/terraform.conf
 
     - name: Deploy to partition
       run: |
         ./debos-docker pinephonepro.yaml
-	mkdir -p builds/pine
-	mv rhino-touch*.img builds/pine/
+	mkdir -p builds/pine && mv rhino-touch*.img builds/pine/
 
     - uses: actions/upload-artifact@v3.1.0
       with:
