@@ -22,6 +22,7 @@ HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-linux-x
 popd
 
 git clone https://github.com/oklopfer/dotfiles
+mv dotfiles/Dot-Transparent /usr/share/icons/
 rm /usr/share/onboard/themes/Droid.theme
 mv dotfiles/onboard/themes/Droid.theme /usr/share/onboard/themes/Droid.theme
 rm -r /etc/skel/.config/xfce4
@@ -44,20 +45,14 @@ echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino
 echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
 echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref
 
-
- wget https://cdn.discordapp.com/attachments/702362478595670026/1078022392812683456/artifacts-17.zip -O kernel.zip
- unzip kernel.zip
- dpkg -i linux*okpine-pro*.deb
- rm linux*okpine-pro*.deb
- rm kernel.zip
-
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Snow/cursor.theme 55
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Ink/cursor.theme 55
+sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Dot-Transparent/cursor.theme 55
 sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth 100
 sudo update-alternatives --set default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth
-sudo update-alternatives --set x-cursor-theme /usr/share/icons/Quintom_Ink/cursor.theme
+sudo update-alternatives --set x-cursor-theme /usr/share/icons/Dot-Transparent/cursor.theme
 echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
 mkdir -p /home/rhino/.config/Kvantum
 mkdir -p /etc/skel/.config/Kvantum
@@ -106,7 +101,6 @@ make -j$(nproc)
 make install
 cd ..
 rm -r xfce4-settings
-apt-get remove xfce4-dev-tools libexo-2-dev libgarcon-1-dev libxfce4ui-2-dev -yq
 
 # The rhino user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
 
