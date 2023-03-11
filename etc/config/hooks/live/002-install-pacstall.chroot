@@ -3,7 +3,7 @@
 
 apt-get update -yq
 apt-get dist-upgrade -yq
-apt-get install axel nano gnome-disk-utility onboard iio-sensor-proxy sxmo-utils -yq
+apt-get install axel nano gnome-disk-utility onboard iio-sensor-proxy sxmo-utils dbus-x11 dconf-editor -yq
 
 # Create user
 sudo useradd -rm -d /home/rhino -g root -s /bin/bash -p $(openssl passwd -1 1234) -u 1001 rhino
