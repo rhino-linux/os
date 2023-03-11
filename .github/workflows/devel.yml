@@ -30,13 +30,13 @@ jobs:
       run: sudo ./build.sh etc/terraform.conf
 
     - name: Deploy to partition
-      run: ./debos-docker pinephonepro.yaml 
+      run: sudo ./debos-docker pinephonepro.yaml 
       
     - name: Place output folder
-      run: mkdir -p builds/pine
+      run: sudo mkdir -p builds/pine
       
     - name: Move to output folder
-      run: mv rhino-touch*.img builds/pine/
+      run: sudo mv rhino-touch*.img builds/pine/
 
     - uses: actions/upload-artifact@v3.1.0
       with:
