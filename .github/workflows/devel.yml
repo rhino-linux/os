@@ -32,7 +32,7 @@ jobs:
     - name: Deploy to partition
       run: |
         ./debos-docker pinephonepro.yaml
-	mkdir -p builds/pine && mv rhino-touch*.img builds/pine/
+	mv rhino-touch*.img builds/pine/
 
     - uses: actions/upload-artifact@v3.1.0
       with:
