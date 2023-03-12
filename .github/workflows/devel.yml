@@ -30,7 +30,7 @@ jobs:
       run: sudo ./build.sh etc/terraform.conf
 
     - name: Deploy to partition
-      run: sudo ./debos-docker pinephonepro.yaml 
+      run: sudo ./debos-docker -m 10G pinephonepro.yaml 
       
     - name: Place output folder
       run: sudo mkdir -p builds/pine
