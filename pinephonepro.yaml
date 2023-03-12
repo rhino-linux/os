@@ -17,7 +17,7 @@ actions:
   - action: run
     description: unpacking rootfs
     chroot: false
-    command: tar --strip-components=1 --numeric-owner -xf /Rhino*.tar -C root && rm /Rhino*.tar
+    command: tar --strip-components=1 --numeric-owner -xf /recipes/root/Rhino*.tar -C root && rm /recipes/root/Rhino*.tar
 
   - action: run
     description: Remove apt caches to save space
