@@ -9,15 +9,10 @@
 # PHASE 1: begin with ubuntu touch base image
 architecture: {{ $architecture }}
 actions:
-  - action: overlay
-    description: Setup base rootfs
-    source: binary
-    destination: /
-
   - action: run
     description: unpacking rootfs
     chroot: false
-    command: tar --strip-components=1 --numeric-owner -xf /recipes/root/Rhino*.tar -C root && rm /recipes/root/Rhino*.tar
+    command: tar --strip-components=1 --numeric-owner -xf /recipes/binary/Rhino*.tar -C root && rm /recipes/binary/Rhino*.tar
 
   - action: run
     description: Remove apt caches to save space
