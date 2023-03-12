@@ -36,7 +36,7 @@ jobs:
       run: sudo mkdir -p builds/pine
       
     - name: Move to output folder
-      run: sudo mv rhino-touch*.img builds/pine/
+      run: sudo mv Rhino*.img builds/pine/
 
     - uses: actions/upload-artifact@v3.1.0
       with:
