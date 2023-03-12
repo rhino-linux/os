@@ -1,8 +1,7 @@
 {{- $architecture := or .architecture "arm64" -}}
-{{- $image := or .image "rhino-touch-pinephone-pro.img" -}}
+{{- $image := or .image "Rhino-Linux-OS-pinephone-pro.img" -}}
 {{- $variant := or .variant "mainline" -}}
 {{- $debug := or .debug "on" -}}
-{{- $cdimagesmirror := or .cdimagesmirror "http://cdimage.ubuntu.com" -}}
 {{- $additional_apt_repos := or .additional_apt_repos "" -}}
 {{- $phablet_password := or .phablet_password "" }}
 
@@ -10,10 +9,10 @@
 # PHASE 1: begin with ubuntu touch base image
 architecture: {{ $architecture }}
 actions:
-  - action: overlay
-    description: Setup base rootfs
-    source: binary
-    destination: /
+  - action: run
+    description: unpacking rootfs
+    chroot: false
+    command: tar --strip-components=1 --numeric-owner -xf binary/Rhino*.tar -C root && rm binary/Rhino*.tar
 
   - action: run
     description: Remove apt caches to save space
