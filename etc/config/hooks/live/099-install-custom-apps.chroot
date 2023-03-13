@@ -21,6 +21,9 @@ HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-xfce4-mobile-config-git xfce4-settings-pine-pro-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-pkg-git rhino-neofetch-git'
 popd
 
+sudo ln -s /usr/share/alsa/ucm2/PinePhonePro/PinePhonePro.conf /usr/share/alsa/ucm2/conf.d/simple-card/PinePhonePro.conf
+sudo alsa force-reload
+
 echo "" >> /etc/apt/preferences.d/rhino.pref
 echo "Package: firefox" >> /etc/apt/preferences.d/rhino.pref
 echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino.pref
