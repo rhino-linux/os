@@ -93,8 +93,12 @@ cd ~
 rm -rf /home/rhino/.config/xfce4
 mkdir -p /home/rhino/.config/xfce4
 mkdir -p /home/rhino/.config/Kvantum
+mkdir -p /home/rhino/.local/share/onboard/
 cp -r /etc/skel/.config/xfce4/* /home/rhino/.config/xfce4
 cp -r /etc/skel/.config/Kvantum/* /home/rhino/.config/Kvantum
+cp -r /etc/skel/.local/share/onboard/* /home/rhino/.local/share/onboard/
+rm -rf /usr/share/onboard/themes/Droid.theme
+cp -r /etc/skel/.local/share/onboard/themes/Droid.theme /usr/share/onboard/themes/Droid.theme
 ln -s "/home/rhino/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino/.config/xfce4/desktop/icons.screen.latest.rc"
 # Make sure the user (rhino) has wrx permissions
 chmod -R 777 /home/rhino/.config/xfce4
