@@ -18,7 +18,7 @@ sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb u-boot-mobian-deb linux-headers-okpine-pro-deb linux-image-okpine-pro-deb linux-libc-dev-okpine-pro-deb'
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-xfce4-mobile-config-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-pkg-git rhino-neofetch-git'
+HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-xfce4-mobile-config-git xfce4-settings-pine-pro-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-pkg-git rhino-neofetch-git'
 popd
 
 echo "" >> /etc/apt/preferences.d/rhino.pref
@@ -78,15 +78,6 @@ echo '{
 }' | sudo tee -a /etc/skel/.config/VSCodium/User/settings.json
 sudo cp -r /etc/skel/.config/VSCodium/ /home/rhino/.config/
 sudo chown -cR rhino /home/rhino/.config/VSCodium/
-
-apt-get install xfce4-dev-tools libexo-2-dev libgarcon-1-dev libxfce4ui-2-dev -yq
-git clone https://github.com/oklopfer/xfce4-settings
-cd xfce4-settings
-./autogen.sh
-make -j$(nproc)
-make install
-cd ..
-rm -r xfce4-settings
 
 # The rhino user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
 
