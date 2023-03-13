@@ -17,27 +17,9 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb'
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-linux-xfce4-config-git quintom-cursor-theme-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-pkg-git rhino-neofetch-git'
+HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb u-boot-mobian-deb linux-headers-okpine-pro-deb linux-image-okpine-pro-deb linux-libc-dev-okpine-pro-deb'
+HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-xfce4-mobile-config-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-pkg-git rhino-neofetch-git'
 popd
-
-git clone https://github.com/oklopfer/dotfiles
-mv dotfiles/Dot-Transparent /usr/share/icons/
-rm /usr/share/onboard/themes/Droid.theme
-mv dotfiles/onboard/themes/Droid.theme /usr/share/onboard/themes/Droid.theme
-rm -r /etc/skel/.config/xfce4
-mv dotfiles/xfce4 /etc/skel/.config
-rm -r dotfiles
-
-wget https://github.com/oklopfer/rhino-os/raw/pinephone/debs/u-boot-menu_4.2.1mobian1_all.deb
-dpkg -i u-boot*.deb
-rm u-boot*.deb
-
-wget https://cdn.discordapp.com/attachments/702362478595670026/1078022392812683456/artifacts-17.zip -O kernel.zip
-unzip kernel.zip
-dpkg -i linux*okpine-pro*.deb
-rm linux*okpine-pro*.deb
-rm kernel.zip
 
 echo "" >> /etc/apt/preferences.d/rhino.pref
 echo "Package: firefox" >> /etc/apt/preferences.d/rhino.pref
@@ -53,8 +35,6 @@ echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
-sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Snow/cursor.theme 55
-sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Ink/cursor.theme 55
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Dot-Transparent/cursor.theme 55
 sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth 100
 sudo update-alternatives --set default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth
