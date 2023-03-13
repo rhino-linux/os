@@ -21,6 +21,11 @@ HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-xfce4-mobile-config-git xfce4-settings-pine-pro-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-pkg-git rhino-neofetch-git'
 popd
 
+sudo mkdir -p /etc/skel/.config/autostart
+sudo mkdir -p /home/rhino/.config/autostart
+sudo cp /usr/share/applications/onboard.desktop /etc/skel/.config/autostart/onboard.desktop
+sudo cp /usr/share/applications/onboard.desktop /home/rhino/.config/autostart/onboard.desktop
+
 sudo ln -s /usr/share/alsa/ucm2/PinePhonePro/PinePhonePro.conf /usr/share/alsa/ucm2/conf.d/simple-card/PinePhonePro.conf
 sudo alsa force-reload
 
