@@ -22,7 +22,7 @@ HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-
 else
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-bin vscodium-deb linux-kernel';
 fi
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-core-git quintom-cursor-theme-git rhino-setup-git'
+HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-core quintom-cursor-theme-git rhino-setup-git'
 popd
 
 if [ $(dpkg --print-architecture) = arm64 ]; then
