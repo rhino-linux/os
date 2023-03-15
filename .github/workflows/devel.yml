@@ -33,6 +33,8 @@ jobs:
     needs: build_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
+    - uses: actions/checkout@v3.1.0
+    
     - name: Deploy to partition
       run: sudo ./debos-docker -m 10G pinephonepro.yaml 
       
@@ -51,6 +53,8 @@ jobs:
     needs: build_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
+    - uses: actions/checkout@v3.1.0
+    
     - name: Deploy to partition
       run: sudo ./debos-docker -m 10G pinephone.yaml 
       
