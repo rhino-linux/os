@@ -34,7 +34,7 @@ jobs:
         sudo mv binary/*.sha256 binary/hash.sha256
         sudo cp binary/hash.sha256 hash.sha256
       
-    - uses: actions/cache@v3.3.0
+    - uses: actions/cache@v3.3.1
       with:
         name: Caching tarball
         path: binary/
@@ -44,7 +44,7 @@ jobs:
     needs: build_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
-    - uses: actions/cache@v3.3.0
+    - uses: actions/cache@v3.3.1
       with:
         name: Pickup tarball
         id: pickup
@@ -72,7 +72,7 @@ jobs:
     needs: build_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
-    - uses: actions/cache@v3.3.0
+    - uses: actions/cache@v3.3.1
       with:
         name: Pickup tarball
         id: pickup
