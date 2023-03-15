@@ -1,7 +1,8 @@
 #!/bin/bash
 set -ex
 
-kver=6.2.0-okpine-pro
+kern=$(dpkg -l | grep linux-image- | tail -n1 | awk '{print $2}')
+kver=${kern/linux-image-/}
 
 libdir="/usr/lib/$DPKG_MAINTSCRIPT_PACKAGE/"
 [ -d "$libdir" ] || exit 0
