@@ -16,23 +16,23 @@ actions:
 
   - action: overlay
     description: Add pulse config files
-    source: pulse/pinepro
+    source: pulse/pine64
     destination: /etc/pulse
 
   - action: run
     description: place alsa symlink
     chroot: true
-    command: ln -s /usr/share/alsa/ucm2/PinePhonePro/PinePhonePro.conf /usr/share/alsa/ucm2/conf.d/simple-card/PinePhonePro.conf
+    command: ln -s /usr/share/alsa/ucm2/PinePhone/PinePhone.conf /usr/share/alsa/ucm2/conf.d/simple-card/PinePhone.conf
 
   - action: overlay
     description: Add extlinux modifier
-    source: scripts/pinepro
+    source: scripts/pine64
     destination: /etc/kernel/postinst.d
 
   - action: run
     description: Install kernel
     chroot: true
-    command: HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI linux-headers-okpine-pro-deb linux-image-okpine-pro-deb linux-libc-dev-okpine-pro-deb'
+    command: HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI linux-headers-okpine64-deb linux-image-okpine64-deb linux-libc-dev-okpine64-deb'
 
   - action: run
     description: Remove apt caches to save space
@@ -77,7 +77,7 @@ actions:
   - action: run
     chroot: true
     description: Make sure EXTLINUX is valid
-    script: scripts/pinepro/zzz-u-boot-pinepro
+    script: scripts/pine64/zzz-u-boot-pine64
 
   # polish.yaml must be run as the last step, as it contains the
   # step to (re-)create /etc/writable symlinks and systemd-nspawn
