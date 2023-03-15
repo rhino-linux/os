@@ -30,9 +30,19 @@ actions:
     destination: /etc/kernel/postinst.d && apt-get remove linux*6.1* -yq
 
   - action: run
+    description: sudo workaround
+    chroot: true
+    command: echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+    
+  - action: run
     description: Install kernel
     chroot: true
     command: HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI linux-headers-okpine64-deb linux-image-okpine64-deb linux-libc-dev-okpine64-deb'
+
+  - action: run
+    description: sudo workaround
+    chroot: true
+    command: sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
   - action: run
     description: Remove apt caches to save space
