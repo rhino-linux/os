@@ -110,5 +110,4 @@ chmod -R 777 /home/rhino/.config/xfce4
 sudo chown "rhino" -cR /home/rhino/Desktop
 
 sudo apt-get clean
-sudo apt-get remove linux*6.1* -yq
 sudo update-initramfs -u

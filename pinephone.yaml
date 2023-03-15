@@ -27,7 +27,7 @@ actions:
   - action: overlay
     description: Add extlinux modifier
     source: scripts/pine64
-    destination: /etc/kernel/postinst.d
+    destination: /etc/kernel/postinst.d && apt-get remove linux*6.1* -yq
 
   - action: run
     description: Install kernel
