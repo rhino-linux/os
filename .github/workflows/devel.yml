@@ -36,23 +36,21 @@ jobs:
       
     - uses: actions/cache@v3.3.1
       with:
-        name: Caching tarball
         path: binary/
         key: tarball-${{ hashFiles('hash.sha256') }}
 
   deploy_pinephone_pro:
     needs: build_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
-    steps:
+    steps:     
+    - uses: actions/checkout@v3.1.0
+    
     - uses: actions/cache@v3.3.1
       with:
-        name: Pickup tarball
         id: pickup
         path: binary/
         key: tarball-${{ hashFiles('hash.sha256') }}
         
-    - uses: actions/checkout@v3.1.0
-    
     - name: Deploy to partition
       if: steps.pickup.outputs.cache-hit != 'true'
       run: sudo ./debos-docker -m 10G pinephonepro.yaml 
@@ -71,15 +69,14 @@ jobs:
   deploy_pinephone:
     needs: build_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
-    steps:
+    steps:     
+    - uses: actions/checkout@v3.1.0
+    
     - uses: actions/cache@v3.3.1
       with:
-        name: Pickup tarball
         id: pickup
         path: binary/
         key: tarball-${{ hashFiles('hash.sha256') }}
-        
-    - uses: actions/checkout@v3.1.0
     
     - name: Deploy to partition
       if: steps.pickup.outputs.cache-hit != 'true'
