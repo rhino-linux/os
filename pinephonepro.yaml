@@ -22,12 +22,12 @@ actions:
   - action: run
     description: place alsa symlink
     chroot: true
-    command: ln -s /usr/share/alsa/ucm2/PinePhonePro/PinePhonePro.conf /usr/share/alsa/ucm2/conf.d/simple-card/PinePhonePro.conf
+    command: ln -s /usr/share/alsa/ucm2/PinePhonePro/PinePhonePro.conf /usr/share/alsa/ucm2/conf.d/simple-card/PinePhonePro.conf  && apt-get remove linux*6.1* -yq
 
   - action: overlay
     description: Add extlinux modifier
     source: scripts/pinepro
-    destination: /etc/kernel/postinst.d && apt-get remove linux*6.1* -yq
+    destination: /etc/kernel/postinst.d
 
   - action: run
     description: sudo workaround
