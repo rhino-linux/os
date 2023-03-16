@@ -17,8 +17,7 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb u-boot-mobian-deb'
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-xfce4-mobile-config-git xfce4-settings-pine-git rhino-kvantum-theme-git rhino-plymouth-theme-git rhino-pkg-git rhino-neofetch-git'
+HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb rhino-pine-core'
 popd
 
 sudo mkdir -p /etc/skel/.config/autostart
