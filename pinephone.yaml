@@ -22,7 +22,7 @@ actions:
   - action: run
     description: place alsa symlink
     chroot: true
-    command: ln -s /usr/share/alsa/ucm2/PinePhone/PinePhone.conf /usr/share/alsa/ucm2/conf.d/simple-card/PinePhone.conf  && apt-get remove linux*6.1* -yq
+    command: apt-get remove linux*6.1* -yq
 
   - action: overlay
     description: Add extlinux modifier
