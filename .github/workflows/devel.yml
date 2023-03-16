@@ -29,15 +29,10 @@ jobs:
     - name: Build tarball
       run: sudo ./build.sh etc/terraform.conf
       
-    - name: Copy hash for cache
-      run: |
-        sudo mv binary/*.sha256 binary/hash.sha256
-        sudo cp binary/hash.sha256 hash.sha256
-      
     - uses: actions/cache@v3.3.1
       with:
         path: binary/
-        key: tarball-${{ hashFiles('hash.sha256') }}
+        key: tarball-${{ github.sha }}
 
   deploy_pinephone_pro:
     needs: build_tarball
@@ -48,7 +43,7 @@ jobs:
     - uses: actions/cache@v3.3.1
       with:
         path: binary/
-        key: tarball-${{ hashFiles('hash.sha256') }}
+        key: tarball-${{ github.sha }}
         
     - name: Deploy to partition
       run: sudo ./debos-docker -m 10G pinephonepro.yaml 
@@ -73,7 +68,7 @@ jobs:
     - uses: actions/cache@v3.3.1
       with:
         path: binary/
-        key: tarball-${{ hashFiles('hash.sha256') }}
+        key: tarball-${{ github.sha }}
     
     - name: Deploy to partition
       run: sudo ./debos-docker -m 10G pinephone.yaml 
