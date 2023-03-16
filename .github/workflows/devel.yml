@@ -47,10 +47,12 @@ jobs:
     
     - uses: actions/cache@v3.3.1
       with:
+        id: pickup
         path: binary/
         key: tarball-${{ hashFiles('hash.sha256') }}
         
     - name: Deploy to partition
+      if: steps.pickup.outputs.cache-hit != 'true'
       run: sudo ./debos-docker -m 10G pinephonepro.yaml 
       
     - name: Place output folder
@@ -72,10 +74,12 @@ jobs:
     
     - uses: actions/cache@v3.3.1
       with:
+        id: pickup
         path: binary/
         key: tarball-${{ hashFiles('hash.sha256') }}
     
     - name: Deploy to partition
+      if: steps.pickup.outputs.cache-hit != 'true'
       run: sudo ./debos-docker -m 10G pinephone.yaml 
       
     - name: Place output folder
@@ -88,4 +92,3 @@ jobs:
       with:
         name: Rhino Linux OS (PinePhone)
         path: builds/pine64/
-
