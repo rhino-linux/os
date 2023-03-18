@@ -42,14 +42,8 @@ sudo update-alternatives --set x-cursor-theme /usr/share/icons/Quintom_Ink/curso
 echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
 mkdir -p /home/rhino/.config/Kvantum
 mkdir -p /etc/skel/.config/Kvantum
-mkdir -p /etc/skel/.config/gtk-4.0
-mkdir -p /home/rhino/.config/gtk-4.0
 echo "theme=KvRhinoDark" >> /home/rhino/.config/Kvantum/kvantum.kvconfig
 echo "theme=KvRhinoDark" >> /etc/skel/.config/Kvantum/kvantum.kvconfig
-echo "[Settings]
-gtk-application-prefer-dark-theme=1" >> /etc/skel/.config/gtk-4.0/settings.ini
-echo "[Settings]
-gtk-application-prefer-dark-theme=1" >> /home/rhino/.config/gtk-4.0/settings.ini
 xfconf-query -c xsettings -p /Net/ThemeName --set "Yaru-purple-dark"
 xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Quintom_Ink"
 xfconf-query -c xfwm4 -p /general/theme -s "Yaru-dark"
