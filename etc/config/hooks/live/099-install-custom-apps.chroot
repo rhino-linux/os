@@ -19,7 +19,7 @@ sudo chown "rhino" -cR "/var/cache/pacstall"
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -U Henryws:pacdeps-if-deps-no-exist'
 
 pushd /home/rhino
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb armcord-arm64-deb rhino-pine-core'
+HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb armcord-arm64-deb xfce4-settings-pine-git rhino-pine-core'
 popd
 
 sudo mkdir -p /etc/skel/.config/autostart
