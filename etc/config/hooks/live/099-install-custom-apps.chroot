@@ -17,7 +17,6 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -U pacstall:develop'
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb armcord-arm64-deb rhino-pine-core'
 popd
 
