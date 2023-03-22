@@ -37,7 +37,7 @@ lb config noauto \
     --zsync false \
     --security true \
     --updates true \
-    --debootstrap-options "--include=mobile-tweaks-common" \
+    --debootstrap-options "--exclude=mobile-tweaks-common" \
     --interactive false \
     --debconf-frontend noninteractive \
     --checksums md5 \
