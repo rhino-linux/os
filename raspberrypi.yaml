@@ -1,0 +1,76 @@
+{{- $firmware_version := or .firmware_version "master" -}}
+{{- $architecture := or .architecture "arm64" -}}
+{{- $image := or .image "Rhino-Linux-2023.1-beta1-rpi4.img" -}}
+{{- $debug := or .debug "on" -}}
+
+architecture: {{ $architecture }}
+actions:
+  - action: run
+    description: unpacking rootfs
+    chroot: false
+    command: tar --strip-components=1 --numeric-owner -xf /recipes/binary/Rhino*.tar -C root && rm /recipes/binary/Rhino*.tar
+
+  - action: run
+    chroot: true
+    command: apt-get remove linux*6.1* -yq
+
+  - action: run
+    description: Remove apt caches to save space
+    chroot: true
+    command: rm -r /var/cache/apt/* /var/lib/apt/lists/*
+
+  - action: image-partition
+    imagename: {{ $image }}
+    imagesize: 5GB
+    partitiontype: gpt
+    mountpoints:
+      - mountpoint: /
+        partition: root
+      - mountpoint: /boot/firmware
+        partition: firmware
+    partitions:
+      - name: firmware
+        fs: vfat
+        start: 0%
+        end: 200MB
+	parttype: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
+      - name: root
+        fs: ext4
+        start: 200MB
+        end: 100%
+        flags: [ boot ]
+	parttype: B921B045-1DF0-41C3-AF44-4C6F280D3FAE
+
+  - action: filesystem-deploy
+    description: Deploying filesystem into image
+
+  - action: run
+    chroot: true
+    description: Add firmware and kernel
+    script: scripts/add-rpi-firmware.sh
+
+  - action: run
+    chroot: true
+    command: depmod -a "$(find /lib/modules -type d -name "*-v8" | grep -oE "[^/]+$")"
+
+  - action: run
+    chroot: true
+    command: kver=$(find /lib/modules -type d -name "*-v8" | grep -oE "[^/]+$") && update-initramfs -c -k "$kver" -b /boot/firmware && sed -i "s/initrd.img/initrd.img-$kver/g" /boot/firmware/config.txt
+
+  - action: run
+    chroot: true
+    description: Set uart tty
+    label: uart
+    command: sed -i 's/ttyS0/ttyAMA0/g' /etc/init/ttyS0.conf
+
+  - action: run
+    chroot: true
+    command: systemctl enable resizefs.service
+
+  - action: recipe
+    description: Run common image polishing steps
+    recipe: ./polish.yaml
+    variables:
+      architecture: {{ $architecture }}
+      image: {{ $image }}
+      output_type: image

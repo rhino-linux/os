@@ -27,10 +27,10 @@ lb config noauto \
     --cache-packages false \
     --cache-stages false \
     --uefi-secure-boot enable \
-    --binary-image hdd \
+    --system normal \
+    --binary-image tar \
     --binary-filesystem ext4 \
-    --chroot-filesystem ext4 \
-    --build-with-chroot true \
+    --chroot-filesystem none \
     --hdd-label "RHINO_LINUX" \
     --firmware-binary false \
     --firmware-chroot false \
@@ -38,12 +38,11 @@ lb config noauto \
     --security true \
     --updates true \
     --debootstrap-options "--include=mobile-tweaks-common" \
-    --swap-file-path /swapfile \
-    --swap-file-size 512 \
     --interactive false \
     --debconf-frontend noninteractive \
-    --compression xz \
     --checksums md5 \
+    --bootstrap-qemu-arch "$QEMU_ARCH" \
+    --bootstrap-qemu-static "$QEMU_STATIC" \
     "${@}"
 
 
