@@ -255,7 +255,7 @@ done
 # directories: EFI EFI/boot boot boot/grub
 size=\$((\$size + 4096 * 4))
 
-blocks=\$(((\$size / 1024 + 1540) / 32 * 32 ))
+blocks=\$(((\$size / 1024 + 55) / 32 * 32 ))
 
 rm -f ${_CHROOT_DIR}/grub-efi-temp/boot/grub/efi.img
 # The VOLID must be (truncated to) a 32bit hexadecimal number
