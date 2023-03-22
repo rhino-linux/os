@@ -20,8 +20,9 @@ actions:
     command: rm -r /var/cache/apt/* /var/lib/apt/lists/*
 
   - action: image-partition
+    description: Creating image
     imagename: {{ $image }}
-    imagesize: 5GB
+    imagesize: 6GB
     partitiontype: gpt
     mountpoints:
       - mountpoint: /
@@ -33,13 +34,13 @@ actions:
         fs: vfat
         start: 0%
         end: 200MB
-	parttype: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
+        parttype: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
       - name: root
         fs: ext4
         start: 200MB
         end: 100%
-        flags: [ boot ]
-	parttype: B921B045-1DF0-41C3-AF44-4C6F280D3FAE
+        parttype: B921B045-1DF0-41C3-AF44-4C6F280D3FAE
+	flags: [ boot ]
 
   - action: filesystem-deploy
     description: Deploying filesystem into image
