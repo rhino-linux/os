@@ -14,7 +14,7 @@ lb config noauto \
     --archive-areas "main restricted universe multiverse" \
     --parent-archive-areas "main restricted universe multiverse" \
     --linux-packages "linux linux-tools linux-modules-extra" \
-    --linux-flavours "raspi" \
+    --linux-flavours "raspi_6.2.0.1003.4" \
     --mirror-bootstrap "$MIRROR_URL" \
     --parent-mirror-bootstrap "$MIRROR_URL" \
     --mirror-chroot-security "$SECURITY_URL" \
