@@ -32,6 +32,7 @@ lb config noauto \
     --binary-image hdd \
     --iso-application "$NAME" \
     --iso-volume "$NAME" \
+    --image-name "$FNAME" \
     --firmware-binary false \
     --firmware-chroot false \
     --binary-filesystem fat32 \
