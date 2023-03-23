@@ -89,14 +89,14 @@ build () {
 
   OUTPUT_DIR="$BASE_DIR/builds/$BUILD_ARCH"
   mkdir -p "$OUTPUT_DIR"
-  mv "$BASE_DIR/tmp/$BUILD_ARCH/live-image-$BUILD_ARCH.hybrid.iso" "$OUTPUT_DIR/${FNAME}.iso"
+  mv "$BASE_DIR/tmp/$BUILD_ARCH/live-image-$BUILD_ARCH.hybrid.img" "$OUTPUT_DIR/${FNAME}.img"
 
   # cd into output to so {FNAME}.sha256.txt only
   # includes the filename and not the path to
   # our file.
   cd $OUTPUT_DIR
-  sha512sum "${FNAME}.iso" > "${FNAME}.sha512"
-  sha256sum "${FNAME}.iso" > "${FNAME}.sha256"
+  sha512sum "${FNAME}.img" > "${FNAME}.sha512"
+  sha256sum "${FNAME}.img" > "${FNAME}.sha256"
   cd $BASE_DIR
 }
 
