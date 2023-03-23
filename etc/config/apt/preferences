@@ -1,0 +1,3 @@
+Package: *raspi*
+Pin: release n="./devel-proposed"
+Pin-Priority: 600

@@ -2,7 +2,7 @@ b43-fwcutter
 dkms
 setserial
 user-setup
-efibootmgr
-secureboot-db
-shim
-shim-signed
+initramfs-tools
+u-boot-menu
+u-boot-tools
+u-boot-rpi

@@ -24,3 +24,6 @@ fonts-noto-cjk-extra
 wget
 ca-certificates
 gnupg2
+u-boot-menu
+u-boot-tools
+u-boot-rpi
