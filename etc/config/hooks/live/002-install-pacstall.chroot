@@ -43,8 +43,6 @@ firmwareType:
         -    timeout: 10
         -    command: apt-get update
              timeout: 120
-        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict grub-efi-$(dpkg --print-architecture)-signed
-             timeout: 300
         -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict shim-signed
              timeout: 300'
 __EOF__

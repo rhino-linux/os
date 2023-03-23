@@ -17,20 +17,15 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
-if [ $(dpkg --print-architecture) = arm64 ]; then
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb';
-else
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-bin vscodium-deb linux-kernel-stable';
-fi
+HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb'
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-core quintom-cursor-theme-git rhino-setup-git'
 popd
 
-if [ $(dpkg --print-architecture) = arm64 ]; then
 echo "" >> /etc/apt/preferences.d/rhino.pref
 echo "Package: firefox" >> /etc/apt/preferences.d/rhino.pref
 echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino.pref
 echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
-echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref; fi
+echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
@@ -128,18 +123,12 @@ true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
 ( cd /etc/calamares/branding && sudo git clone https://github.com/rhino-linux/calamares rhino )
 sudo sed -i 's/lubuntu/rhino/g' /etc/calamares/settings.conf
 
-if [ $(dpkg --print-architecture) = arm64 ]; then
-GNU="aarch"; 
-else 
-GNU="x86_";
-fi
-
-if [ $(dpkg --print-architecture) = arm64 ]; then sudo rm /etc/calamares/modules/*386*.conf; fi
+sudo rm /etc/calamares/modules/*386*.conf
 sudo rm /etc/calamares/modules/automirror.conf
-sudo rm /lib/"$GNU"64-linux-gnu/calamares/modules/automirror -r
-cd /lib/"$GNU"64-linux-gnu/calamares/modules/
-sudo git clone https://github.com/oklopfer/automirror/ -b $(dpkg --print-architecture)
-sudo cp /lib/"$GNU"64-linux-gnu/calamares/modules/automirror/automirror.conf /etc/calamares/modules/automirror.conf
+sudo rm /lib/aarch64-linux-gnu/calamares/modules/automirror -r
+cd /lib/aarch64-linux-gnu/calamares/modules/
+sudo git clone https://github.com/oklopfer/automirror/ -b arm64
+sudo cp /lib/"aarch64-linux-gnu/calamares/modules/automirror/automirror.conf /etc/calamares/modules/automirror.conf
 cd ~
 
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf

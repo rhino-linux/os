@@ -48,6 +48,8 @@ lb config noauto \
     --compression xz \
     --checksums md5 \
     --bootloaders "$BOOTLOADERS" \
+    --bootstrap-qemu-arch "$QEMU_ARCH" \
+    --bootstrap-qemu-static "$QEMU_STATIC" \
     "${@}"
 
 
