@@ -128,7 +128,7 @@ sudo rm /etc/calamares/modules/automirror.conf
 sudo rm /lib/aarch64-linux-gnu/calamares/modules/automirror -r
 cd /lib/aarch64-linux-gnu/calamares/modules/
 sudo git clone https://github.com/oklopfer/automirror/ -b arm64
-sudo cp /lib/"aarch64-linux-gnu/calamares/modules/automirror/automirror.conf /etc/calamares/modules/automirror.conf
+sudo cp /lib/aarch64-linux-gnu/calamares/modules/automirror/automirror.conf /etc/calamares/modules/automirror.conf
 cd ~
 
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
