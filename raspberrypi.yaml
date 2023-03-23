@@ -27,21 +27,22 @@ actions:
     mountpoints:
       - mountpoint: /
         partition: root
-      - mountpoint: /boot/firmware
-        partition: firmware
+      - mountpoint: /boot
+        partition: boot
     partitions:
-      - name: firmware
-        fs: vfat
-        start: 0%
-        end: 200MB
-        parttype: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
+      - name: boot
+        fs: ext4
+        start: 1M
+        end: 400MB
+        parttype: C12A7328-F81F-11D2-BA4B-00A0C93EC93B
+        flags: [ esp,boot ]
       - name: root
         fs: ext4
-        start: 200MB
+        start: 400MB
         end: 100%
         parttype: B921B045-1DF0-41C3-AF44-4C6F280D3FAE
-        flags: [ boot ]
-#
+        
+        
   - action: filesystem-deploy
     description: Deploying filesystem into image
 
