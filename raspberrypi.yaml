@@ -15,6 +15,11 @@ actions:
     command: apt-get remove linux*6.1* -yq
 
   - action: run
+    chroot: true
+    description: Add firmware and kernel
+    script: scripts/add-rpi-firmware.sh
+
+  - action: run
     description: Remove apt caches to save space
     chroot: true
     command: rm -r /var/cache/apt/* /var/lib/apt/lists/*
@@ -48,18 +53,7 @@ actions:
 
   - action: run
     chroot: true
-    description: Add firmware and kernel
-    script: scripts/add-rpi-firmware.sh
-
-  - action: run
-    chroot: true
     command: update-initramfs -c -k all
-
-  - action: run
-    chroot: true
-    description: Set uart tty
-    label: uart
-    command: sed -i 's/ttyS0/ttyAMA0/g' /etc/init/ttyS0.conf
 
   - action: run
     chroot: true
