@@ -17,15 +17,26 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb'
+if [ $(dpkg --print-architecture) = arm64 ]; then
+HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb linux-kernel-stable-arm64';
+else
+HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-bin vscodium-deb linux-kernel-stable';
+fi
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-core quintom-cursor-theme-git rhino-setup-git'
 popd
 
+wget -nc -O rpi-linux-image.deb $kernelArtifacts/raspberrypi-kernel_1.20230317-1_arm64.deb
+wget -nc -O rpi-linux-headers.deb $kernelArtifacts/raspberrypi-kernel-headers_1.20230317-1_arm64.deb
+wget -nc -O rpi-linux-libc-dev.deb $kernelArtifacts/linux-libc-dev_1.20230317-1_arm64.deb
+wget -nc -O rpi-bootloader.deb $kernelArtifacts/raspberrypi-bootloader_1.20230317-1_arm64.deb
+
+
+if [ $(dpkg --print-architecture) = arm64 ]; then
 echo "" >> /etc/apt/preferences.d/rhino.pref
 echo "Package: firefox" >> /etc/apt/preferences.d/rhino.pref
 echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino.pref
 echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
-echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref; fi
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
@@ -37,8 +48,6 @@ sudo update-alternatives --set x-cursor-theme /usr/share/icons/Quintom_Ink/curso
 echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
 mkdir -p /home/rhino/.config/Kvantum
 mkdir -p /etc/skel/.config/Kvantum
-mkdir -p /etc/skel/.config/gtk-4.0
-mkdir -p /home/rhino/.config/gtk-4.0
 echo "theme=KvRhinoDark" >> /home/rhino/.config/Kvantum/kvantum.kvconfig
 echo "theme=KvRhinoDark" >> /etc/skel/.config/Kvantum/kvantum.kvconfig
 xfconf-query -c xsettings -p /Net/ThemeName --set "Yaru-purple-dark"
@@ -51,6 +60,93 @@ sudo glib-compile-schemas .
 cd ~
 
 mkdir -p /home/rhino/Desktop
+echo '[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Install Rhino Linux 23.04
+Name[ar]=تنصيب لوبينتو 23.04
+Name[ca]=Instal·lar Rhino Linux 23.04
+Name[da]=Installer Rhino Linux 23.04
+Name[de]=Rhino Linux 23.04 installieren
+Name[es]=Instalar Rhino Linux 23.04
+Name[fr]=Installer Rhino Linux 23.04
+Name[it]=Installa Rhino Linux 23.04
+Name[no]=Installer Rhino Linux 23.04
+Name[pl]=Zainstaluj Rhino Linux 23.04
+Name[pt]=Instalar o Rhino Linux 23.04
+Name[pt_BR]=Instalar Rhino Linux 23.04
+GenericName=Install Rhino Linux
+GenericName[ar]=تنصيب لوبينتو
+GenericName[ca]=Instal·lar Rhino Linux
+GenericName[da]=Installer Rhino Linux
+GenericName[de]=Rhino Linux installieren
+GenericName[es]=Instalar Rhino Linux
+GenericName[fr]=Installer Rhino Linux
+GenericName[it]=Installa Rhino Linux
+GenericName[no]=Installer Rhino Linux
+GenericName[pl]=Zainstaluj Rhino Linux
+GenericName[pt]=Instalar o Rhino Linux
+GenericName[pt_BR]=Instalar Rhino Linux
+Exec=sudo -E calamares -D6
+Comment=Calamares — System Installer
+Comment[ar]=الحبار — منصب النظام
+Comment[ca]=Calamares — Instal·lador del Sistema
+Comment[da]=Calamares - System installation
+Comment[de]=Calamares — System Installer
+Comment[es]=Calamares — Instalador del Sistema
+Comment[fr]=Calamares  — Installateur de votre system
+Comment[it]=Calamares — Installatore del Sistema
+Comment[no]=Calamares — System installerer
+Comment[pl]=Calamares — Instalator systemu
+Comment[pt]=Calamares — Instalador do Sistema
+Comment[pt_BR]=Calamares — Instalador do sistema
+Icon=/usr/share/icons/logo.svg
+Terminal=false
+StartupNotify=true
+Categories=Qt;System;
+Keywords=installer;calamares;system;' | tee -a /usr/share/applications/install.desktop > /dev/null
+sudo chmod 755 /usr/share/applications/install.desktop
+sudo ln -s /usr/share/applications/install.desktop /home/rhino/Desktop/install.desktop
+sudo chown "rhino" -cR /usr/share/applications/install.desktop
+
+mkdir -p /etc/skel/.config/autostart
+sudo rm /etc/calamares/modules/after_bootloader_context.conf
+sudo cat > /etc/calamares/modules/after_bootloader_context.conf << __EOF__
+---
+dontChroot: false
+timeout: 120
+firmwareType:
+    "*":
+        - "-rm /usr/share/applications/install.desktop"
+        - command: "-ln -s /usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop /home/\$USER/.config/autostart/setup.desktop"
+        - command: "-wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
+        - command: "-mv Microsoft.VisualStudio.Services.VSIXPackage omni-dracula.vsix"
+        - command: "-mkdir /home/\$USER/.config/VSCodium/"
+        - command:  "-mkdir /home/\$USER/.config/VSCodium/User/"
+        - command: "-chown -cR \$USER /home/\$USER/.config/VSCodium/"
+        - command: "-HOME=/home/\$USER runuser -m -u \$USER -- sh -c  'codium --install-extension omni-dracula.vsix'"
+        - command: "-rm omni-dracula.vsix"
+__EOF__
+
+echo '#!/bin/sh
+true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
+
+( cd /etc/calamares/branding && sudo git clone https://github.com/rhino-linux/calamares rhino )
+sudo sed -i 's/lubuntu/rhino/g' /etc/calamares/settings.conf
+
+if [ $(dpkg --print-architecture) = arm64 ]; then
+GNU="aarch"; 
+else 
+GNU="x86_";
+fi
+
+if [ $(dpkg --print-architecture) = arm64 ]; then sudo rm /etc/calamares/modules/*386*.conf; fi
+sudo rm /etc/calamares/modules/automirror.conf
+sudo rm /lib/"$GNU"64-linux-gnu/calamares/modules/automirror -r
+cd /lib/"$GNU"64-linux-gnu/calamares/modules/
+sudo git clone https://github.com/oklopfer/automirror/ -b $(dpkg --print-architecture)
+sudo cp /lib/"$GNU"64-linux-gnu/calamares/modules/automirror/automirror.conf /etc/calamares/modules/automirror.conf
+cd ~
 
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
 ( cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png )
@@ -70,8 +166,8 @@ echo '{
 sudo cp -r /etc/skel/.config/VSCodium/ /home/rhino/.config/
 sudo chown -cR rhino /home/rhino/.config/VSCodium/
 
-# The rhino user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
 
+# The rhino user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
 rm -rf /home/rhino/.config/xfce4
 mkdir -p /home/rhino/.config/xfce4
 mkdir -p /home/rhino/.config/Kvantum
@@ -83,4 +179,5 @@ chmod -R 777 /home/rhino/.config/xfce4
 sudo chown "rhino" -cR /home/rhino/Desktop
 
 sudo apt-get clean
+sudo apt-get remove linux*6.1* -yq
 sudo update-initramfs -u

@@ -7,13 +7,15 @@ set -e
 lb config noauto \
     --architectures "$ARCH" \
     --mode debian \
-    --initramfs none \
+    --initramfs live-boot \
     --initsystem systemd \
     --distribution "./$BASECODENAME" \
     --parent-distribution "./$BASECODENAME" \
-    --linux-flavours "generic" \
     --archive-areas "main restricted universe multiverse" \
     --parent-archive-areas "main restricted universe multiverse" \
+    --linux-packages linux-image \
+    --linux-flavours "generic" \
+    --bootappend-live "boot=casper quiet splash" \
     --mirror-bootstrap "$MIRROR_URL" \
     --parent-mirror-bootstrap "$MIRROR_URL" \
     --mirror-chroot-security "$SECURITY_URL" \
@@ -27,22 +29,24 @@ lb config noauto \
     --cache-packages false \
     --cache-stages false \
     --uefi-secure-boot enable \
-    --system normal \
-    --binary-image tar \
-    --binary-filesystem ext4 \
-    --chroot-filesystem none \
-    --hdd-label "RHINO_LINUX" \
+    --binary-image hdd \
+    --iso-application "$NAME" \
+    --iso-volume "$NAME" \
     --firmware-binary false \
     --firmware-chroot false \
+    --binary-filesystem fat32 \
+    --chroot-filesystem squashfs \
     --zsync false \
     --security true \
     --updates true \
-    --debootstrap-options "--exclude=mobile-tweaks-common" \
+    --debootstrap-options "--exclude=pinephone-tweaks,mobile-tweaks-common,librem5-tweaks,pinetab-tweaks" \
+    --swap-file-path /swapfile \
+    --swap-file-size 512 \
     --interactive false \
     --debconf-frontend noninteractive \
+    --compression xz \
     --checksums md5 \
-    --bootstrap-qemu-arch "$QEMU_ARCH" \
-    --bootstrap-qemu-static "$QEMU_STATIC" \
+    --bootloaders "$BOOTLOADERS" \
     "${@}"
 
 

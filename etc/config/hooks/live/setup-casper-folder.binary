@@ -1,0 +1,10 @@
+#!/bin/sh
+
+mkdir casper || true
+mv live/filesystem.squashfs casper/filesystem.squashfs
+mv live/filesystem.size casper/filesystem.size
+mv live/initrd.img-* casper/initrd.lz
+mv live/vmlinuz-* casper/vmlinuz
+mv live/filesystem.packages-remove casper/filesystem.manifest-remove
+mv live/filesystem.packages casper/filesystem.manifest
+printf "$(sudo du -sx --block-size=1 ./ | cut -f1)" > casper/filesystem.size
