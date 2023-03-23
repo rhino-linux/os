@@ -17,21 +17,6 @@ fi
 BASE_DIR="$PWD"
 source "$BASE_DIR"/"$CONFIG_FILE"
 
-# do arch-dep adjustment
-if [ $ARCH = arm64 ]; then
-echo 'initramfs-tools
-grub-efi-arm64
-grub-efi-arm64-bin
-grub-efi-arm64-signed' | sudo tee -a etc/config/package-lists.calamares/pool.list.binary; 
-else
-echo 'bcmwl-kernel-source
-microcode-initrd
-iucode-tool
-grub-efi-amd64
-grub-efi-amd64-bin
-grub-efi-amd64-signed' | sudo tee -a etc/config/package-lists.calamares/pool.list.binary; 
-fi
-
 #VanillaOS patch to yeet ia32
 #sudo sed -i '/Check_package chroot \/usr\/lib\/grub\/i386-efi\/configfile.mod grub-efi-ia32-bin/d' /usr/lib/live/build/binary_grub-efi
 
@@ -99,17 +84,6 @@ build () {
   sha256sum "${FNAME}.img" > "${FNAME}.sha256"
   cd $BASE_DIR
 }
-
-cat > etc/config/package-lists.calamares/pool.list.binary << __EOF__
-b43-fwcutter
-dkms
-setserial
-user-setup
-efibootmgr
-secureboot-db
-shim
-shim-signed
-__EOF__
 
 if [[ "$ARCH" == "all" ]]; then
     build amd64
