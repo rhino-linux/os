@@ -9,7 +9,7 @@ actions:
     description: unpacking rootfs
     chroot: false
     command: tar --strip-components=1 --numeric-owner -xf /recipes/binary/Rhino*.tar -C root && rm /recipes/binary/Rhino*.tar
-
+#
   - action: run
     chroot: true
     command: apt-get remove linux*6.1* -yq
@@ -18,7 +18,7 @@ actions:
     description: Remove apt caches to save space
     chroot: true
     command: rm -r /var/cache/apt/* /var/lib/apt/lists/*
-
+#
   - action: image-partition
     description: Creating image
     imagename: {{ $image }}
@@ -40,8 +40,8 @@ actions:
         start: 200MB
         end: 100%
         parttype: B921B045-1DF0-41C3-AF44-4C6F280D3FAE
-	      flags: [ boot ]
-
+        flags: [ boot ]
+#
   - action: filesystem-deploy
     description: Deploying filesystem into image
 
