@@ -57,7 +57,7 @@ actions:
 
   - action: run
     chroot: true
-    command: kver=$(find /lib/modules -type d -name "*-v8" | grep -oE "[^/]+$") && update-initramfs -c -k "$kver" -b /boot/firmware && sed -i "s/initrd.img/initrd.img-$kver/g" /boot/firmware/config.txt
+    command: kver=$(find /lib/modules -type d -name "*-v8" | grep -oE "[^/]+$") && update-initramfs -c -k "$kver"
 
   - action: run
     chroot: true
