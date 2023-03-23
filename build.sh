@@ -74,7 +74,7 @@ build () {
 
   OUTPUT_DIR="$BASE_DIR/builds/$BUILD_ARCH"
   mkdir -p "$OUTPUT_DIR"
-  mv "$BASE_DIR/tmp/$BUILD_ARCH/live-image-$BUILD_ARCH.hybrid.img" "$OUTPUT_DIR/${FNAME}.img"
+  mv "$BASE_DIR/tmp/$BUILD_ARCH/${FNAME}.img" "$OUTPUT_DIR/${FNAME}.img"
 
   # cd into output to so {FNAME}.sha256.txt only
   # includes the filename and not the path to
