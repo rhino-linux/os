@@ -4,7 +4,7 @@ on:
   workflow_dispatch
 
 jobs:
-  build_tarball:
+  build_rpi4:
     runs-on: buildjet-4vcpu-ubuntu-2204-arm
     steps:
     - uses: actions/checkout@v3.1.0
