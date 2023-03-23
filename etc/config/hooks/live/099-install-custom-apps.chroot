@@ -25,12 +25,6 @@ fi
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI rhino-core quintom-cursor-theme-git rhino-setup-git'
 popd
 
-wget -nc -O rpi-linux-image.deb $kernelArtifacts/raspberrypi-kernel_1.20230317-1_arm64.deb
-wget -nc -O rpi-linux-headers.deb $kernelArtifacts/raspberrypi-kernel-headers_1.20230317-1_arm64.deb
-wget -nc -O rpi-linux-libc-dev.deb $kernelArtifacts/linux-libc-dev_1.20230317-1_arm64.deb
-wget -nc -O rpi-bootloader.deb $kernelArtifacts/raspberrypi-bootloader_1.20230317-1_arm64.deb
-
-
 if [ $(dpkg --print-architecture) = arm64 ]; then
 echo "" >> /etc/apt/preferences.d/rhino.pref
 echo "Package: firefox" >> /etc/apt/preferences.d/rhino.pref
@@ -179,5 +173,5 @@ chmod -R 777 /home/rhino/.config/xfce4
 sudo chown "rhino" -cR /home/rhino/Desktop
 
 sudo apt-get clean
-sudo apt-get remove linux*6.1* -yq
+sudo apt-get remove linux*6.1*generic -yq
 sudo update-initramfs -u
