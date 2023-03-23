@@ -1,10 +1,9 @@
 #!/bin/sh
 # Description: Add/install Pacstall
 
-wget http://archive.raspberrypi.org/debian/raspberrypi.gpg.key -O - | sudo apt-key add -
 apt-get update -yq
 apt-get dist-upgrade -yq
-apt-get install axel nano gnome-disk-utility dbus-x11 raspberrypi-kernel raspberrypi-kernel-headers raspberrypi-bootloader -yq
+apt-get install axel nano gnome-disk-utility dbus-x11 -yq
 
 # Create user
 sudo useradd -rm -d /home/rhino -g root -s /bin/bash -u 1001 rhino

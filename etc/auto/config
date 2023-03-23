@@ -13,9 +13,8 @@ lb config noauto \
     --parent-distribution "./$BASECODENAME" \
     --archive-areas "main restricted universe multiverse" \
     --parent-archive-areas "main restricted universe multiverse" \
-    --linux-packages linux-image \
-    --linux-flavours "generic" \
-    --bootappend-live "boot=casper quiet splash" \
+    --linux-packages "linux linux-tools linux-modules-extra" \
+    --linux-flavours "raspi" \
     --mirror-bootstrap "$MIRROR_URL" \
     --parent-mirror-bootstrap "$MIRROR_URL" \
     --mirror-chroot-security "$SECURITY_URL" \
