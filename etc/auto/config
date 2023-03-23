@@ -10,7 +10,7 @@ lb config noauto \
     --initramfs none \
     --initsystem systemd \
     --distribution "./$BASECODENAME" \
-    --parent-distribution "./${BASECODENAME}-proposed" \
+    --parent-distribution "./${BASECODENAME}" \
     --archive-areas "main restricted universe multiverse" \
     --parent-archive-areas "main restricted universe multiverse" \
     --linux-packages "linux linux-tools linux-modules-extra" \
