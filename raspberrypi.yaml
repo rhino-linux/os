@@ -53,11 +53,7 @@ actions:
 
   - action: run
     chroot: true
-    command: depmod -a "$(find /lib/modules -type d -name "*-v8" | grep -oE "[^/]+$")"
-
-  - action: run
-    chroot: true
-    command: kver=$(find /lib/modules -type d -name "*-v8" | grep -oE "[^/]+$") && update-initramfs -c -k "$kver"
+    command: update-initramfs -c -k all
 
   - action: run
     chroot: true
