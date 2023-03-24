@@ -101,12 +101,6 @@ build () {
   mkdir -p tempmount
   mount $FREELOOP tempmount
 
-  # first, we copy the contents of the boot/firmware/ folder to the root directory, because that is where these files are needed
-
-  # next, we replace the "root=" parameter with the parameters needed for
-  # live-booting (this goes all on one line)
-  sed -e 's#root=/dev/mmcblk0p2 #boot=live components config toram hostname=pi username=pi #' -i tempmount/cmdline.txt
-
   # here comes the cleanup part
   sync
   umount $FREELOOP
