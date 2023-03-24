@@ -90,7 +90,7 @@ jobs:
     - uses: actions/cache@v3.3.1
       with:
         path: binary/
-        key: tarball-${{ github.sha }}
+        key: tarball-pine-${{ github.sha }}
 
   deploy_pinephone_pro:
     needs: build_pine_tarball
@@ -103,7 +103,7 @@ jobs:
     - uses: actions/cache@v3.3.1
       with:
         path: binary/
-        key: tarball-${{ github.sha }}
+        key: tarball-pine-${{ github.sha }}
         
     - name: Deploy to partition
       run: sudo ./debos-docker -m 10G pinephonepro.yaml
@@ -130,7 +130,7 @@ jobs:
     - uses: actions/cache@v3.3.1
       with:
         path: binary/
-        key: tarball-${{ github.sha }}
+        key: tarball-pine-${{ github.sha }}
     
     - name: Deploy to partition
       run: sudo ./debos-docker -m 10G pinephone.yaml
