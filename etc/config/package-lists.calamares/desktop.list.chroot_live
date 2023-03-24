@@ -3,6 +3,7 @@ gparted
 cifs-utils
 language-pack-en
 language-pack-ko
+linux-firmware-raspi
 xfsprogs
 jfsutils
 reiserfsprogs
@@ -24,6 +25,3 @@ fonts-noto-cjk-extra
 wget
 ca-certificates
 gnupg2
-u-boot-menu
-u-boot-tools
-u-boot-rpi

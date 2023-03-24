@@ -2,6 +2,4 @@ b43-fwcutter
 dkms
 setserial
 user-setup
-u-boot-menu
-u-boot-tools
-u-boot-rpi
+initramfs-tools

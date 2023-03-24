@@ -7,8 +7,10 @@ set -e
 lb config noauto \
     --architectures "$ARCH" \
     --mode debian \
-    --initramfs none \
+    --initramfs live-boot \
     --initsystem systemd \
+    --system live \
+    --bootappend-live "boot=live config hostname=pi username=pi" \
     --distribution "./$BASECODENAME" \
     --parent-distribution "./$BASECODENAME" \
     --archive-areas "main restricted universe multiverse" \
@@ -36,12 +38,13 @@ lb config noauto \
     --firmware-chroot false \
     --binary-filesystem fat32 \
     --chroot-filesystem squashfs \
+    --hdd-label "RHINO_LINUX" \
     --zsync false \
     --security true \
     --updates true \
     --debootstrap-options "--exclude=pinephone-tweaks,mobile-tweaks-common,librem5-tweaks,pinetab-tweaks" \
     --swap-file-path /swapfile \
-    --swap-file-size 512 \
+    --swap-file-size 256 \
     --interactive false \
     --debconf-frontend noninteractive \
     --compression xz \

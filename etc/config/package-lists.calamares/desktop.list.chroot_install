@@ -12,6 +12,7 @@ doc-base
 ghostscript-x
 gtk2-engines-pixbuf
 inputattach
+linux-firmware-raspi
 language-selector-common
 libasound2-plugins
 libsasl2-modules
@@ -53,6 +54,3 @@ mpv
 language-pack-ko
 fonts-noto-cjk
 fonts-noto-cjk-extra
-u-boot-menu
-u-boot-tools
-u-boot-rpi
