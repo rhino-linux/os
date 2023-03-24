@@ -102,7 +102,6 @@ build () {
   mount $FREELOOP tempmount
 
   # first, we copy the contents of the boot/firmware/ folder to the root directory, because that is where these files are needed
-  cp -a ../tmp/$BUILD_ARCH/chroot/boot/* tempmount
 
   # next, we replace the "root=" parameter with the parameters needed for
   # live-booting (this goes all on one line)
