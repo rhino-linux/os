@@ -80,6 +80,39 @@ build () {
   # includes the filename and not the path to
   # our file.
   cd $OUTPUT_DIR
+  # after the build, let's determine the name of our image file ...
+
+  # ... and change the partition type to reflect the file
+  # system actually in use for partition 1 ("b" is FAT32)
+  sfdisk --part-type ${FNAME}.img 1 b
+
+  # next, we need to patch two things inside the image, so
+  # we need to set up a loop device for it.
+  FREELOOP=$(losetup -f)
+  # note that this could become a TOCTOU issue if more than
+  # 1 process tries to use loop devices
+
+  # as the image is a full disk image containing a partition, we
+  # need to jump to the position where the first partition starts
+  losetup -o 1048576 $FREELOOP $IMAGEFILE
+
+  # now let's mount it
+  mkdir -p tempmount
+  mount $FREELOOP tempmount
+
+  # first, we copy the contents of the boot/firmware/ folder to the root directory, because that is where these files are needed
+  cp -a chroot/boot/firmware/* tempmount
+
+  # next, we replace the "root=" parameter with the parameters needed for
+  # live-booting (this goes all on one line)
+  sed -e 's#root=/dev/mmcblk0p2 #boot=live components config toram
+  hostname=pi username=pi #' -i tempmount/cmdline.txt
+
+  # here comes the cleanup part
+  sync
+  umount $FREELOOP
+  losetup -d $FREELOOP
+  
   sha512sum "${FNAME}.img" > "${FNAME}.sha512"
   sha256sum "${FNAME}.img" > "${FNAME}.sha256"
   cd $BASE_DIR
