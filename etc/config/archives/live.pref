@@ -1,3 +1,7 @@
 Package: *raspi*
-Pin: release n="./devel-proposed"
+Pin: release n=./devel-proposed
 Pin-Priority: 600
+
+Package: *raspi*
+Pin: release n=./devel
+Pin-Priority: 1
