@@ -81,10 +81,11 @@ build () {
   # our file.
   cd $OUTPUT_DIR
   # after the build, let's determine the name of our image file ...
+  IMAGEFILE="${FNAME}.img"
 
   # ... and change the partition type to reflect the file
   # system actually in use for partition 1 ("b" is FAT32)
-  sfdisk --part-type ${FNAME}.img 1 b
+  sfdisk --part-type $IMAGEFILE 1 b
 
   # next, we need to patch two things inside the image, so
   # we need to set up a loop device for it.
