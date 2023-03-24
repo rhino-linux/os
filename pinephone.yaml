@@ -22,7 +22,7 @@ actions:
   - action: run
     description: place alsa symlink
     chroot: true
-    command: apt-get remove linux*6.1* -yq
+    command: apt-get remove linux*6.2* -yq
 
   - action: overlay
     description: Add extlinux modifier
