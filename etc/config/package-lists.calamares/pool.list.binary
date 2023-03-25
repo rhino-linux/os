@@ -3,3 +3,4 @@ dkms
 setserial
 user-setup
 initramfs-tools
+u-boot-rpi
