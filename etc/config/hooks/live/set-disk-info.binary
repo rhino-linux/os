@@ -6,5 +6,5 @@ cp -rf ../config/includes.binary/.disk .
 
 echo "P: Begin executing rpi-firmware binary hook in ${PWD}"
 
-cp -rf ../chroot/usr/lib/firmware/* .
-cp -rf ../chroot/usr/lib/linux-firmware-raspi/* .
+cp -rf ../chroot/usr/lib/firmware/* ./boot
+cp -rf ../chroot/usr/lib/linux-firmware-raspi/* ./boot
