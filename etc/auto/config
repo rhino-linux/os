@@ -28,6 +28,7 @@ lb config noauto \
     --apt-options "--option Acquire::Retries=2 --option Acquire::http::Timeout=45 --yes" \
     --cache-packages false \
     --cache-stages false \
+    --chroot-squashfs-compression-level 9 \
     --uefi-secure-boot enable \
     --binary-image iso-hybrid \
     --iso-application "$NAME" \
