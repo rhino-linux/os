@@ -36,7 +36,7 @@ lb config noauto \
     --firmware-binary false \
     --firmware-chroot false \
     --binary-filesystem fat32 \
-    --chroot-filesystem squashfs \
+    --chroot-filesystem ext4 \
     --hdd-label "RHINO_LINUX" \
     --zsync false \
     --security true \
