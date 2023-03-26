@@ -34,6 +34,7 @@ lb config noauto \
     --iso-volume "$NAME" \
     --firmware-binary false \
     --firmware-chroot false \
+    --chroot-squashfs-compression-type "xz -Xdict-size 1M -b 1M" \
     --zsync false \
     --security true \
     --updates true \
