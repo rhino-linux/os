@@ -9,12 +9,6 @@ actions:
     description: unpacking rootfs
     chroot: false
     command: tar --strip-components=1 --numeric-owner -xf /recipes/binary/Rhino*.tar -C root && rm /recipes/binary/Rhino*.tar
-#
-
-  - action: run
-    chroot: true
-    description: Add firmware and kernel
-    script: scripts/add-rpi-firmware.sh
 
   - action: run
     description: Remove apt caches to save space
@@ -49,7 +43,7 @@ actions:
 
   - action: run
     chroot: true
-    command: update-initramfs -c -k all
+    command: update-initramfs -c -k all && /etc/kernel/postinst.d/zz-flash-kernel
 
   - action: run
     chroot: true
