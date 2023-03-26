@@ -26,3 +26,4 @@ wget
 ca-certificates
 gnupg2
 u-boot-rpi
+u-boot-tools

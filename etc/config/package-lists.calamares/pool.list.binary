@@ -4,3 +4,4 @@ setserial
 user-setup
 initramfs-tools
 u-boot-rpi
+u-boot-tools
