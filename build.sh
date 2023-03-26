@@ -99,14 +99,14 @@ build () {
 
   # now let's mount it
   mkdir -p tempmount
-  mount $FREELOOP tempmount
+  sudo mount $FREELOOP tempmount
 
-  cp -a ../../tmp/$BUILD_ARCH/chroot/usr/lib/firmware/* tempmount/
-  cp -a ../../tmp/$BUILD_ARCH/chroot/usr/lib/linux-firmware-raspi/* tempmount/
+  sudo cp -rf ../../tmp/$BUILD_ARCH/chroot/usr/lib/firmware/* tempmount/
+  sudo cp -rf ../../tmp/$BUILD_ARCH/chroot/usr/lib/linux-firmware-raspi/* tempmount/
 
   # here comes the cleanup part
   sync
-  umount $FREELOOP
+  sudo umount $FREELOOP
   losetup -d $FREELOOP
   
   sha512sum "${FNAME}.img" > "${FNAME}.sha512"
