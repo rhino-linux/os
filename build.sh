@@ -101,8 +101,10 @@ build () {
   mkdir -p tempmount
   sudo mount $FREELOOP tempmount
 
-  sudo mv ../../tmp/$BUILD_ARCH/chroot/usr/lib/firmware/6.2.0-1003-raspi/* tempmount/
+  sudo mv ../../tmp/$BUILD_ARCH/chroot/usr/lib/firmware/6.2.0-1003-raspi/device-tree/broadcom/* tempmount/
+  sudo mv ../../tmp/$BUILD_ARCH/chroot/usr/lib/firmware/6.2.0-1003-raspi/device-tree/overlays tempmount/
   sudo mv ../../tmp/$BUILD_ARCH/chroot/usr/lib/linux-firmware-raspi/* tempmount/
+  sudo echo 'console=serial0,115200 console=tty1 boot=live components config toram hostname=rhino username=rhino rootfstype=squashfs' | sudo tee -a tempmount/cmdline.txt
 
   # here comes the cleanup part
   sync
