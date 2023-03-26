@@ -101,7 +101,7 @@ build () {
   mkdir -p tempmount
   sudo mount $FREELOOP tempmount
 
-  sudo mv ../../tmp/$BUILD_ARCH/chroot/usr/lib/firmware/* tempmount/
+  sudo mv ../../tmp/$BUILD_ARCH/chroot/usr/lib/firmware/6.2.0-1003-raspi/* tempmount/
   sudo mv ../../tmp/$BUILD_ARCH/chroot/usr/lib/linux-firmware-raspi/* tempmount/
 
   # here comes the cleanup part
