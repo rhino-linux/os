@@ -30,14 +30,14 @@ lb config noauto \
     --cache-packages false \
     --cache-stages false \
     --uefi-secure-boot enable \
-    --binary-image hdd \
+    --binary-image tar \
     --iso-application "$NAME" \
     --iso-volume "$NAME" \
     --image-name "$FNAME" \
     --firmware-binary false \
     --firmware-chroot false \
-    --binary-filesystem tar \
-    --chroot-filesystem ext4 \
+    --binary-filesystem ext4 \
+    --chroot-filesystem none \
     --hdd-label "RHINO_LINUX" \
     --zsync false \
     --security true \
