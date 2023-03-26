@@ -74,45 +74,14 @@ build () {
 
   OUTPUT_DIR="$BASE_DIR/builds/$BUILD_ARCH"
   mkdir -p "$OUTPUT_DIR"
-  mv "$BASE_DIR/tmp/$BUILD_ARCH/"*.img "$OUTPUT_DIR/${FNAME}.img"
+  mv "$BASE_DIR/tmp/$BUILD_ARCH/"*.tar.tar "$OUTPUT_DIR/${FNAME}.tar"
 
   # cd into output to so {FNAME}.sha256.txt only
   # includes the filename and not the path to
   # our file.
   cd $OUTPUT_DIR
-  # after the build, let's determine the name of our image file ...
-  IMAGEFILE="${FNAME}.img"
-
-  # ... and change the partition type to reflect the file
-  # system actually in use for partition 1 ("b" is FAT32)
-  sfdisk --part-type $IMAGEFILE 1 b
-
-  # next, we need to patch two things inside the image, so
-  # we need to set up a loop device for it.
-  FREELOOP=$(losetup -f)
-  # note that this could become a TOCTOU issue if more than
-  # 1 process tries to use loop devices
-
-  # as the image is a full disk image containing a partition, we
-  # need to jump to the position where the first partition starts
-  losetup -o 1048576 $FREELOOP $IMAGEFILE
-
-  # now let's mount it
-  mkdir -p tempmount
-  sudo mount $FREELOOP tempmount
-
-  sudo mv ../../tmp/$BUILD_ARCH/chroot/usr/lib/firmware/6.2.0-1003-raspi/device-tree/broadcom/* tempmount/
-  sudo mv ../../tmp/$BUILD_ARCH/chroot/usr/lib/firmware/6.2.0-1003-raspi/device-tree/overlays tempmount/
-  sudo mv ../../tmp/$BUILD_ARCH/chroot/usr/lib/linux-firmware-raspi/* tempmount/
-  sudo echo 'console=serial0,115200 console=tty1 boot=live components config toram hostname=rhino username=rhino rootfstype=ext4' | sudo tee -a tempmount/cmdline.txt
-
-  # here comes the cleanup part
-  sync
-  sudo umount $FREELOOP
-  losetup -d $FREELOOP
-  
-  sha512sum "${FNAME}.img" > "${FNAME}.sha512"
-  sha256sum "${FNAME}.img" > "${FNAME}.sha256"
+  sha512sum "${FNAME}.tar" > "${FNAME}.sha512"
+  sha256sum "${FNAME}.tar" > "${FNAME}.sha256"
   cd $BASE_DIR
 }
 

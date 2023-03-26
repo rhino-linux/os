@@ -9,6 +9,7 @@ lb config noauto \
     --mode debian \
     --initramfs none \
     --initsystem systemd \
+    --system none \
     --bootappend-live "boot=live config hostname=pi username=pi" \
     --distribution "./$BASECODENAME" \
     --parent-distribution "./$BASECODENAME" \
@@ -35,7 +36,7 @@ lb config noauto \
     --image-name "$FNAME" \
     --firmware-binary false \
     --firmware-chroot false \
-    --binary-filesystem fat32 \
+    --binary-filesystem tar \
     --chroot-filesystem ext4 \
     --hdd-label "RHINO_LINUX" \
     --zsync false \

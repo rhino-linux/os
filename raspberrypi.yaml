@@ -1,0 +1,64 @@
+{{- $firmware_version := or .firmware_version "master" -}}
+{{- $architecture := or .architecture "arm64" -}}
+{{- $image := or .image "Rhino-Linux-2023.1-beta1-rpi4.img" -}}
+{{- $debug := or .debug "on" -}}
+
+architecture: {{ $architecture }}
+actions:
+  - action: run
+    description: unpacking rootfs
+    chroot: false
+    command: tar --strip-components=1 --numeric-owner -xf /recipes/binary/Rhino*.tar -C root && rm /recipes/binary/Rhino*.tar
+#
+
+  - action: run
+    chroot: true
+    description: Add firmware and kernel
+    script: scripts/add-rpi-firmware.sh
+
+  - action: run
+    description: Remove apt caches to save space
+    chroot: true
+    command: rm -r /var/cache/apt/* /var/lib/apt/lists/*
+#
+  - action: image-partition
+    description: Creating image
+    imagename: {{ $image }}
+    imagesize: 8GB
+    partitiontype: gpt
+    mountpoints:
+      - mountpoint: /
+        partition: root
+      - mountpoint: /boot
+        partition: boot
+    partitions:
+      - name: boot
+        fs: vfat
+        start: 1M
+        end: 400MB
+        parttype: C12A7328-F81F-11D2-BA4B-00A0C93EC93B
+        flags: [ esp,boot ]
+      - name: root
+        fs: ext4
+        start: 400MB
+        end: 100%
+        parttype: B921B045-1DF0-41C3-AF44-4C6F280D3FAE
+        
+  - action: filesystem-deploy
+    description: Deploying filesystem into image
+
+  - action: run
+    chroot: true
+    command: update-initramfs -c -k all
+
+  - action: run
+    chroot: true
+    command: systemctl enable resizefs.service
+
+  - action: recipe
+    description: Run common image polishing steps
+    recipe: ./polish.yaml
+    variables:
+      architecture: {{ $architecture }}
+      image: {{ $image }}
+      output_type: image
