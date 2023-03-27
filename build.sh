@@ -74,7 +74,7 @@ build () {
 
   OUTPUT_DIR="$BASE_DIR/binary"
   mkdir -p "$OUTPUT_DIR"
-  mv "$BASE_DIR/tmp/$BUILD_ARCH/"*.tar* "$OUTPUT_DIR/${FNAME}.tar"
+  mv "$BASE_DIR/tmp/$BUILD_ARCH/"*.tar.tar "$OUTPUT_DIR/${FNAME}.tar"
 
   # cd into output to so {FNAME}.sha256.txt only
   # includes the filename and not the path to
