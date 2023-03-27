@@ -107,6 +107,9 @@ sudo ln -s /usr/share/applications/install.desktop /home/rhino/Desktop/install.d
 sudo chown "rhino" -cR /usr/share/applications/install.desktop
 
 mkdir -p /etc/skel/.config/autostart
+mkdir /home/rhino/.config/autostart/
+cp /usr/share/applications/ulauncher.desktop /etc/skel/.config/autostart/ulauncher.desktop
+cp /etc/skel/.config/autostart/ulauncher.desktop /home/rhino/.config/autostart/ulauncher.desktop
 sudo rm /etc/calamares/modules/after_bootloader_context.conf
 sudo cat > /etc/calamares/modules/after_bootloader_context.conf << __EOF__
 ---
