@@ -14,6 +14,12 @@ actions:
     description: Remove apt caches to save space
     chroot: true
     command: rm -r /var/cache/apt/* /var/lib/apt/lists/*
+    
+  - action: run
+    description: Remove apt caches to save space
+    chroot: true
+    command: rm -r /boot/initrd.img /boot/initrd.img.old /boot/vmlinuz /boot/vmlinuz.old
+    
 #
   - action: image-partition
     description: Creating image
