@@ -117,6 +117,7 @@ firmwareType:
         - command: "-chown -cR \$USER /home/\$USER/.config/VSCodium/"
         - command: "-HOME=/home/\$USER runuser -m -u \$USER -- sh -c  'codium --install-extension omni-dracula.vsix'"
         - command: "-rm omni-dracula.vsix"
+        - command: "-HOME=/home/rhino runuser -m -u \$USER -- sh -c 'xfconf-query -c xfwm4 -p /general/theme -s Yaru-dark'"
 __EOF__
 
 echo '#!/bin/sh
