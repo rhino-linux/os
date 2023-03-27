@@ -16,9 +16,14 @@ actions:
     command: rm -r /var/cache/apt/* /var/lib/apt/lists/*
     
   - action: run
-    description: Remove apt caches to save space
+    description: Remove broken kernel links
     chroot: true
     command: rm -r /boot/initrd.img /boot/initrd.img.old /boot/vmlinuz /boot/vmlinuz.old
+    
+  - action: run
+    description: add overlays
+    chroot: true
+    command: cp -rf /usr/lib/firmware/6.2.0-1003-raspi/device-tree/broadcom/* /boot && cp -rf /usr/lib/firmware/6.2.0-1003-raspi/device-tree/overlays /boot && cp -rf /usr/lib/linux-firmware-raspi/* /boot
     
 #
   - action: image-partition
