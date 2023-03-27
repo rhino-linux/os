@@ -53,6 +53,12 @@ cd /usr/share/glib-2.0/schemas
 sudo glib-compile-schemas .
 cd ~
 
+mkdir -p /home/rhino/.config/ulauncher/
+mkdir -p /etc/skel/.config/ulauncher/
+cd /etc/skel/.config/ulauncher/ && wget https://github.com/oklopfer/rhino-ulauncher/
+cp -rf /etc/skel/.config/ulauncher/* /home/rhino/.config/ulauncher/
+cd ~
+
 mkdir -p /home/rhino/Desktop
 echo '[Desktop Entry]
 Type=Application
