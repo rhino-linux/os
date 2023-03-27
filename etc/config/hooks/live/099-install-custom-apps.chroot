@@ -129,6 +129,7 @@ firmwareType:
         - command: "-chown -cR \$USER /home/\$USER/.config/VSCodium/"
         - command: "-HOME=/home/\$USER runuser -m -u \$USER -- sh -c  'codium --install-extension omni-dracula.vsix'"
         - command: "-rm omni-dracula.vsix"
+        - command: "-chown -cR \$USER /home/\$USER/.config"
 __EOF__
 
 echo '#!/bin/sh
@@ -180,6 +181,7 @@ ln -s "/home/rhino/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino
 # Make sure the user (rhino) has wrx permissions
 chmod -R 777 /home/rhino/.config/xfce4
 sudo chown "rhino" -cR /home/rhino/Desktop
+sudo chown "rhino" -cR /home/rhino/.config
 
 sudo apt-get clean
 sudo apt-get remove linux*6.2.0* -yq
