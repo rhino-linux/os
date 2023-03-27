@@ -15,6 +15,8 @@ inputattach
 language-selector-common
 libasound2-plugins
 libsasl2-modules
+libadwaita-1-0
+libpanel-1-1
 libu2f-udev
 lightdm
 lightdm-gtk-greeter
