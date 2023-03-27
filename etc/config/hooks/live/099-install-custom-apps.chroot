@@ -52,7 +52,7 @@ cd ~
 
 mkdir -p /home/rhino/.config/ulauncher/
 mkdir -p /etc/skel/.config/ulauncher/
-cd /etc/skel/.config/ulauncher/ && wget https://github.com/oklopfer/rhino-ulauncher/
+cd /etc/skel/.config/ulauncher/ && git clone --depth=1 https://github.com/oklopfer/rhino-ulauncher/ .
 cp -rf /etc/skel/.config/ulauncher/* /home/rhino/.config/ulauncher/
 cd ~
 
