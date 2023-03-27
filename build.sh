@@ -72,7 +72,7 @@ build () {
 #---------------------------#
 "
 
-  OUTPUT_DIR="$BASE_DIR/builds/$BUILD_ARCH"
+  OUTPUT_DIR="$BASE_DIR/binary"
   mkdir -p "$OUTPUT_DIR"
   mv "$BASE_DIR/tmp/$BUILD_ARCH/"*.tar* "$OUTPUT_DIR/${FNAME}.tar"
 
