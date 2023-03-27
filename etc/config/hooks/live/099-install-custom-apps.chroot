@@ -129,7 +129,6 @@ firmwareType:
         - command: "-chown -cR \$USER /home/\$USER/.config/VSCodium/"
         - command: "-HOME=/home/\$USER runuser -m -u \$USER -- sh -c  'codium --install-extension omni-dracula.vsix'"
         - command: "-rm omni-dracula.vsix"
-        - command: "-HOME=/home/\$USER runuser -m -u \$USER -- sh -c 'DISPLAY=:0 XAUTHORITY=/home/rhino/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus xfconf-query -c xfwm4 -p /general/theme -s Yaru-dark'"
 __EOF__
 
 echo '#!/bin/sh
