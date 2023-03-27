@@ -107,6 +107,7 @@ ln -s "/home/rhino/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino
 # Make sure the user (rhino) has wrx permissions
 chmod -R 777 /home/rhino/.config/xfce4
 sudo chown "rhino" -cR /home/rhino/Desktop
+sudo chown "rhino" -cR /home/rhino/.config
 
 sudo apt-get clean
 sudo update-initramfs -u
