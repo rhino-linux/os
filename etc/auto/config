@@ -45,7 +45,6 @@ lb config noauto \
     --debootstrap-options "--exclude=pinephone-tweaks,mobile-tweaks-common,librem5-tweaks,pinetab-tweaks" \
     --interactive false \
     --debconf-frontend noninteractive \
-    --compression xz \
     --checksums md5 \
     --bootloaders "$BOOTLOADERS" \
     --bootstrap-qemu-arch "$QEMU_ARCH" \
