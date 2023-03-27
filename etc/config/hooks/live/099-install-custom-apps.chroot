@@ -46,7 +46,7 @@ echo "theme=KvRhinoDark" >> /home/rhino/.config/Kvantum/kvantum.kvconfig
 echo "theme=KvRhinoDark" >> /etc/skel/.config/Kvantum/kvantum.kvconfig
 xfconf-query -c xsettings -p /Net/ThemeName --set "Yaru-purple-dark"
 xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Quintom_Ink"
-xfconf-query -c xfwm4 -p /general/theme -s "Yaru-dark"
+HOME=/home/rhino runuser -l rhino -c 'xfconf-query -c xfwm4 -p /general/theme -s "Yaru-dark"'
 sudo sed -i "s/'Adwaita'/'Yaru-purple-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
 sudo sed -i "s/'default'/'prefer-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
 cd /usr/share/glib-2.0/schemas
@@ -116,7 +116,7 @@ firmwareType:
         - command: "-wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
         - command: "-mv Microsoft.VisualStudio.Services.VSIXPackage omni-dracula.vsix"
         - command: "-mkdir /home/\$USER/.config/VSCodium/"
-        - command:  "-mkdir /home/\$USER/.config/VSCodium/User/"
+        - command: "-mkdir /home/\$USER/.config/VSCodium/User/"
         - command: "-chown -cR \$USER /home/\$USER/.config/VSCodium/"
         - command: "-HOME=/home/\$USER runuser -m -u \$USER -- sh -c  'codium --install-extension omni-dracula.vsix'"
         - command: "-rm omni-dracula.vsix"
