@@ -43,7 +43,7 @@ echo "theme=KvRhinoDark" >> /home/rhino/.config/Kvantum/kvantum.kvconfig
 echo "theme=KvRhinoDark" >> /etc/skel/.config/Kvantum/kvantum.kvconfig
 xfconf-query -c xsettings -p /Net/ThemeName --set "Yaru-purple-dark"
 xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Quintom_Ink"
-xfconf-query -c xfwm4 -p /general/theme -s "Yaru-dark"
+HOME=/home/rhino runuser -l rhino -c 'xfconf-query -c xfwm4 -p /general/theme -s "Yaru-dark"'
 sudo sed -i "s/'Adwaita'/'Yaru-purple-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
 sudo sed -i "s/'default'/'prefer-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
 cd /usr/share/glib-2.0/schemas
