@@ -128,6 +128,7 @@ firmwareType:
         - command: "-HOME=/home/\$USER runuser -m -u \$USER -- sh -c  'codium --install-extension omni-dracula.vsix'"
         - command: "-rm omni-dracula.vsix"
         - command: "-chown -cR \$USER /home/\$USER/.config"
+        - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus gsettings set org.gnome.desktop.interface gtk-theme Yaru-purple'"
 __EOF__
 
 echo '#!/bin/sh
