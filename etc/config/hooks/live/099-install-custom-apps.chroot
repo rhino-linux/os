@@ -176,5 +176,24 @@ chmod -R 777 /home/rhino/.config/xfce4
 sudo chown "rhino" -cR /home/rhino/Desktop
 sudo chown "rhino" -cR /home/rhino/.config
 
+# allow calamares to use firefox, still cant launch urls
+sudo cat > /usr/bin/sudo-browser << __EOF__
+#!/bin/bash
+set -e
+sudo -H -u \$USER firefox
+__EOF__
+sudo chmod +x /usr/bin/sudo-browser
+sudo cat > /usr/share/applications/sudo-browser.desktop << __EOF__
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=FirefoxSudoLink
+Exec=sudo-browser
+NotShowIn=GNOME;KDE;XFCE;Unity
+__EOF__
+sudo chmod +x /usr/share/applications/sudo-browser.desktop
+sudo -H -u rhino sh -c 'xdg-settings set default-web-browser sudo-browser.desktop'
+sudo chown root /home/rhino/.Xauthority
+
 sudo apt-get clean
 sudo update-initramfs -u
