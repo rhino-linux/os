@@ -17,8 +17,7 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb ulauncher-deb'
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI rhino-core quintom-cursor-theme-git rhino-setup-bin'
+HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-deb ulauncher-deb rhino-core quintom-cursor-theme-git rhino-setup-bin'
 popd
 
 sudo sed -i 's/quiet/console=ttyS0,115200 console=tty1 quiet splash rw/g' /etc/default/flash-kernel
