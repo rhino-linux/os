@@ -7,6 +7,8 @@ export DEBIAN_FRONTEND=noninteractive
 export PACSTALL_DOWNLOADER=quiet-wget
 export GITHUB_ACTIONS=true
 
+
+#Pacstall dirs
 sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /tmp/pacstall /var/cache/pacstall /usr/src/pacstall
 sudo chown "rhino" -cR "/var/log/pacstall"
 sudo chmod -R 777 "/tmp/pacstall"
@@ -16,6 +18,8 @@ sudo chown "rhino" -cR "/usr/share/pacstall"
 sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 
+
+#Pacstall installs
 pushd /home/rhino
 if [ $(dpkg --print-architecture) = arm64 ]; then
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-arm64-deb ulauncher-deb linux-kernel-stable-arm64';
@@ -25,6 +29,8 @@ fi
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget apacstall -PI rhino-core quintom-cursor-theme-git rhino-setup-bin'
 popd
 
+
+#Hack: arm64 firefox no snap
 if [ $(dpkg --print-architecture) = arm64 ]; then
 echo "" >> /etc/apt/preferences.d/rhino.pref
 echo "Package: firefox" >> /etc/apt/preferences.d/rhino.pref
@@ -34,6 +40,7 @@ echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref; fi
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
+#Theming 
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Snow/cursor.theme 55
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Ink/cursor.theme 55
 sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth 100
@@ -54,12 +61,14 @@ cd /usr/share/glib-2.0/schemas
 sudo glib-compile-schemas .
 cd ~
 
+#Ulauncher
 mkdir -p /home/rhino/.config/ulauncher/
 mkdir -p /etc/skel/.config/ulauncher/
 cd /etc/skel/.config/ulauncher/ && git clone --depth=1 https://github.com/oklopfer/rhino-ulauncher/ .
 cp -rf /etc/skel/.config/ulauncher/* /home/rhino/.config/ulauncher/
 cd ~
 
+#Calamares
 mkdir -p /home/rhino/Desktop
 echo '[Desktop Entry]
 Type=Application
@@ -154,9 +163,12 @@ sudo git clone https://github.com/oklopfer/automirror/ -b $(dpkg --print-archite
 sudo cp /lib/"$GNU"64-linux-gnu/calamares/modules/automirror/automirror.conf /etc/calamares/modules/automirror.conf
 cd ~
 
+#Lightdm
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
 ( cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png )
 
+
+#VSC theme
 wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage && mv Microsoft.VisualStudio.Services.VSIXPackage /home/rhino/omni-dracula.vsix
 sudo chown -cR rhino /home/rhino/omni-dracula.vsix
 sudo mkdir /etc/skel/.config/VSCodium/
@@ -184,6 +196,25 @@ ln -s "/home/rhino/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino
 chmod -R 777 /home/rhino/.config/xfce4
 sudo chown "rhino" -cR /home/rhino/Desktop
 sudo chown "rhino" -cR /home/rhino/.config
+
+# allow calamares to use firefox, still cant launch urls
+sudo cat > /usr/bin/sudo-browser << __EOF__
+#!/bin/bash
+set -e
+sudo -H -u \$USER firefox
+__EOF__
+sudo chmod +x /usr/bin/sudo-browser
+sudo cat > /usr/share/applications/sudo-browser.desktop << __EOF__
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=FirefoxSudoLink
+Exec=sudo-browser
+NotShowIn=GNOME;KDE;XFCE;Unity
+__EOF__
+sudo chmod +x /usr/share/applications/sudo-browser.desktop
+sudo -H -u rhino sh -c 'xdg-settings set default-web-browser sudo-browser.desktop'
+sudo chown root /home/rhino/.Xauthority
 
 sudo apt-get clean
 sudo apt-get remove linux*6.2.0* -yq
