@@ -21,12 +21,7 @@ sudo chown "rhino" -cR "/var/cache/pacstall"
 
 #Pacstall installs
 pushd /home/rhino
-if [ $(dpkg --print-architecture) = arm64 ]; then
-FIREFOX="firefox-arm64-deb";
-else
-FIREFOX="firefox-bin";
-fi
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb ${FIREFOX} vscodium-deb ulauncher-deb linux-kernel-stable rhino-core quintom-cursor-theme-git rhino-setup-bin'
+HOME=/home/rhino runuser -l rhino -c 'if [ $(dpkg --print-architecture) = arm64 ]; then FIREFOX="firefox-arm64-deb"; else FIREFOX="firefox-bin"; fi; SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb ${FIREFOX} vscodium-deb ulauncher-deb linux-kernel-stable rhino-core quintom-cursor-theme-git rhino-setup-bin'
 popd
 
 
