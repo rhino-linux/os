@@ -19,7 +19,12 @@ actions:
     description: Remove broken kernel links
     chroot: true
     command: rm -r /boot/initrd.img /boot/initrd.img.old /boot/vmlinuz /boot/vmlinuz.old
-    
+
+  - action: overlay
+    description: Add extlinux modifier
+    source: scripts/rpi
+    destination: /etc/kernel/postinst.d
+
 #
   - action: image-partition
     description: Creating image
@@ -49,7 +54,7 @@ actions:
 
   - action: run
     chroot: true
-    command: update-initramfs -c -k all && /etc/kernel/postinst.d/zzz-rpi
+    command: update-initramfs -c -k all && /etc/kernel/postinst.d/zzz-u-boot-rpi
 
   - action: run
     chroot: true
