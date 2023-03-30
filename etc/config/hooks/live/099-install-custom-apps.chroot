@@ -85,15 +85,6 @@ sudo chown -cR rhino /home/rhino/.config/VSCodium/
 
 # The rhino user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
 
-rm -rf /etc/skel/.config/dconf
-rm -rf /home/rhino/.config/dconf
-cd /etc/skel/.config/
-git clone https://github.com/oklopfer/dconf -b mobile
-mkdir /home/rhino/.config/dconf
-cp -r /etc/skel/.config/dconf/user /home/rhino/.config/dconf/user
-cd ~
-# weird extra patch arm64 needs for correct themeing 
-
 rm -rf /home/rhino/.config/xfce4
 mkdir -p /home/rhino/.config/xfce4
 mkdir -p /home/rhino/.config/Kvantum
