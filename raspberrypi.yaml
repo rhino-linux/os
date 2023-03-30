@@ -20,11 +20,6 @@ actions:
     chroot: true
     command: rm -r /boot/initrd.img /boot/initrd.img.old /boot/vmlinuz /boot/vmlinuz.old
     
-  - action: run
-    description: add overlays
-    chroot: true
-    command: cp -rf /usr/lib/firmware/6.2.0-1003-raspi/device-tree/broadcom/* /boot && cp -rf /usr/lib/firmware/6.2.0-1003-raspi/device-tree/overlays /boot && cp -rf /usr/lib/linux-firmware-raspi/* /boot
-    
 #
   - action: image-partition
     description: Creating image
@@ -38,7 +33,7 @@ actions:
         partition: boot
     partitions:
       - name: boot
-        fs: vfat
+        fs: ext4
         start: 1M
         end: 400MB
         parttype: C12A7328-F81F-11D2-BA4B-00A0C93EC93B
@@ -54,7 +49,7 @@ actions:
 
   - action: run
     chroot: true
-    command: update-initramfs -c -k all && /etc/kernel/postinst.d/zz-flash-kernel
+    command: update-initramfs -c -k all && /etc/kernel/postinst.d/zzz-rpi
 
   - action: run
     chroot: true
