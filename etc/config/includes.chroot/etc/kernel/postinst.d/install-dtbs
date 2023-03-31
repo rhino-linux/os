@@ -4,7 +4,7 @@ set -ex
 kern=$(dpkg -l | grep linux-image- | tail -n1 | awk '{print $2}')
 kver=${kern/linux-image-/}
 
-libdir="/usr/lib/firmware/"
+libdir="/usr/lib/firmware/$kver/device-tree"
 [ -d "$libdir" ] || exit 0
 
 cd "$libdir"
