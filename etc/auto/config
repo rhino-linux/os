@@ -10,7 +10,6 @@ lb config noauto \
     --initramfs none \
     --initsystem systemd \
     --system normal \
-    --bootappend-live "boot=live config hostname=pi username=pi" \
     --distribution "./$BASECODENAME" \
     --parent-distribution "./$BASECODENAME" \
     --archive-areas "main restricted universe multiverse" \
