@@ -11,19 +11,19 @@ actions:
     command: tar --strip-components=1 --numeric-owner -xf /recipes/binary/Rhino*.tar -C root && rm /recipes/binary/Rhino*.tar
 
   - action: run
-    description: Remove apt caches to save space
     chroot: true
-    command: rm -r /var/cache/apt/* /var/lib/apt/lists/*
-    
+    description: setup rpi booting
+    script: scripts/setup-system-boot.sh
+
   - action: run
     description: Remove broken kernel links
     chroot: true
     command: rm -r /boot/initrd.img /boot/initrd.img.old /boot/vmlinuz /boot/vmlinuz.old
 
-  - action: overlay
-    description: Add extlinux modifier
-    source: scripts/rpi
-    destination: /etc/kernel/postinst.d
+  - action: run
+    description: Remove apt caches to save space
+    chroot: true
+    command: rm -r /var/cache/apt/* /var/lib/apt/lists/*
 
 #
   - action: image-partition
@@ -34,7 +34,7 @@ actions:
     mountpoints:
       - mountpoint: /
         partition: root
-      - mountpoint: /boot
+      - mountpoint: /system-boot
         partition: boot
     partitions:
       - name: boot
@@ -54,7 +54,12 @@ actions:
 
   - action: run
     chroot: true
-    command: update-initramfs -c -k all && /etc/kernel/postinst.d/zzz-u-boot-rpi
+    command: update-initramfs -c -k all
+
+  - action: overlay
+    description: Add extlinux modifier for future kerns
+    source: scripts/rpi
+    destination: /etc/kernel/postinst.d
 
   - action: run
     chroot: true

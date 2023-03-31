@@ -17,17 +17,11 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 
 pushd /home/rhino
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-deb ulauncher-deb rhino-core quintom-cursor-theme-git u-boot-mobian-deb rhino-setup-bin'
+HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-deb ulauncher-deb rhino-core quintom-cursor-theme-git rhino-setup-bin'
 popd
 
 echo "" >> /etc/apt/preferences.d/rhino.pref
 echo "Package: firefox" >> /etc/apt/preferences.d/rhino.pref
-echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino.pref
-echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
-echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref
-
-echo "" >> /etc/apt/preferences.d/rhino.pref
-echo "Package: u-boot-menu" >> /etc/apt/preferences.d/rhino.pref
 echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino.pref
 echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
 echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref
