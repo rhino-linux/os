@@ -38,7 +38,7 @@ actions:
         partition: boot
     partitions:
       - name: boot
-        fs: ext4
+        fs: vfat
         start: 1M
         end: 400MB
         parttype: C12A7328-F81F-11D2-BA4B-00A0C93EC93B
