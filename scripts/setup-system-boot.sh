@@ -42,7 +42,7 @@ display_auto_detect=1
 arm_64bit=1
 dtoverlay=dwc2" | tee -a /system-boot/config.txt
 
-echo "zswap.enabled=1 zswap.zpool=z3fold zswap.compressor=zstd dwc_otg.lpm_enable=0 console=tty1 root=LABEL=writable rootfstype=ext4 rootwait fixrtc quiet splash" | tee -a /system-boot/cmdline.txt
+echo "zswap.enabled=1 zswap.zpool=z3fold zswap.compressor=zstd dwc_otg.lpm_enable=0 console=tty1 root=LABEL=root rootfstype=ext4 rootwait fixrtc quiet splash" | tee -a /system-boot/cmdline.txt
 
 echo "kernel=uboot.bin
 device_tree_address=0x02000000
