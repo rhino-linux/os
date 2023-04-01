@@ -30,7 +30,7 @@ jobs:
     - uses: actions/upload-artifact@v3.1.2
       with:
         name: Rhino Linux ISO (AMD64)
-        path: builds/amd64/
+        path: builds/amd64/*.iso
         
   build_arm64:
     runs-on: buildjet-4vcpu-ubuntu-2204-arm
@@ -58,7 +58,7 @@ jobs:
     - uses: actions/upload-artifact@v3.1.2
       with:
         name: Rhino Linux ISO (ARM64)
-        path: builds/arm64/
+        path: builds/arm64/*.iso
 
   build_pine_tarball:
     runs-on: buildjet-4vcpu-ubuntu-2204-arm
@@ -112,12 +112,14 @@ jobs:
       run: sudo mkdir -p builds/pinepro
       
     - name: Move to output folder
-      run: sudo mv Rhino*pro.img builds/pinepro/
+      run: |
+        sudo mv Rhino*pro.img builds/pinepro/
+        sudo xz -v builds/pinepro/Rhino*pro.img
 
     - uses: actions/upload-artifact@v3.1.2
       with:
         name: Rhino Linux Pre-Built (PinePhonePro)
-        path: builds/pinepro/
+        path: builds/pinepro/Rhino*pro.img.xz
 
   deploy_pinephone:
     needs: build_pine_tarball
@@ -139,12 +141,14 @@ jobs:
       run: sudo mkdir -p builds/pine64
       
     - name: Move to output folder
-      run: sudo mv Rhino*pinephone.img builds/pine64/
+      run: |
+        sudo mv Rhino*pinephone.img builds/pine64/
+        sudo xz -v builds/pinepro/Rhino*pinephone.img
 
     - uses: actions/upload-artifact@v3.1.2
       with:
         name: Rhino Linux Pre-Built (PinePhone)
-        path: builds/pine64/
+        path: builds/pine64/Rhino*pinephone.img.xz
 
   build_rpi_tarball:
     runs-on: buildjet-4vcpu-ubuntu-2204-arm
@@ -197,12 +201,14 @@ jobs:
       run: sudo mkdir -p builds/rpi-desktop
       
     - name: Move to output folder
-      run: sudo mv Rhino*rpi-desktop.img builds/rpi-desktop/
+      run: |
+        sudo mv Rhino*rpi-desktop.img builds/rpi-desktop/
+        sudo xz -v builds/rpi-desktop/Rhino*rpi-desktop.img
 
     - uses: actions/upload-artifact@v3.1.2
       with:
         name: Rhino Linux Pre-Built (RPI-Desktop)
-        path: builds/rpi-desktop/
+        path: builds/rpi-desktop/Rhino*rpi-desktop.img.xz
 
   deploy_rpi_server:
     needs: build_rpi_tarball
@@ -224,12 +230,14 @@ jobs:
       run: sudo mkdir -p builds/rpi-server
       
     - name: Move to output folder
-      run: sudo mv Rhino*rpi-server.img builds/rpi-server/
+      run: |
+        sudo mv Rhino*rpi-server.img builds/rpi-server/
+        sudo xz -v builds/rpi-server/Rhino*rpi-server.img
 
     - uses: actions/upload-artifact@v3.1.2
       with:
         name: Rhino Linux Pre-Built (RPI-Server)
-        path: builds/rpi-server/
+        path: builds/rpi-server/Rhino*rpi-server.img.xz
 
 
 
