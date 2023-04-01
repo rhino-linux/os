@@ -4,7 +4,7 @@ on:
   workflow_dispatch
 
 jobs:
-  build_rpi4:
+  build_rpi_tarball:
     runs-on: buildjet-4vcpu-ubuntu-2204-arm
     steps:
     - uses: actions/checkout@v3.1.0
@@ -34,7 +34,7 @@ jobs:
         key: tarball-rpi-${{ github.sha }}
 
   deploy_rpi_desktop:
-    needs: build_rpi_desktop
+    needs: build_rpi_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:     
     - uses: actions/checkout@v3.1.0
@@ -59,7 +59,7 @@ jobs:
         path: builds/rpi-desktop/
 
   deploy_rpi_server:
-    needs: build_rpi_desktop
+    needs: build_rpi_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:     
     - uses: actions/checkout@v3.1.0
