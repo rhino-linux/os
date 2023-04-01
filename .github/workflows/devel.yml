@@ -7,7 +7,7 @@ jobs:
   build_amd64:
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
-    - uses: actions/checkout@v3.1.0
+    - uses: actions/checkout@v3.5.0
 
     - name: Install needed packages
       run: |
@@ -27,7 +27,7 @@ jobs:
     - name: Build ISO
       run: sudo ./build.sh etc/terraform.conf
 
-    - uses: actions/upload-artifact@v3.1.0
+    - uses: actions/upload-artifact@v3.1.2
       with:
         name: Rhino Linux ISO (AMD64)
         path: builds/amd64/
@@ -35,7 +35,7 @@ jobs:
   build_arm64:
     runs-on: buildjet-4vcpu-ubuntu-2204-arm
     steps:
-    - uses: actions/checkout@v3.1.0
+    - uses: actions/checkout@v3.5.0
 
     - name: Install needed packages
       run: |
@@ -55,7 +55,7 @@ jobs:
     - name: Build ISO
       run: sudo ./build.sh etc/terraform.conf
 
-    - uses: actions/upload-artifact@v3.1.0
+    - uses: actions/upload-artifact@v3.1.2
       with:
         name: Rhino Linux ISO (ARM64)
         path: builds/arm64/
@@ -63,7 +63,7 @@ jobs:
   build_pine_tarball:
     runs-on: buildjet-4vcpu-ubuntu-2204-arm
     steps:
-    - uses: actions/checkout@v3.1.0
+    - uses: actions/checkout@v3.5.0
       with:
         ref: 'pinephone'
 
@@ -96,7 +96,7 @@ jobs:
     needs: build_pine_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
-    - uses: actions/checkout@v3.1.0
+    - uses: actions/checkout@v3.5.0
       with:
         ref: 'pinephone'
     
@@ -114,7 +114,7 @@ jobs:
     - name: Move to output folder
       run: sudo mv Rhino*pro.img builds/pinepro/
 
-    - uses: actions/upload-artifact@v3.1.0
+    - uses: actions/upload-artifact@v3.1.2
       with:
         name: Rhino Linux Pre-Built (PinePhonePro)
         path: builds/pinepro/
@@ -123,7 +123,7 @@ jobs:
     needs: build_pine_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
-    - uses: actions/checkout@v3.1.0
+    - uses: actions/checkout@v3.5.0
       with:
         ref: 'pinephone'
     
@@ -141,7 +141,7 @@ jobs:
     - name: Move to output folder
       run: sudo mv Rhino*pinephone.img builds/pine64/
 
-    - uses: actions/upload-artifact@v3.1.0
+    - uses: actions/upload-artifact@v3.1.2
       with:
         name: Rhino Linux Pre-Built (PinePhone)
         path: builds/pine64/
@@ -149,7 +149,7 @@ jobs:
   build_rpi_tarball:
     runs-on: buildjet-4vcpu-ubuntu-2204-arm
     steps:
-    - uses: actions/checkout@v3.1.0
+    - uses: actions/checkout@v3.5.0
       with:
         ref: 'rpi'
 
@@ -181,7 +181,7 @@ jobs:
     needs: build_rpi_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:     
-    - uses: actions/checkout@v3.1.0
+    - uses: actions/checkout@v3.5.0
       with:
         ref: 'rpi'
     
@@ -199,7 +199,7 @@ jobs:
     - name: Move to output folder
       run: sudo mv Rhino*rpi-desktop.img builds/rpi-desktop/
 
-    - uses: actions/upload-artifact@v3.1.0
+    - uses: actions/upload-artifact@v3.1.2
       with:
         name: Rhino Linux Pre-Built (RPI-Desktop)
         path: builds/rpi-desktop/
@@ -208,7 +208,7 @@ jobs:
     needs: build_rpi_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:     
-    - uses: actions/checkout@v3.1.0
+    - uses: actions/checkout@v3.5.0
       with:
         ref: 'rpi'
     
@@ -226,7 +226,7 @@ jobs:
     - name: Move to output folder
       run: sudo mv Rhino*rpi-server.img builds/rpi-server/
 
-    - uses: actions/upload-artifact@v3.1.0
+    - uses: actions/upload-artifact@v3.1.2
       with:
         name: Rhino Linux Pre-Built (RPI-Server)
         path: builds/rpi-server/
