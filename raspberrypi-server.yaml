@@ -1,6 +1,6 @@
 {{- $firmware_version := or .firmware_version "master" -}}
 {{- $architecture := or .architecture "arm64" -}}
-{{- $image := or .image "Rhino-Linux-2023.1-beta1-rpi4.img" -}}
+{{- $image := or .image "Rhino-Linux-2023.1-beta1-rpi-server.img" -}}
 {{- $debug := or .debug "on" -}}
 
 architecture: {{ $architecture }}
@@ -16,6 +16,11 @@ actions:
     script: scripts/setup-system-boot.sh
 
   - action: run
+    chroot: true
+    description: cleanup for server
+    script: scripts/server-clean.sh
+
+  - action: run
     description: Remove broken kernel links
     chroot: true
     command: rm -r /boot/initrd.img /boot/initrd.img.old /boot/vmlinuz /boot/vmlinuz.old
@@ -29,7 +34,7 @@ actions:
   - action: image-partition
     description: Creating image
     imagename: {{ $image }}
-    imagesize: 6GB
+    imagesize: 4GB
     partitiontype: gpt
     mountpoints:
       - mountpoint: /
