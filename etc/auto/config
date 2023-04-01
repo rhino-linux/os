@@ -26,6 +26,7 @@ lb config noauto \
     --parent-mirror-binary "$MIRROR_URL" \
     --keyring-packages ubuntu-keyring \
     --apt-options "--option Acquire::Retries=2 --option Acquire::http::Timeout=45 --yes" \
+    --apt-recommends false \
     --cache-packages false \
     --cache-stages false \
     --uefi-secure-boot enable \
