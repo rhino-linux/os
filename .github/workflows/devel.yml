@@ -27,7 +27,7 @@ jobs:
     - name: Build ISO
       run: |
         sudo ./build.sh etc/terraform.conf
-        echo "::set-env name=ISOX64::$(ls builds/amd64/*.iso)"
+        echo "ISOX64=$(cd builds/amd64; ls *.iso)"  >> $GITHUB_ENV
 
     - uses: actions/upload-artifact@v3.1.2
       with:
@@ -57,7 +57,7 @@ jobs:
     - name: Build ISO
       run: |
         sudo ./build.sh etc/terraform.conf
-        echo "::set-env name=ISOA64::$(ls builds/arm64/*.iso)"
+        echo "ISOA64=$(cd builds/arm64; ls *.iso)" >> $GITHUB_ENV
 
     - uses: actions/upload-artifact@v3.1.2
       with:
@@ -115,11 +115,11 @@ jobs:
     - name: Place output folder
       run: sudo mkdir -p builds/pinepro
       
-    - name: Move to output folder
+    - name: Move to output folder and compress
       run: |
         sudo mv Rhino*pro.img builds/pinepro/
         sudo xz -v builds/pinepro/Rhino*pro.img
-        echo "::set-env name=IMGPPP::$(ls builds/pinepro/*.img.xz)"
+        echo "IMGPPP=$(cd builds/pinepro; ls *.img.xz)" >> $GITHUB_ENV
 
     - uses: actions/upload-artifact@v3.1.2
       with:
@@ -145,11 +145,11 @@ jobs:
     - name: Place output folder
       run: sudo mkdir -p builds/pine64
       
-    - name: Move to output folder
+    - name: Move to output folder and compress
       run: |
         sudo mv Rhino*pinephone.img builds/pine64/
-        sudo xz -v builds/pinepro/Rhino*pinephone.img
-        echo "::set-env name=IMGPP::$(ls builds/pine64/*.img.xz)"
+        sudo xz -v builds/pine64/Rhino*pinephone.img
+        echo "IMGPP=$(cd builds/pine64; ls *.img.xz)" >> $GITHUB_ENV
 
     - uses: actions/upload-artifact@v3.1.2
       with:
@@ -206,11 +206,11 @@ jobs:
     - name: Place output folder
       run: sudo mkdir -p builds/rpi-desktop
       
-    - name: Move to output folder
+    - name: Move to output folder and compress
       run: |
         sudo mv Rhino*rpi-desktop.img builds/rpi-desktop/
         sudo xz -v builds/rpi-desktop/Rhino*rpi-desktop.img
-        echo "::set-env name=IMGRPD::$(ls builds/rpi-desktop/*.img.xz)"
+        echo "IMGRPD=$(cd builds/rpi-desktop; ls *.img.xz)" >> $GITHUB_ENV
 
     - uses: actions/upload-artifact@v3.1.2
       with:
@@ -236,11 +236,11 @@ jobs:
     - name: Place output folder
       run: sudo mkdir -p builds/rpi-server
       
-    - name: Move to output folder
+    - name: Move to output folder and compress
       run: |
         sudo mv Rhino*rpi-server.img builds/rpi-server/
         sudo xz -v builds/rpi-server/Rhino*rpi-server.img
-        echo "::set-env name=IMGRPS::$(ls builds/rpi-server/*.img.xz)"
+        echo "IMGRPS=$(cd builds/rpi-server; ls *.img.xz)" >> $GITHUB_ENV
 
     - uses: actions/upload-artifact@v3.1.2
       with:
