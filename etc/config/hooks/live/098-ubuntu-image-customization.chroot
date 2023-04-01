@@ -13,7 +13,7 @@ if [ "$IMAGEFORMAT" == "none" ]; then
         touch "/var/lib/oem-config/run"
 
         # Make the writable partition grow
-        echo "LABEL=writable    /     ext4    defaults,x-systemd.growfs    0 0" >>/etc/fstab
+        echo "LABEL=root    /     ext4    defaults,x-systemd.growfs    0 0" >>/etc/fstab
 
         # Create a 1GB swapfile. Now done by lb
         #dd if=/dev/zero of=/swapfile bs=1G count=1
