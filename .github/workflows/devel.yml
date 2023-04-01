@@ -25,12 +25,14 @@ jobs:
       run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
 
     - name: Build ISO
-      run: sudo ./build.sh etc/terraform.conf
+      run: |
+        sudo ./build.sh etc/terraform.conf
+        echo "::set-env name=ISOX64::$(ls builds/amd64/*.iso)"
 
     - uses: actions/upload-artifact@v3.1.2
       with:
-        name: Rhino Linux ISO (AMD64)
-        path: builds/amd64/*.iso
+        name: ${{ env.ISOX64 }}
+        path: builds/amd64/${{ env.ISOX64 }}
         
   build_arm64:
     runs-on: buildjet-4vcpu-ubuntu-2204-arm
@@ -53,12 +55,14 @@ jobs:
       run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
 
     - name: Build ISO
-      run: sudo ./build.sh etc/terraform.conf
+      run: |
+        sudo ./build.sh etc/terraform.conf
+        echo "::set-env name=ISOA64::$(ls builds/arm64/*.iso)"
 
     - uses: actions/upload-artifact@v3.1.2
       with:
-        name: Rhino Linux ISO (ARM64)
-        path: builds/arm64/*.iso
+        name: ${{ env.ISOA64 }}
+        path: builds/arm64/${{ env.ISOA64 }}
 
   build_pine_tarball:
     runs-on: buildjet-4vcpu-ubuntu-2204-arm
@@ -115,11 +119,12 @@ jobs:
       run: |
         sudo mv Rhino*pro.img builds/pinepro/
         sudo xz -v builds/pinepro/Rhino*pro.img
+        echo "::set-env name=IMGPPP::$(ls builds/pinepro/*.img.xz)"
 
     - uses: actions/upload-artifact@v3.1.2
       with:
-        name: Rhino Linux Pre-Built (PinePhonePro)
-        path: builds/pinepro/Rhino*pro.img.xz
+        name: ${{ env.IMGPPP }}
+        path: builds/pinepro/${{ env.IMGPPP }}
 
   deploy_pinephone:
     needs: build_pine_tarball
@@ -144,11 +149,12 @@ jobs:
       run: |
         sudo mv Rhino*pinephone.img builds/pine64/
         sudo xz -v builds/pinepro/Rhino*pinephone.img
+        echo "::set-env name=IMGPP::$(ls builds/pine64/*.img.xz)"
 
     - uses: actions/upload-artifact@v3.1.2
       with:
-        name: Rhino Linux Pre-Built (PinePhone)
-        path: builds/pine64/Rhino*pinephone.img.xz
+        name: ${{ env.IMGPP }}
+        path: builds/pine64/${{ env.IMGPP }}
 
   build_rpi_tarball:
     runs-on: buildjet-4vcpu-ubuntu-2204-arm
@@ -204,11 +210,12 @@ jobs:
       run: |
         sudo mv Rhino*rpi-desktop.img builds/rpi-desktop/
         sudo xz -v builds/rpi-desktop/Rhino*rpi-desktop.img
+        echo "::set-env name=IMGRPD::$(ls builds/rpi-desktop/*.img.xz)"
 
     - uses: actions/upload-artifact@v3.1.2
       with:
-        name: Rhino Linux Pre-Built (RPI-Desktop)
-        path: builds/rpi-desktop/Rhino*rpi-desktop.img.xz
+        name: ${{ env.IMGRPD }}
+        path: builds/rpi-desktop/${{ env.IMGRPD }}
 
   deploy_rpi_server:
     needs: build_rpi_tarball
@@ -233,11 +240,12 @@ jobs:
       run: |
         sudo mv Rhino*rpi-server.img builds/rpi-server/
         sudo xz -v builds/rpi-server/Rhino*rpi-server.img
+        echo "::set-env name=IMGRPS::$(ls builds/rpi-server/*.img.xz)"
 
     - uses: actions/upload-artifact@v3.1.2
       with:
-        name: Rhino Linux Pre-Built (RPI-Server)
-        path: builds/rpi-server/Rhino*rpi-server.img.xz
+        name: ${{ env.IMGRPS }}
+        path: builds/rpi-server/${{ env.IMGRPS }}
 
 
 
