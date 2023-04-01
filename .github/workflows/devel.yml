@@ -201,7 +201,7 @@ jobs:
 
     - uses: actions/upload-artifact@v3.1.0
       with:
-        name: Rhino Linux Pre-Installed (RPI-Desktop)
+        name: Rhino Linux Pre-Built (RPI-Desktop)
         path: builds/rpi-desktop/
 
   deploy_rpi_server:
@@ -228,7 +228,7 @@ jobs:
 
     - uses: actions/upload-artifact@v3.1.0
       with:
-        name: Rhino Linux Pre-Installed (RPI-Server)
+        name: Rhino Linux Pre-Built (RPI-Server)
         path: builds/rpi-server/
 
 
