@@ -6,6 +6,7 @@ language-pack-en
 language-pack-ko
 libadwaita-1-0
 libpanel-1-1
+libdbus-glib-1-2
 xfsprogs
 jfsutils
 reiserfsprogs
