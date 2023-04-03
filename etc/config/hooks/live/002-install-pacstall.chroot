@@ -41,7 +41,7 @@ firmwareType:
         -    timeout: 10
         -    command: apt-get update
              timeout: 120
-        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict grub-efi-\$(dpkg --print-architecture)-signed \$(if [ \$(dpkg --print-architecture) = amd64 ]; then grub-pc; fi)
+        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict grub-efi-\$(dpkg --print-architecture)-signed \$(if [ \$(dpkg --print-architecture) = amd64 ]; then echo grub-pc; fi)
              timeout: 300
         -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict shim-signed
              timeout: 300'
