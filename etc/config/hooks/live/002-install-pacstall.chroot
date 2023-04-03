@@ -32,10 +32,6 @@ sudo cat > /etc/calamares/modules/before_bootloader_context.conf << __EOF__
 ---
 firmwareType:
     bios:
-        -    command: apt-cdrom add -m -d=/media/cdrom/
-             timeout: 10
-        -    command: sed -i '/deb http/d' /etc/apt/sources.list
-             timeout: 10
         -    command: sed -i 's/ cdrom/ [trusted=yes] cdrom/g' /etc/apt/sources.list
         -    timeout: 10
         -    command: apt-get update
@@ -45,10 +41,6 @@ firmwareType:
         -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict shim-signed
              timeout: 300'
     "*":
-        -    command: apt-cdrom add -m -d=/media/cdrom/
-             timeout: 10
-        -    command: sed -i '/deb http/d' /etc/apt/sources.list
-             timeout: 10
         -    command: sed -i 's/ cdrom/ [trusted=yes] cdrom/g' /etc/apt/sources.list
         -    timeout: 10
         -    command: apt-get update
