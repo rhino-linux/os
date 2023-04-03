@@ -21,7 +21,6 @@ curl -fsSL https://git.io/JsADh > pacstall-install.sh
 chmod +x ./pacstall-install.sh
 echo N\n | sudo -E ./pacstall-install.sh
 rm ./pacstall-install.sh
-
 # WORKAROUND to trust CD Add
 sudo rm /etc/calamares/modules/before_bootloader_context.conf
 sudo touch /etc/calamares/modules/before_bootloader_context.conf
@@ -42,7 +41,7 @@ firmwareType:
         -    timeout: 10
         -    command: apt-get update
              timeout: 120
-        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict grub-efi-$(dpkg --print-architecture)-signed
+        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict grub-efi-\$(dpkg --print-architecture)-signed \$(if [ \$(dpkg --print-architecture) = amd64 ]; then grub-pc; fi)
              timeout: 300
         -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict shim-signed
              timeout: 300'
