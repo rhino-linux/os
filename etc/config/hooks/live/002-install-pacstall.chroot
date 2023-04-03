@@ -31,7 +31,19 @@ sudo cat > /etc/calamares/modules/before_bootloader_context.conf << __EOF__
 # procedure for all EFI types.
 ---
 firmwareType:
-    bios:    "-/bin/true"
+    bios:
+        -    command: apt-cdrom add -m -d=/media/cdrom/
+             timeout: 10
+        -    command: sed -i '/deb http/d' /etc/apt/sources.list
+             timeout: 10
+        -    command: sed -i 's/ cdrom/ [trusted=yes] cdrom/g' /etc/apt/sources.list
+        -    timeout: 10
+        -    command: apt-get update
+             timeout: 120
+        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict grub-pc
+             timeout: 300
+        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict shim-signed
+             timeout: 300'
     "*":
         -    command: apt-cdrom add -m -d=/media/cdrom/
              timeout: 10
@@ -41,7 +53,7 @@ firmwareType:
         -    timeout: 10
         -    command: apt-get update
              timeout: 120
-        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict grub-efi-\$(dpkg --print-architecture)-signed \$(if [ \$(dpkg --print-architecture) = amd64 ]; then echo grub-pc; fi)
+        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict grub-efi-\$(dpkg --print-architecture)-signed
              timeout: 300
         -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict shim-signed
              timeout: 300'
