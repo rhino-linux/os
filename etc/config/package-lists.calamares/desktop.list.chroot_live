@@ -12,6 +12,8 @@ jfsutils
 reiserfsprogs
 shim-signed
 shim
+dosfstools
+mtools
 ntfs-3g
 lvm2
 dmraid
