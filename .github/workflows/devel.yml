@@ -94,7 +94,7 @@ jobs:
     - uses: actions/cache@v3.3.1
       with:
         path: binary/
-        key: tar-pine-${{ github.run_id }}-${{ github.run_attempt }}
+        key: tar-pine-${{ github.run_id }}
 
   deploy_pinephone_pro:
     needs: build_pine_tarball
@@ -107,7 +107,7 @@ jobs:
     - uses: actions/cache@v3.3.1
       with:
         path: binary/
-        key: tar-pine-${{ github.run_id }}-${{ github.run_attempt }}
+        key: tar-pine-${{ github.run_id }}
         
     - name: Deploy to partition
       run: sudo ./debos-docker -m 10G pinephonepro.yaml
@@ -137,7 +137,7 @@ jobs:
     - uses: actions/cache@v3.3.1
       with:
         path: binary/
-        key: tar-pine-${{ github.run_id }}-${{ github.run_attempt }}
+        key: tar-pine-${{ github.run_id }}
     
     - name: Deploy to partition
       run: sudo ./debos-docker -m 10G pinephone.yaml
@@ -185,7 +185,7 @@ jobs:
     - uses: actions/cache@v3.3.1
       with:
         path: binary/
-        key: tar-rpi-${{ github.run_id }}-${{ github.run_attempt }}
+        key: tar-rpi-${{ github.run_id }}
 
   deploy_rpi_desktop:
     needs: build_rpi_tarball
@@ -198,7 +198,7 @@ jobs:
     - uses: actions/cache@v3.3.1
       with:
         path: binary/
-        key: tar-rpi-${{ github.run_id }}-${{ github.run_attempt }}
+        key: tar-rpi-${{ github.run_id }}
         
     - name: Deploy to partition
       run: sudo ./debos-docker -m 10G raspberrypi-desktop.yaml
@@ -228,7 +228,7 @@ jobs:
     - uses: actions/cache@v3.3.1
       with:
         path: binary/
-        key: tar-rpi-${{ github.run_id }}-${{ github.run_attempt }}
+        key: tar-rpi-${{ github.run_id }}
         
     - name: Deploy to partition
       run: sudo ./debos-docker -m 10G raspberrypi-server.yaml
