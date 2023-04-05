@@ -4,6 +4,8 @@ bash-completion
 blueman
 bluez
 policykit-1-gnome
+polkitd
+pkexec
 bluez-alsa-utils
 bluez-tools
 mate-polkit
