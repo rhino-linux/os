@@ -28,3 +28,7 @@ libglib2.0-bin
 fonts-noto-cjk
 fonts-noto-cjk-extra
 btrfs-progs
+mokutil
+openssl
+sbsigntool
+fwts
