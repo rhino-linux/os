@@ -1,8 +1,0 @@
-b43-fwcutter
-dkms
-setserial
-user-setup
-initramfs-tools
-flash-kernel
-u-boot-rpi
-u-boot-tools
