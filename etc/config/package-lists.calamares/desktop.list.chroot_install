@@ -56,3 +56,7 @@ mpv
 language-pack-ko
 fonts-noto-cjk
 fonts-noto-cjk-extra
+wireplumber
+pipewire
+pipewire-pulse
+
