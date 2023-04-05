@@ -78,3 +78,6 @@ wget
 btrfs-progs
 ca-certificates
 gnupg2
+wireplumber
+pipewire
+pipewire-pulse
