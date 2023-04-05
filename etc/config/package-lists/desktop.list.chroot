@@ -75,5 +75,6 @@ zram-config
 rsync
 libglib2.0-bin
 wget
+btrfs-progs
 ca-certificates
 gnupg2
