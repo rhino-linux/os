@@ -2,10 +2,15 @@ gpg
 curl
 bash-completion
 blueman
+bluez
+policykit-1-gnome
+bluez-alsa-utils
+bluez-tools
 mate-polkit
 network-manager-gnome
 alsa-base
 alsa-utils
+alsa-ucm-conf
 bc
 ca-certificates
 doc-base
