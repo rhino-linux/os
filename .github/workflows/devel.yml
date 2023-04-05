@@ -1,4 +1,4 @@
-name: Rhino Linux Image Generation
+name: Rhino Linux Image Generation (Meta)
 
 on:
   workflow_dispatch
