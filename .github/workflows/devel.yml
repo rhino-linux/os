@@ -117,7 +117,7 @@ jobs:
       
     - name: Move to output folder and compress
       run: |
-        sudo mv Rhino*pro.img builds/pine/
+        sudo mv Rhino*unified.img builds/pine/
         sudo xz -v builds/pine/Rhino*unified.img
         echo "IMGPP=$(cd builds/pine; ls *.img.xz)" >> $GITHUB_ENV
 
