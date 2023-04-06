@@ -1,5 +1,5 @@
 {{- $architecture := or .architecture "arm64" -}}
-{{- $image := or .image "Rhino-Linux-2023.1-beta1-pinephone.img" -}}
+{{- $image := or .image "Rhino-Linux-2023.1-beta1-pinephone-unified.img" -}}
 {{- $variant := or .variant "mainline" -}}
 {{- $debug := or .debug "on" -}}
 {{- $additional_apt_repos := or .additional_apt_repos "" -}}
@@ -14,30 +14,20 @@ actions:
     chroot: false
     command: tar --strip-components=1 --numeric-owner -xf /recipes/binary/Rhino*.tar -C root && rm /recipes/binary/Rhino*.tar
 
-  - action: overlay
-    description: Add pulse config files
-    source: pulse/pine64
-    destination: /etc/pulse
-
   - action: run
-    description: place alsa symlink
+    description: clean
     chroot: true
     command: apt-get remove linux*6.2* -yq
-
-  - action: overlay
-    description: Add extlinux modifier
-    source: scripts/pine64
-    destination: /etc/kernel/postinst.d
 
   - action: run
     description: sudo workaround
     chroot: true
     command: echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-    
+
   - action: run
     description: Install kernel
     chroot: true
-    command: HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI linux-headers-okpine64-deb linux-image-okpine64-deb linux-libc-dev-okpine64-deb'
+    command: HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI linux-headers-okpine-deb linux-image-okpine-deb linux-libc-dev-okpine-deb'
 
   - action: run
     description: sudo workaround
@@ -87,7 +77,7 @@ actions:
   - action: run
     chroot: true
     description: Make sure EXTLINUX is valid
-    script: scripts/pine64/zzz-u-boot-pine64
+    script: scripts/pinepro/zzz-u-boot-pinepro
 
   # polish.yaml must be run as the last step, as it contains the
   # step to (re-)create /etc/writable symlinks and systemd-nspawn
