@@ -75,7 +75,6 @@ build () {
 
   OUTPUT_DIR="$BASE_DIR/binary"
   mkdir -p "$OUTPUT_DIR"
-  FNAME="Rhino-Linux-OS-$VERSION$OUTPUT_SUFFIX-$BUILD_ARCH"
   mv "$BASE_DIR/tmp/$BUILD_ARCH/live-image-$BUILD_ARCH.tar.tar" "$OUTPUT_DIR/${FNAME}.tar"
   rm -r "$BASE_DIR/tmp/$BUILD_ARCH/"
 
