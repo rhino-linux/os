@@ -79,6 +79,11 @@ actions:
     description: Make sure EXTLINUX is valid
     script: scripts/pinepro/zzz-u-boot-pinepro
 
+  - action: overlay
+    description: Add post inst script for future kernels
+    source: scripts/pine
+    destination: /etc/kernel/postinst.d
+
   # polish.yaml must be run as the last step, as it contains the
   # step to (re-)create /etc/writable symlinks and systemd-nspawn
   # tends to overwrite them.
