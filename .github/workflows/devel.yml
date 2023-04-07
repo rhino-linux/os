@@ -1,13 +1,13 @@
-name: RL OS ISO Generation
+name: RL PinePhone Generation
 
 on:
   workflow_dispatch
 
 jobs:
-  build_tarball:
+  build_pine_tarball:
     runs-on: buildjet-4vcpu-ubuntu-2204-arm
     steps:
-    - uses: actions/checkout@v3.1.0
+    - uses: actions/checkout@v3.5.0
 
     - name: Install needed packages
       run: |
@@ -32,29 +32,37 @@ jobs:
     - uses: actions/cache@v3.3.1
       with:
         path: binary/
-        key: tarball-${{ github.sha }}
+        key: tar-pine-${{ github.run_id }}
 
-  deploy_pinephone_pro:
-    needs: build_tarball
+  deploy_pine:
+    needs: build_pine_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
-    steps:     
-    - uses: actions/checkout@v3.1.0
+    steps:
+    - uses: actions/checkout@v3.5.0
     
     - uses: actions/cache@v3.3.1
       with:
         path: binary/
-        key: tarball-${{ github.sha }}
+        key: tar-pine-${{ github.run_id }}
         
     - name: Deploy to partition
-      run: sudo ./debos-docker -m 10G pinephone-unified.yaml 
+      run: sudo ./debos-docker -m 10G pinephone-unified.yaml
       
     - name: Place output folder
-      run: sudo mkdir -p builds/pinepro
+      run: sudo mkdir -p builds/pine
       
-    - name: Move to output folder
-      run: sudo mv Rhino*pro.img builds/pinepro/
+    - name: Move to output folder and compress
+      run: |
+        sudo mv Rhino*unified.img builds/pine/
+        sudo xz -v builds/pine/Rhino*unified.img
+        echo "IMGPP=$(cd builds/pine; ls *.img.xz)" >> $GITHUB_ENV
 
-    - uses: actions/upload-artifact@v3.1.0
+    - uses: actions/upload-artifact@v3.1.2
       with:
-        name: Rhino Linux OS (PinePhonePro)
-        path: builds/pinepro/
+        name: ${{ env.IMGPP }}
+        path: builds/pine/${{ env.IMGPP }}
+        
+        
+        
+        
+        
