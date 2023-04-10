@@ -31,3 +31,4 @@ btrfs-progs
 openssl
 sbsigntool
 fwts
+cryptsetup
