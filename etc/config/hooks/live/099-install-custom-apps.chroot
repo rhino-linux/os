@@ -64,6 +64,8 @@ cp -rf /etc/skel/.config/ulauncher/* /home/rhino/.config/ulauncher/
 cd ~
 
 #Calamares
+# Replace Lubuntu Calamares desktop file with ours
+rm /usr/share/applications/calamares.desktop
 mkdir -p /home/rhino/Desktop
 echo '[Desktop Entry]
 Type=Application
@@ -109,10 +111,10 @@ Icon=/usr/share/icons/logo.svg
 Terminal=false
 StartupNotify=true
 Categories=Qt;System;
-Keywords=installer;calamares;system;' | tee -a /usr/share/applications/install.desktop > /dev/null
-sudo chmod 755 /usr/share/applications/install.desktop
-sudo ln -s /usr/share/applications/install.desktop /home/rhino/Desktop/install.desktop
-sudo chown "rhino" -cR /usr/share/applications/install.desktop
+Keywords=installer;calamares;system;' | tee -a /usr/share/applications/calamares.desktop > /dev/null
+sudo chmod 755 /usr/share/applications/calamares.desktop
+sudo ln -s /usr/share/applications/calamares.desktop /home/rhino/Desktop/calamares.desktop
+sudo chown "rhino" -cR /usr/share/applications/calamares.desktop
 
 mkdir -p /etc/skel/.config/autostart
 mkdir /home/rhino/.config/autostart/
@@ -125,7 +127,7 @@ dontChroot: false
 timeout: 120
 firmwareType:
     "*":
-        - "-rm /usr/share/applications/install.desktop"
+        - "-rm /usr/share/applications/calamares.desktop"
         - command: "-ln -s /usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop /home/\$USER/.config/autostart/setup.desktop"
         - command: "-wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
         - command: "-mv Microsoft.VisualStudio.Services.VSIXPackage omni-dracula.vsix"
