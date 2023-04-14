@@ -6,14 +6,15 @@ export PACSTALL_DOWNLOADER=quiet-wget
 export GITHUB_ACTIONS=true
 
 # first, set sources list
-echo $(cat /etc/os-release | grep VERSION_CODENAME) >> rolling; 
-sed -i 's/\"//g' rolling;
-export $(head -1 rolling);
-rm rolling;
-echo '#!/bin/bash' >> rolling;
-echo "sudo sed -i 's/$VERSION_CODENAME/.\/devel/g' /etc/apt/sources.list" >> rolling;
-chmod +x rolling && ./rolling 
+echo $(cat /etc/os-release | grep VERSION_CODENAME) >> rolling 
+sed -i 's/\"//g' rolling
+export $(head -1 rolling)
 rm rolling
+if ! [ $VERSION_CODENAME = "devel" ]; then
+echo '#!/bin/bash' >> rolling
+echo "sudo sed -i 's/$VERSION_CODENAME/.\/devel/g' /etc/apt/sources.list" >> rolling
+chmod +x rolling && ./rolling 
+rm rolling; fi
 sudo apt-get update && sudo apt-get dist-upgrade -y
 
 # then, install pacstall
