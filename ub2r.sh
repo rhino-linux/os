@@ -31,11 +31,13 @@ pacstall -PI rhino-core nala-deb ${FIREFOX} vscodium-deb ulauncher-deb linux-ker
 
 #Hack: arm64 firefox no snap
 if [ $(dpkg --print-architecture) = arm64 ]; then
-echo "" >> /etc/apt/preferences.d/rhino.pref
-echo "Package: firefox" >> /etc/apt/preferences.d/rhino.pref
-echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino.pref
-echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
-echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref; fi
+sudo touch rhino.pref
+echo "" >> rhino.pref
+echo "Package: firefox" >> rhino.pref
+echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> rhino.pref
+echo "Pin: release o=Ubuntu" >> rhino.pref
+echo "Pin-Priority: 1" >> rhino.pref
+sudo mv rhino.pref /etc/apt/preferences.d/; fi
 
 # put it all together
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Snow/cursor.theme 55
@@ -45,37 +47,29 @@ sudo update-alternatives --set default.plymouth /usr/share/plymouth/themes/rhino
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/Quintom_Ink/cursor.theme
 echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
 mkdir -p /home/$USER/.config/Kvantum
-mkdir -p /etc/skel/.config/Kvantum
 echo "theme=KvRhinoDark" >> /home/$USER/.config/Kvantum/kvantum.kvconfig
-echo "theme=KvRhinoDark" >> /etc/skel/.config/Kvantum/kvantum.kvconfig
 xfconf-query -c xsettings -p /Net/ThemeName --set Yaru-purple-dark
 xfconf-query -c xsettings -p /Gtk/CursorThemeName -s Quintom_Ink
 gsettings set org.gnome.desktop.interface gtk-theme Yaru-purple
 xfconf-query -c xfwm4 -p /general/theme -s Yaru-dark
 mkdir -p /home/$USER/.config/ulauncher/
-mkdir -p /etc/skel/.config/ulauncher/
 cd /etc/skel/.config/ulauncher/ && git clone --depth=1 https://github.com/oklopfer/rhino-ulauncher/ .
 cp -rf /etc/skel/.config/ulauncher/* /home/$USER/.config/ulauncher/
 cd $BASEDIR
-mkdir -p /etc/skel/.config/autostart
 mkdir /home/$USER/.config/autostart/
-cp /usr/share/applications/ulauncher.desktop /etc/skel/.config/autostart/ulauncher.desktop
-cp /etc/skel/.config/autostart/ulauncher.desktop /home/$USER/.config/autostart/ulauncher.desktop
+cp /usr/share/applications/ulauncher.desktop /home/$USER/.config/autostart/ulauncher.desktop
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
 ( cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png )
 wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage && mv Microsoft.VisualStudio.Services.VSIXPackage /home/$USER/omni-dracula.vsix
 sudo chown -cR $USER /home/$USER/omni-dracula.vsix
-sudo mkdir /etc/skel/.config/VSCodium/
-sudo mkdir /etc/skel/.config/VSCodium/User/
 sudo mkdir /home/$USER/.config/VSCodium/
 sudo mkdir /home/$USER/.config/VSCodium/User/
 sudo chown -cR $USER /home/$USER/.config/VSCodium/
-codium --install-extension /home/$USER/omni-dracula.vsix --user-data-dir /etc/skel/.config/VSCodium/ --no-sandbox
+codium --install-extension /home/$USER/omni-dracula.vsix
 rm /home/$USER/omni-dracula.vsix
-echo '{
+sudo echo '{
     "workbench.colorTheme": "Omni Dracula Theme"
-}' | sudo tee -a /etc/skel/.config/VSCodium/User/settings.json
-sudo cp -r /etc/skel/.config/VSCodium/ /home/$USER/.config/
+}' | sudo tee -a /home/$USER/.config/
 sudo chown -cR $USER /home/$USER/.config/VSCodium/
 rm -rf /home/$USER/.config/xfce4
 mkdir -p /home/$USER/.config/xfce4
