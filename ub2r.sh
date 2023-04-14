@@ -76,7 +76,7 @@ mkdir -p /home/$USER/.config/xfce4
 mkdir -p /home/$USER/.config/Kvantum
 cp -r /etc/skel/.config/xfce4/* /home/$USER/.config/xfce4
 cp -r /etc/skel/.config/Kvantum/* /home/$USER/.config/Kvantum
-ln -s "/home/$USER/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino/.config/xfce4/desktop/icons.screen.latest.rc"
+ln -s "/home/$USER/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/$USER/.config/xfce4/desktop/icons.screen.latest.rc"
 chmod -R 777 /home/$USER/.config/xfce4
 sudo chown $USER -cR /home/$USER/Desktop
 sudo chown $USER -cR /home/$USER/.config
