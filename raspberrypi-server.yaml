@@ -61,11 +61,6 @@ actions:
     chroot: true
     command: update-initramfs -c -k all
 
-  - action: overlay
-    description: Add extlinux modifier for future kerns
-    source: scripts/rpi
-    destination: /etc/kernel/postinst.d
-
   - action: run
     chroot: true
     command: systemctl enable resizefs.service
