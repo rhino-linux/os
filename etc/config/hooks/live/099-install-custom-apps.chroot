@@ -16,9 +16,11 @@ sudo chown "rhino" -cR "/usr/share/pacstall"
 sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 
+HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:develop'
 pushd /home/rhino
 HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-deb ulauncher-deb rhino-core quintom-cursor-theme-git rhino-setup-bin'
 popd
+HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:master'
 
 echo "" >> /etc/apt/preferences.d/rhino.pref
 echo "Package: firefox" >> /etc/apt/preferences.d/rhino.pref
