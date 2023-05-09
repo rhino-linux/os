@@ -1,6 +1,6 @@
 {{- $firmware_version := or .firmware_version "master" -}}
 {{- $architecture := or .architecture "arm64" -}}
-{{- $image := or .image "Rhino-Linux-2023.1-beta4-rpi-desktop.img" -}}
+{{- $image := or .image "Rhino-Linux-2023.1-beta5-rpi-desktop.img" -}}
 {{- $debug := or .debug "on" -}}
 
 architecture: {{ $architecture }}
