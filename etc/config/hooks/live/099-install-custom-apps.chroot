@@ -50,6 +50,7 @@ xfconf-query -c xsettings -p /Net/ThemeName --set "Yaru-purple-dark"
 xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Quintom_Ink"
 HOME=/home/rhino runuser -l rhino -c 'DISPLAY=:0 XAUTHORITY=/home/rhino/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus gsettings set org.gnome.desktop.interface gtk-theme Yaru-purple'
 HOME=/home/rhino runuser -l rhino -c 'DISPLAY=:0 XAUTHORITY=/home/rhino/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus xfconf-query -c xfwm4 -p /general/theme -s Yaru-dark'
+HOME=/home/rhino runuser -l rhino -c 'cat /usr/share/plank/docks.ini | DISPLAY=:0 XAUTHORITY=/home/rhino/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus dconf load /net/launchpad/plank/docks/'
 sudo sed -i "s/'Adwaita'/'Yaru-purple-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
 sudo sed -i "s/'default'/'prefer-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
 cd /usr/share/glib-2.0/schemas
@@ -138,6 +139,7 @@ firmwareType:
         - command: "-rm omni-dracula.vsix"
         - command: "-chown -cR \$USER /home/\$USER/.config"
         - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus gsettings set org.gnome.desktop.interface gtk-theme Yaru-purple'"
+        - command: "-HOME=/home/\$USER runuser -l \$USER -c 'cat /usr/share/plank/docks.ini | DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus dconf load /net/launchpad/plank/docks/'
 __EOF__
 
 echo '#!/bin/sh
