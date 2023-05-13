@@ -4,9 +4,9 @@ set -ex
 kern=$(dpkg -l | grep linux-image- | tail -n1 | awk '{print $2}')
 kver=${kern/linux-image-/}
 
-if [[ $(cat /proc/device-tree/model) = "Pine64 PinePhonePro" ]]; then
+if [[ $(< /proc/device-tree/model) == "Pine64 PinePhonePro" ]]; then
 PARAMS="console=ttyS2,115200n8 consoleblank=0 loglevel=7 rw splash plymouth.ignore-serial-consoles vt.global_cursor_default=0";
 else
 PARAMS="console=ttyS0,115200 consoleblank=0 loglevel=7 rw splash plymouth.ignore-serial-consoles vt.global_cursor_default=0"; fi
 
-U_BOOT_PARAMETERS="$PARAMS" /etc/kernel/postinst.d/zz-u-boot-menu $kver
+U_BOOT_PARAMETERS="$PARAMS" /etc/kernel/postinst.d/zz-u-boot-menu "$kver"
