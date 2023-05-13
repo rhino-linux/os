@@ -1,4 +1,5 @@
 gpg
+gnupg2
 expect
 gparted
 cifs-utils
@@ -48,6 +49,7 @@ x11-common
 zip
 xubuntu-default-settings
 systemd
+software-properties-common
 mousepad
 qt5-style-kvantum
 qt5-style-kvantum-themes
