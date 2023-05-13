@@ -1,4 +1,5 @@
 gpg
+gnupg2
 curl
 bash-completion
 blueman
@@ -20,6 +21,7 @@ lightdm
 lightdm-gtk-greeter
 rfkill
 spice-vdagent
+software-properties-common
 thunar
 thunar-volman
 ubuntu-drivers-common
