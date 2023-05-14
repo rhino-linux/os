@@ -115,6 +115,7 @@ Keywords=installer;calamares;system;' | tee -a /usr/share/applications/calamares
 sudo chmod 755 /usr/share/applications/calamares.desktop
 sudo ln -s /usr/share/applications/calamares.desktop /home/rhino/Desktop/calamares.desktop
 sudo chown "rhino" -cR /usr/share/applications/calamares.desktop
+sudo rm /usr/share/applications/lubuntu-calamares.desktop
 
 mkdir -p /etc/skel/.config/autostart
 mkdir /home/rhino/.config/autostart/
