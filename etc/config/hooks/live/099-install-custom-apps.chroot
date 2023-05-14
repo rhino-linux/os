@@ -86,6 +86,8 @@ for i in xfce4 Kvantum plank autostart rofi xfce4; do
 mkdir -p /home/rhino/.config/${i}
 cp -r /etc/skel/.config/${i}/* /home/rhino/.config/${i};
 done
+mkdir /home/rhino/.lightpad
+cp /etc/skel/.lightpad/* /home/rhino/.lightpad
 ln -s "/home/rhino/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino/.config/xfce4/desktop/icons.screen.latest.rc"
 # Make sure the user (rhino) has wrx permissions
 chmod -R 777 /home/rhino/.config/xfce4
