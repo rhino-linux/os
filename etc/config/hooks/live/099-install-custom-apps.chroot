@@ -41,9 +41,10 @@ mkdir -p /etc/skel/.config/Kvantum
 echo "theme=KvRhinoDark" >> /home/rhino/.config/Kvantum/kvantum.kvconfig
 echo "theme=KvRhinoDark" >> /etc/skel/.config/Kvantum/kvantum.kvconfig
 xfconf-query -c xsettings -p /Net/ThemeName --set "Yaru-purple-dark"
-xfconf-query -c xsettings -p /Gtk/CursorThemeName -s "Quintom_Ink"
 HOME=/home/rhino runuser -l rhino -c 'DISPLAY=:0 XAUTHORITY=/home/rhino/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus gsettings set org.gnome.desktop.interface gtk-theme Yaru-purple'
 HOME=/home/rhino runuser -l rhino -c 'DISPLAY=:0 XAUTHORITY=/home/rhino/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus xfconf-query -c xfwm4 -p /general/theme -s Yaru-dark'
+HOME=/home/rhino runuser -l rhino -c 'DISPLAY=:0 XAUTHORITY=/home/rhino/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Dark'
+HOME=/home/rhino runuser -l rhino -c 'DISPLAY=:0 XAUTHORITY=/home/rhino/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus xfconf-query -c xsettings -p /Gtk/CursorThemeName -s Quintom_Ink'
 sudo sed -i "s/'Adwaita'/'Yaru-purple-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
 sudo sed -i "s/'default'/'prefer-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
 cd /usr/share/glib-2.0/schemas
