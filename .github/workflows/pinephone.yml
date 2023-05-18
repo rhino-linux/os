@@ -5,7 +5,7 @@ on:
 
 jobs:
   build_pine_tarball:
-    runs-on: buildjet-4vcpu-ubuntu-2204-arm
+    runs-on: buildjet-8vcpu-ubuntu-2204-arm
     steps:
     - uses: actions/checkout@v3.5.0
       with:
@@ -38,7 +38,7 @@ jobs:
 
   deploy_pine:
     needs: build_pine_tarball
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: buildjet-8vcpu-ubuntu-2204
     steps:
     - uses: actions/checkout@v3.5.0
       with:
