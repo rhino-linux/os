@@ -32,7 +32,7 @@ actions:
   - action: run
     description: Install kernel
     chroot: true
-    command: HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI linux-headers-okpine-deb linux-image-okpine-deb linux-libc-dev-okpine-deb'
+    command: HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI linux-headers-okpine-deb linux-image-okpine-deb'
     
   - action: run
     description: pacstall workaround
