@@ -2,6 +2,8 @@ gpg
 gnupg2
 expect
 gparted
+gvfs-fuse
+gvfs-backends
 cifs-utils
 language-pack-en
 curl
