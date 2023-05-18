@@ -1,5 +1,7 @@
 gpg
 gnupg2
+gvfs-fuse
+gvfs-backends
 curl
 bash-completion
 blueman
