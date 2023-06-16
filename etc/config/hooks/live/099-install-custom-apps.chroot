@@ -38,6 +38,11 @@ echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
+#Hack: rhino landing
+sudo rm -r /etc/firefox/syspref.js
+echo 'pref("browser.startup.homepage", "https://rhinolinux.org/landing/");' >> /etc/firefox/syspref.js
+
+
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Dot-Transparent/cursor.theme 55
 sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth 100
 sudo update-alternatives --set default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth
