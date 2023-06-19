@@ -8,5 +8,5 @@ rm -f /etc/shadow-
 rm -f /etc/gshadow-
 rm -f /etc/group-
 rm -f /etc/apt/conf.d/00secure
-rm -rf /home/rhino/.cache
+rm -rf /home/rhino-live/.cache
 rm -rf /root/.cache
