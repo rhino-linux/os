@@ -36,7 +36,7 @@ jobs:
         path: binary/
         key: tar-tab-${{ github.run_id }}
 
-  deploy_pine:
+  deploy_tab:
     needs: build_tab_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
