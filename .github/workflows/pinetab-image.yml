@@ -8,8 +8,6 @@ jobs:
     runs-on: buildjet-4vcpu-ubuntu-2204-arm
     steps:
     - uses: actions/checkout@v3.5.0
-      with:
-        ref: 'pinetab'
 
     - name: Install needed packages
       run: |
@@ -41,8 +39,6 @@ jobs:
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
     - uses: actions/checkout@v3.5.0
-      with:
-        ref: 'pinetab'
     
     - uses: actions/cache@v3.3.1
       with:
