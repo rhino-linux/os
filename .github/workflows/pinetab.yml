@@ -9,7 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3.5.0
       with:
-	ref: 'pinetab'
+        ref: 'pinetab'
 
     - name: Install needed packages
       run: |
@@ -37,12 +37,12 @@ jobs:
         key: tar-tab-${{ github.run_id }}
 
   deploy_pine:
-    needs: build_pine_tarball
+    needs: build_tab_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
     - uses: actions/checkout@v3.5.0
       with:
-	ref: 'pinetab'
+        ref: 'pinetab'
     
     - uses: actions/cache@v3.3.1
       with:
