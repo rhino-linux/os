@@ -1,9 +1,0 @@
-[Unit]
-Description=modem power cycle to boot it
-
-[Service]
-Type=oneshot
-ExecStart=/usr/sbin/modem-start.sh
-
-[Install]
-WantedBy=multi-user.target

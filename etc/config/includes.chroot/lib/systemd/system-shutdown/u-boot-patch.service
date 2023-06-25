@@ -1,0 +1,12 @@
+[Unit]
+Description=reload u-boot into the SD at shutdown
+Before=shutdown.target reboot.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/bin/true
+ExecStop=/usr/sbin/u-boot-patch.sh
+
+[Install]
+WantedBy=multi-user.target
