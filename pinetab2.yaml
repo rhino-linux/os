@@ -24,20 +24,20 @@ actions:
     chroot: true
     command: echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
     
-  - action: run
-    description: pacstall workaround
-    chroot: true
-    command:  HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:develop'
+ # - action: run
+ #   description: pacstall workaround
+ #   chroot: true
+ #   command:  HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:develop'
 
   - action: run
     description: Install kernel
     chroot: true
     command: HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI linux-headers-rockchip-deb linux-image-rockchip-deb'
     
-  - action: run
-    description: pacstall workaround
-    chroot: true
-    command:  HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:master'
+#  - action: run
+#    description: pacstall workaround
+#    chroot: true
+#    command:  HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:master'
 
   - action: run
     description: sudo workaround
