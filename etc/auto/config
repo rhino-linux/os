@@ -62,7 +62,7 @@ sed -i "s/@DISTRO_NAME/$NAME/" config/includes.binary/.disk/info
 sed -i "s/@VERSION/$VERSION/" config/includes.binary/.disk/info
 sed -i "s/@DATE/$DATE/" config/includes.binary/.disk/info
 
-sed -i "s/@DISTRO_NAME/$NAME/" config/hooks/live/004-set-os-info.chroot
+sed -i "s/@DISTRO_NAME/$DISTRO_NAME/" config/hooks/live/004-set-os-info.chroot
 sed -i "s/@VERSION/$VERSION/" config/hooks/live/004-set-os-info.chroot
 sed -i "s/@CHANNEL/$CHANNEL/" config/hooks/live/004-set-os-info.chroot
 sed -i "s/@CODENAME/$CODENAME/" config/hooks/live/004-set-os-info.chroot
