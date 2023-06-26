@@ -195,5 +195,5 @@ sudo chown "rhino-live" -cR /home/rhino-live/Desktop
 sudo chown "rhino-live" -cR /home/rhino-live/.config
 
 sudo apt-get clean
-sudo apt-get remove linux*6.2.0* -yq
+sudo apt-get remove linux*6.3.0* -yq
 sudo update-initramfs -u
