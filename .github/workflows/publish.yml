@@ -1,0 +1,26 @@
+name: Publish ISOs
+on: workflow_dispatch
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update APT cache
+        run: sudo apt-get update
+
+      - name: Install rclone
+        run: sudo apt-get install rclone -y
+
+      - name: Set up rclone config
+        run: |
+          rclone config create wasabi s3 \
+          provider='Wasabi' \
+          access_key_id="${{ secrets.WASABI_ACCESS_KEY_ID }}" \
+          secret_access_key="${{ secrets.WASABI_ACCESS_KEY_SECRET }}" \
+          endpoint='s3.wasabisys.com'
+
+      - name: Download release assets from latest CI run
+        run: gh run download -p '*' "$(gh run list -w devel.yml --json databaseId -q '.[].databaseId' -L 1)"
+
+      - name: Upload assets to Wasabi
+        run: for iso in *.iso *.img.xz; do rclone copyto "${iso}" "wasabi:dl.rhinolinux.org/${iso}"; done
