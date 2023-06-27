@@ -1,0 +1,58 @@
+name: Publish ISOs
+on: workflow_dispatch
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          path: os
+
+      - name: Update APT cache
+        run: sudo apt-get update
+
+      - name: Install rclone
+        run: sudo apt-get install rclone -y
+
+      - name: Set up rclone config
+        run: |
+          # Normally we'd be able to run something like
+          # 'rclone config create ...', but that isn't working for some reason.
+          # So we'll make the config manually instead.
+          #
+          # See https://github.com/rhino-linux/os/actions/runs/5396018584/jobs/9799166656
+          # as an example.
+          mkdir ~/.config/rclone
+          echo "
+          [wasabi]
+          type = s3
+          provider = Wasabi
+          access_key_id = ${{ secrets.WASABI_ACCESS_KEY_ID }}
+          secret_access_key = ${{ secrets.WASABI_ACCESS_KEY_SECRET }}
+          endpoint = s3.wasabisys.com
+          " > ~/.config/rclone/rclone.conf
+
+      #- name: Download release assets from latest CI run
+      #  run: gh run download -p '*' "$(gh run list -w devel.yml --json databaseId -q '.[].databaseId' -L 1)"
+      #  env:
+      #    GH_TOKEN: "${{ github.token }}"
+      #    GH_REPO: "${{ github.repository }}"
+
+      - name: Download them ISOs from GitHub releases
+        run: |
+          for num in 1 2 3 4 5; do
+            echo "Downloading assets from 'beta${num}'..."
+            gh release download "2023.1-beta${num}"
+          done
+        env:
+          GH_TOKEN: "${{ github.token }}"
+          GH_REPO: "${{ github.repository }}"
+
+      - name: Upload assets to Wasabi
+        run: |
+          source os/etc/terraform.conf
+          for iso in *.iso *.img.xz; do
+            rclone copyto --progress "${iso}" "wasabi:dl.rhinolinux.org/releases/${VERSION}${SUBVER}/";
+          done
