@@ -47,5 +47,5 @@ jobs:
         run: |
           source os/etc/terraform.conf
           for iso in *.iso *.img.xz; do
-            rclone copyto --progress "${iso}" "wasabi:dl.rhinolinux.org/releases/${VERSION}${SUBVER}/";
+            rclone copyto --progress --s3-no-check-bucket "${iso}" "wasabi:dl.rhinolinux.org/releases/${VERSION}${SUBVER}/${iso}";
           done
