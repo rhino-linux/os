@@ -37,31 +37,15 @@ jobs:
           endpoint = s3.wasabisys.com
           " > ~/.config/rclone/rclone.conf
 
-      #- name: Download release assets from latest CI run
-      #  run: gh run download -p '*' "$(gh run list -w devel.yml --json databaseId -q '.[].databaseId' -L 1)"
-      #  env:
-      #    GH_TOKEN: "${{ github.token }}"
-      #    GH_REPO: "${{ github.repository }}"
-
-      - name: Download them ISOs from GitHub releases and publish to Wasabi
-        run: |
-          for num in 1 2 3 4 5; do
-            echo "Downloading assets from 'beta${num}'..."
-            gh release download "2023.1-beta${num}"
-
-            for iso in *.iso *.img.xz; do
-              rclone copyto --s3-no-check-bucket --progress "${iso}" "wasabi:dl.rhinolinux.org/releases/2023.1-beta${num}/${iso}";
-            done
-
-            rm *.iso *.img.xz
-          done
+      - name: Download release assets from latest CI run
+        run: gh run download -p '*' "$(gh run list -w devel.yml --json databaseId -q '.[].databaseId' -L 1)"
         env:
           GH_TOKEN: "${{ github.token }}"
           GH_REPO: "${{ github.repository }}"
 
-      #- name: Upload assets to Wasabi
-      #  run: |
-      #    source os/etc/terraform.conf
-      #    for iso in *.iso *.img.xz; do
-      #      rclone copyto --progress "${iso}" "wasabi:dl.rhinolinux.org/releases/${VERSION}${SUBVER}/";
-      #    done
+      - name: Upload assets to Wasabi
+        run: |
+          source os/etc/terraform.conf
+          for iso in *.iso *.img.xz; do
+            rclone copyto --progress "${iso}" "wasabi:dl.rhinolinux.org/releases/${VERSION}${SUBVER}/";
+          done
