@@ -47,7 +47,7 @@ jobs:
             gh release download "2023.1-beta${num}"
 
             for iso in *.iso *.img.xz; do
-              rclone copyto --progress "${iso}" "wasabi:dl.rhinolinux.org/releases/2023.1-beta${num}/${iso}";
+              rclone copyto --s3-no-check-bucket --progress "${iso}" "wasabi:dl.rhinolinux.org/releases/2023.1-beta${num}/${iso}";
             done
 
             rm *.iso *.img.xz
