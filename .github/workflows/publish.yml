@@ -3,7 +3,7 @@ on: workflow_dispatch
 
 jobs:
   publish:
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3.5.0
