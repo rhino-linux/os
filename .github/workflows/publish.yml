@@ -1,4 +1,4 @@
-name: Publish ISOs
+name: Publish Rhino Linux Images
 on: workflow_dispatch
 
 jobs:
