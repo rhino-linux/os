@@ -47,7 +47,9 @@ jobs:
         run: |
           source os/etc/terraform.conf
           for iso in *.iso *.img.xz; do
-            sha256sum -b "${iso}" >> "${iso}".sha256
-            rclone copyto --progress --s3-no-check-bucket "${iso}.sha256" "wasabi:dl.rhinolinux.org/releases/${VERSION}${SUBVER}/${iso}.sha256"
-            rclone copyto --progress --s3-no-check-bucket "${iso}" "wasabi:dl.rhinolinux.org/releases/${VERSION}${SUBVER}/${iso}";
+            mkdir builds
+            mv "${iso}"/"${iso}" builds/
+            sha256sum "builds/${iso}" >> "builds/${iso}".sha256
+            rclone copyto --progress --s3-no-check-bucket "builds/${iso}.sha256" "wasabi:dl.rhinolinux.org/releases/${VERSION}${SUBVER}/${iso}.sha256"
+            rclone copyto --progress --s3-no-check-bucket "builds/${iso}" "wasabi:dl.rhinolinux.org/releases/${VERSION}${SUBVER}/${iso}";
           done
