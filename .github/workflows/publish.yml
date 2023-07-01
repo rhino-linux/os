@@ -46,8 +46,8 @@ jobs:
       - name: Upload assets to Wasabi
         run: |
           source os/etc/terraform.conf
+          mkdir builds/
           for iso in *.iso *.img.xz; do
-            mkdir builds
             mv "${iso}"/"${iso}" builds/
             sha256sum "builds/${iso}" >> "builds/${iso}".sha256
             rclone copyto --progress --s3-no-check-bucket "builds/${iso}.sha256" "wasabi:dl.rhinolinux.org/releases/${VERSION}${SUBVER}/${iso}.sha256"
