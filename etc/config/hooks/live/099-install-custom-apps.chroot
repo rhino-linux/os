@@ -164,7 +164,7 @@ sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
 
 
 #VSC theme
-wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage && mv Microsoft.VisualStudio.Services.VSIXPackage /home/rhino/omni-dracula.vsix
+wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage && mv Microsoft.VisualStudio.Services.VSIXPackage /home/rhino-live/omni-dracula.vsix
 sudo chown -cR rhino-live /home/rhino-live/omni-dracula.vsix
 sudo mkdir /etc/skel/.config/VSCodium/
 sudo mkdir /etc/skel/.config/VSCodium/User/
