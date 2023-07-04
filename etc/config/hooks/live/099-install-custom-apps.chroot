@@ -195,7 +195,7 @@ sudo chown "rhino-live" -cR /home/rhino-live/Desktop
 sudo chown "rhino-live" -cR /home/rhino-live/.config
 
 # once everything else is done, set unicorn as the default session
-sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
+#sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
 
 sudo apt-get clean
 sudo apt-get remove linux*6.3.0* -yq
