@@ -101,7 +101,7 @@ sudo chown "rhino" -cR /home/rhino/Desktop
 sudo chown "rhino" -cR /home/rhino/.config
 
 # once everything else is done, set unicorn as the default session
-sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
+#sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
 
 sudo apt-get clean
 sudo update-initramfs -u
