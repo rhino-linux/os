@@ -136,6 +136,7 @@ firmwareType:
         - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Dark'"
         - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus xfconf-query -c xsettings -p /Gtk/CursorThemeName -s Quintom_Ink'"
         - command: "-userdel -r rhino-live"
+        - command: "-rm /usr/share/xsessions/xubuntu.desktop /usr/share/xsessions/xfce.desktop"
 __EOF__
 
 echo '#!/bin/sh
@@ -193,9 +194,6 @@ ln -s "/home/rhino-live/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/
 chmod -R 777 /home/rhino-live/.config/xfce4
 sudo chown "rhino-live" -cR /home/rhino-live/Desktop
 sudo chown "rhino-live" -cR /home/rhino-live/.config
-
-# once everything else is done, set unicorn as the default session
-#sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
 
 sudo apt-get clean
 sudo apt-get remove linux*6.3.0* -yq
