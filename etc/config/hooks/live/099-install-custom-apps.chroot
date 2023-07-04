@@ -136,7 +136,6 @@ firmwareType:
         - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Dark'"
         - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus xfconf-query -c xsettings -p /Gtk/CursorThemeName -s Quintom_Ink'"
         - command: "-userdel -r rhino-live"
-        - command: "-rm /usr/share/xsessions/xubuntu.desktop /usr/share/xsessions/xfce.desktop"
 __EOF__
 
 echo '#!/bin/sh
