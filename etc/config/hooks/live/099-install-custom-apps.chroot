@@ -100,5 +100,7 @@ chmod -R 777 /home/rhino/.config/xfce4
 sudo chown "rhino" -cR /home/rhino/Desktop
 sudo chown "rhino" -cR /home/rhino/.config
 
+sudo rm /usr/share/xsessions/xubuntu.desktop /usr/share/xsessions/xfce.desktop
+
 sudo apt-get clean
 sudo update-initramfs -u
