@@ -102,6 +102,12 @@ sudo chown "rhino" -cR /home/rhino/.config
 
 sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
 sudo rm /usr/share/xsessions/xfce.desktop /usr/share/xsessions/xubuntu.desktop
+sudo rm /etc/lightdm/lightdm.conf
+echo '[SeatDefaults]
+allow-guest=false
+autologin-guest=false
+autologin-user=rhino
+autologin-user-timeout=0' | sudo tee -a /etc/lightdm/lightdm.conf
 
 sudo apt remove flash-kernel -yq
 echo "" >> /etc/apt/preferences.d/rhino.pref
