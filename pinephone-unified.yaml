@@ -1,5 +1,5 @@
 {{- $architecture := or .architecture "arm64" -}}
-{{- $image := or .image "Rhino-Linux-2023.1-beta6-pinephone-unified.img" -}}
+{{- $image := or .image "Rhino-Linux-2023.1-beta7-pinephone-unified.img" -}}
 {{- $variant := or .variant "mainline" -}}
 {{- $debug := or .debug "on" -}}
 {{- $additional_apt_repos := or .additional_apt_repos "" -}}
