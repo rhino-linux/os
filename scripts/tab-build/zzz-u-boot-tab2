@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-kern=$(dpkg -l | grep 'linux-image-.*rockchip' | tail -n1 | awk '{print $2}')
+kern=$(dpkg -l | grep 'linux-image-.*okpine' | tail -n1 | awk '{print $2}')
 kver=${kern/linux-image-/}
 
 U_BOOT_PARAMETERS="consoleblank=0 loglevel=7 rw splash plymouth.ignore-serial-consoles vt.global_cursor_default=0" \

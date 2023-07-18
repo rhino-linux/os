@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-kern=$(dpkg -l | grep 'linux-image-.*rockchip' | tail -n1 | awk '{print $2}')
+kern=$(dpkg -l | grep 'linux-image-.*okpine' | tail -n1 | awk '{print $2}')
 kver=${kern/linux-image-/}
 
 libdir="/usr/lib/$DPKG_MAINTSCRIPT_PACKAGE/"

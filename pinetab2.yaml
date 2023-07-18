@@ -19,6 +19,16 @@ actions:
     chroot: true
     command: apt-get remove linux*6.3.0* -yq
 
+  - action: overlay
+    description: Add PT2 bootloader
+    source: files/tab2-boot
+    destination: /boot
+
+  - action: overlay
+    description: Add PT2 boot patch
+    source: files/uboot-tab2
+    destination: /usr/sbin
+
   - action: run
     description: sudo workaround
     chroot: true
@@ -32,7 +42,7 @@ actions:
   - action: run
     description: Install kernel
     chroot: true
-    command: HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI linux-headers-rockchip-deb linux-image-rockchip-deb'
+    command: HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI linux-headers-okpine-deb linux-image-okpine-deb'
     
 #  - action: run
 #    description: pacstall workaround

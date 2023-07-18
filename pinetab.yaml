@@ -1,0 +1,116 @@
+{{- $architecture := or .architecture "arm64" -}}
+{{- $image := or .image "Rhino-Linux-2023.1-beta7-pinetab.img" -}}
+{{- $variant := or .variant "mainline" -}}
+{{- $debug := or .debug "on" -}}
+{{- $additional_apt_repos := or .additional_apt_repos "" -}}
+{{- $phablet_password := or .phablet_password "" }}
+
+
+# PHASE 1: begin with ubuntu touch base image
+architecture: {{ $architecture }}
+actions:
+  - action: run
+    description: unpacking rootfs
+    chroot: false
+    command: tar --strip-components=1 --numeric-owner -xf /recipes/binary/Rhino*.tar -C root && rm /recipes/binary/Rhino*.tar
+
+  - action: run
+    description: clean
+    chroot: true
+    command: apt-get remove linux*6.3.0* -yq
+
+  - action: overlay
+    description: Add PT1 bootloader
+    source: files/tab1-boot
+    destination: /boot
+
+  - action: overlay
+    description: Add PT1 boot patch
+    source: files/uboot-tab1
+    destination: /usr/sbin
+
+  - action: run
+    description: sudo workaround
+    chroot: true
+    command: echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+    
+ # - action: run
+ #   description: pacstall workaround
+ #   chroot: true
+ #   command:  HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:develop'
+
+  - action: run
+    description: Install kernel
+    chroot: true
+    command: HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino pacstall -PI linux-headers-okpine-deb linux-image-okpine-deb'
+    
+#  - action: run
+#    description: pacstall workaround
+#    chroot: true
+#    command:  HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:master'
+
+  - action: run
+    description: sudo workaround
+    chroot: true
+    command: sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
+
+  - action: run
+    description: Remove apt caches to save space
+    chroot: true
+    command: rm -r /var/cache/apt/* /var/lib/apt/lists/*
+
+# PHASE 2: build image
+  - action: image-partition
+    description: Creating image
+    imagename: {{ $image }}
+    imagesize: 6.5GB
+    partitiontype: gpt
+    mountpoints:
+      - mountpoint: /
+        partition: root
+      - mountpoint: /boot
+        partition: boot
+    partitions:
+      - name: boot
+        fs: ext4
+        start: 17M
+        end: 300MB
+        parttype: C12A7328-F81F-11D2-BA4B-00A0C93EC93B
+        flags: [ esp,boot ]
+      - name: root
+        fs: ext4
+        start: 300MB
+        end: 100%
+        parttype: B921B045-1DF0-41C3-AF44-4C6F280D3FAE
+
+  - action: filesystem-deploy
+    description: Deploying filesystem into image
+
+  - action: run
+    chroot: true
+    command: update-initramfs -u
+
+  - action: run
+    chroot: true
+    command: systemctl enable /usr/lib/systemd/system-shutdown/u-boot-patch.service && systemctl enable resizefs.service
+
+  - action: run
+    chroot: true
+    description: Make sure EXTLINUX is valid
+    script: scripts/tab-build/zzz-u-boot-tab1
+
+  - action: overlay
+    description: Add post inst script for future kernels
+    source: scripts/last-tab
+    destination: /etc/kernel/postinst.d
+
+  # polish.yaml must be run as the last step, as it contains the
+  # step to (re-)create /etc/writable symlinks and systemd-nspawn
+  # tends to overwrite them.
+  - action: recipe
+    description: Run common image polishing steps
+    recipe: ./polish.yaml
+    variables:
+      architecture: {{ $architecture }}
+      image: {{ $image }}
+      output_type: image
