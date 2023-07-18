@@ -249,7 +249,37 @@ jobs:
         path: binary/
         key: tar-tab-${{ github.run_id }}
 
-  deploy_tab:
+  deploy_tab1:
+    needs: build_tab_tarball
+    runs-on: buildjet-4vcpu-ubuntu-2204
+    steps:
+    - uses: actions/checkout@v3.5.0
+      with:
+        ref: 'pinetab'
+    
+    - uses: actions/cache@v3.3.1
+      with:
+        path: binary/
+        key: tar-tab-${{ github.run_id }}
+        
+    - name: Deploy to partition
+      run: sudo ./debos-docker -m 10G pinetab.yaml
+      
+    - name: Place output folder
+      run: sudo mkdir -p builds/tab
+      
+    - name: Move to output folder and compress
+      run: |
+        sudo mv Rhino*tab2.img builds/tab/
+        sudo xz -v builds/tab/Rhino*tab.img
+        echo "IMGPTA=$(cd builds/tab; ls *.img.xz)" >> $GITHUB_ENV
+
+    - uses: actions/upload-artifact@v3.1.2
+      with:
+        name: ${{ env.IMGPTA }}
+        path: builds/tab/${{ env.IMGPTA }}
+        
+  deploy_tab2:
     needs: build_tab_tarball
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
@@ -266,21 +296,15 @@ jobs:
       run: sudo ./debos-docker -m 10G pinetab2.yaml
       
     - name: Place output folder
-      run: sudo mkdir -p builds/tab
+      run: sudo mkdir -p builds/tab2
       
     - name: Move to output folder and compress
       run: |
-        sudo mv Rhino*tab2.img builds/tab/
-        sudo xz -v builds/tab/Rhino*tab2.img
-        echo "IMGPT=$(cd builds/tab; ls *.img.xz)" >> $GITHUB_ENV
+        sudo mv Rhino*tab2.img builds/tab2/
+        sudo xz -v builds/tab2/Rhino*tab2.img
+        echo "IMGPTB=$(cd builds/tab2; ls *.img.xz)" >> $GITHUB_ENV
 
     - uses: actions/upload-artifact@v3.1.2
       with:
-        name: ${{ env.IMGPT }}
-        path: builds/tab/${{ env.IMGPT }}
-
-
-
-
-
-
+        name: ${{ env.IMGPTB }}
+        path: builds/tab2/${{ env.IMGPTB }}
