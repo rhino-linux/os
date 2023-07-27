@@ -62,10 +62,6 @@ cd /usr/share/glib-2.0/schemas
 sudo glib-compile-schemas .
 cd ~
 
-mkdir -p /home/rhino/Desktop
-mkdir /home/rhino/.config/autostart/
-sudo ln -s /usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop /home/rhino/.config/autostart/setup.desktop
-
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
 ( cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/oklopfer/lightdm-rhino/mobile/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png )
 
