@@ -127,7 +127,6 @@ timeout: 120
 firmwareType:
     "*":
         - "-rm /usr/share/applications/calamares.desktop"
-        - command: "-ln -s /usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop /home/\$USER/.config/autostart/setup.desktop"
         - command: "-wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
         - command: "-mv Microsoft.VisualStudio.Services.VSIXPackage omni-dracula.vsix"
         - command: "-mkdir /home/\$USER/.config/VSCodium/"
