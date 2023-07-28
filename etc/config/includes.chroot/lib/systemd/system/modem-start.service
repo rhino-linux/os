@@ -1,6 +1,5 @@
 [Unit]
 Description=modem power cycle to boot it
-After=eg25-manager.service
 
 [Service]
 Type=oneshot
