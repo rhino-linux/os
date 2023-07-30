@@ -15,6 +15,7 @@ sudo chown "rhino" -cR "/tmp/pacstall"
 sudo chown "rhino" -cR "/usr/share/pacstall"
 sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
+git config --global --add safe.directory '*'
 
 #HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:develop'
 pushd /home/rhino
