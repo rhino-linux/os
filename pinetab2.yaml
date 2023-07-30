@@ -88,6 +88,10 @@ actions:
 
   - action: run
     chroot: true
+    command: echo "mac80211" | tee -a /etc/modules && echo "bes2600" | tee -a /etc/modules && depmod "$(uname -r)"
+
+  - action: run
+    chroot: true
     command: update-initramfs -u
 
   - action: run
