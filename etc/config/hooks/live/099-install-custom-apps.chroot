@@ -63,7 +63,7 @@ sudo glib-compile-schemas .
 cd ~
 
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
-( cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/oklopfer/lightdm-rhino/mobile/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png )
+( cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/mobile/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png )
 
 wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage && mv Microsoft.VisualStudio.Services.VSIXPackage /home/rhino/omni-dracula.vsix
 sudo chown -cR rhino /home/rhino/omni-dracula.vsix
