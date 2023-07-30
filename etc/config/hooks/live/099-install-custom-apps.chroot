@@ -17,6 +17,7 @@ sudo chown "rhino-live" -cR "/tmp/pacstall"
 sudo chown "rhino-live" -cR "/usr/share/pacstall"
 sudo chown "rhino-live" -cR "/home/rhino-live"
 sudo chown "rhino-live" -cR "/var/cache/pacstall"
+git config --global --add safe.directory '*'
 
 #HOME=/home/rhino-live runuser -l rhino-live -c 'pacstall -U pacstall:develop'
 #Pacstall installs
