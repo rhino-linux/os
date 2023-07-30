@@ -270,7 +270,7 @@ jobs:
       
     - name: Move to output folder and compress
       run: |
-        sudo mv Rhino*tab2.img builds/tab/
+        sudo mv Rhino*tab.img builds/tab/
         sudo xz -v builds/tab/Rhino*tab.img
         echo "IMGPTA=$(cd builds/tab; ls *.img.xz)" >> $GITHUB_ENV
 
