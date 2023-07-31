@@ -24,7 +24,7 @@ popd
 #HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:master'
 
 sudo mkdir -p /home/rhino/.config/autostart
-if ! [[ -f "${homedir}/.config/autostart/rhino-setup.desktop" ]]; then
+if ! [[ -f "/home/rhino/.config/autostart/rhino-setup.desktop" ]]; then
   sudo ln -sf "/usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop" "/home/rhino/.config/autostart/rhino-setup.desktop"
 fi
 
