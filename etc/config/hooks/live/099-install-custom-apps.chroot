@@ -22,7 +22,7 @@ git config --global --add safe.directory '*'
 #HOME=/home/rhino-live runuser -l rhino-live -c 'pacstall -U pacstall:develop'
 #Pacstall installs
 pushd /home/rhino-live
-HOME=/home/rhino-live runuser -l rhino-live -c 'if [ $(dpkg --print-architecture) = arm64 ]; then FIREFOX="firefox-arm64-deb"; else FIREFOX="firefox-bin"; fi; SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb ${FIREFOX} vscodium-deb celeste-bin linux-kernel-stable rhino-core quintom-cursor-theme-git rhino-setup-bin'
+HOME=/home/rhino-live runuser -l rhino-live -c 'if [ $(dpkg --print-architecture) = arm64 ]; then FIREFOX="firefox-arm64-deb"; else FIREFOX="firefox-bin"; fi; SUDO_USER=rhino-live PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb ${FIREFOX} vscodium-deb celeste-bin linux-kernel-stable rhino-core quintom-cursor-theme-git'
 popd
 #HOME=/home/rhino-live runuser -l rhino-live -c 'pacstall -U pacstall:master'
 
@@ -139,6 +139,9 @@ firmwareType:
         - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus gsettings set org.gnome.desktop.interface gtk-theme Yaru-purple'"
         - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Dark'"
         - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus xfconf-query -c xsettings -p /Gtk/CursorThemeName -s Quintom_Ink'"
+        - command: "-echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
+        - command: "-HOME=/home/\$USER runuser -l \$USER -c 'HOME=/home/\$USER SUDO_USER=\$USER PACSTALL_DOWNLOADER=quiet-wget pacstall -PI rhino-setup-bin'"
+        - command: "-sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers"
         - command: "-userdel -r rhino-live"
 __EOF__
 
