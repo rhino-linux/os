@@ -19,9 +19,14 @@ git config --global --add safe.directory '*'
 
 #HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:develop'
 pushd /home/rhino
-HOME=/home/rhino runuser -l rhino -c 'SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-deb celeste-bin rhino-core quintom-cursor-theme-git rhino-setup-bin'
+HOME=/home/rhino runuser -l rhino -c 'HOME=/home/rhino SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-deb celeste-bin rhino-core quintom-cursor-theme-git rhino-setup-bin'
 popd
 #HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:master'
+
+sudo mkdir -p /home/rhino/.config/autostart
+if ! [[ -f "${homedir}/.config/autostart/rhino-setup.desktop" ]]; then
+  sudo ln -sf "/usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop" "/home/rhino/.config/autostart/rhino-setup.desktop"
+fi
 
 echo "" >> /etc/apt/preferences.d/rhino.pref
 echo "Package: firefox" >> /etc/apt/preferences.d/rhino.pref
