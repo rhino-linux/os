@@ -19,7 +19,7 @@ git config --global --add safe.directory '*'
 
 #HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:develop'
 pushd /home/rhino
-HOME=/home/rhino runuser -l rhino -c 'HOME=/home/rhino SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-deb celeste-bin rhino-pine-core rhino-setup-bin'
+HOME=/home/rhino runuser -l rhino -c 'HOME=/home/rhino SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-deb celeste-bin rhino-pine-core rhino-setup-bin fake-ubuntu-advantage-tools-deb'
 popd
 #HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:master'
 
