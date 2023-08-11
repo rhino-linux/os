@@ -22,7 +22,7 @@ git config --global --add safe.directory '*'
 #HOME=/home/rhino-live runuser -l rhino-live -c 'pacstall -U pacstall:develop'
 #Pacstall installs
 pushd /home/rhino-live
-HOME=/home/rhino-live runuser -l rhino-live -c 'if [ $(dpkg --print-architecture) = arm64 ]; then FIREFOX="firefox-arm64-deb"; else FIREFOX="firefox-bin"; fi; SUDO_USER=rhino-live PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb ${FIREFOX} vscodium-deb celeste-bin linux-kernel-stable rhino-core quintom-cursor-theme-git'
+HOME=/home/rhino-live runuser -l rhino-live -c 'if [ $(dpkg --print-architecture) = arm64 ]; then FIREFOX="firefox-arm64-deb"; else FIREFOX="firefox-bin"; fi; SUDO_USER=rhino-live PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb ${FIREFOX} vscodium-deb celeste-bin linux-kernel-stable rhino-core quintom-cursor-theme-git fake-ubuntu-advantage-tools-deb'
 popd
 #HOME=/home/rhino-live runuser -l rhino-live -c 'pacstall -U pacstall:master'
 
