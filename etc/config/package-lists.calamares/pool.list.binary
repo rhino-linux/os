@@ -1,8 +1,8 @@
-b43-fwcutter
-dkms
 setserial
 user-setup
 efibootmgr
 secureboot-db
 shim
 shim-signed
+grub-efi
+grub-pc
