@@ -18,6 +18,7 @@ export GITHUB_ACTIONS=true
 
 # Install pacstall
 sudo bash -c "$(curl -fsSL https://pacstall.dev/q/install\?dnt || wget -q https://pacstall.dev/q/install\?dnt -O -)"
+
 # WORKAROUND to trust CD Add
 sudo rm /etc/calamares/modules/before_bootloader_context.conf
 sudo touch /etc/calamares/modules/before_bootloader_context.conf
@@ -50,4 +51,20 @@ firmwareType:
              timeout: 300
         -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict shim-signed
              timeout: 300
+__EOF__
+
+# Unmount partition of even if installation fails
+sudo cat > /etc/calamares/modules/umount.conf << __EOF__
+  GNU nano 7.2                       umount.conf                                
+### Umount Module
+#
+# This module represents the last part of the installation, the unmounting
+# of partitions used for the install.  After this, there is no regular way
+# to modify the target system anymore.
+#
+
+---
+# Setting emergency to true will make it so this module is still run
+# when a prior module fails
+emergency: true
 __EOF__
