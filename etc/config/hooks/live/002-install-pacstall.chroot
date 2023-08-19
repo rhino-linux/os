@@ -55,16 +55,12 @@ __EOF__
 
 # Unmount partition of even if installation fails
 sudo cat > /etc/calamares/modules/umount.conf << __EOF__
-  GNU nano 7.2                       umount.conf                                
-### Umount Module
-#
 # This module represents the last part of the installation, the unmounting
 # of partitions used for the install.  After this, there is no regular way
 # to modify the target system anymore.
 #
 
 ---
-# Setting emergency to true will make it so this module is still run
-# when a prior module fails
+# when a prior module fails this will still run anyway
 emergency: true
 __EOF__
