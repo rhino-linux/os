@@ -35,10 +35,6 @@ firmwareType:
              timeout: 10
         -    command: apt-get update
              timeout: 120
-        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict grub-pc
-             timeout: 300
-        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict shim-signed
-             timeout: 300
     "*":
         -    command: sed -i 's/ cdrom/ [trusted=yes] cdrom/g' /etc/apt/sources.list
              timeout: 10
