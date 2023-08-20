@@ -71,3 +71,4 @@ wireplumber
 pipewire
 pipewire-pulse
 firmware-sof-signed
+cryptsetup-initramfs
