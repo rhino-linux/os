@@ -1,5 +1,8 @@
 ## Rhino Linux ISO Builder
+---
+Originally forked from [Vanilla-OS's ISO builder](https://github.com/Vanilla-OS/live-iso), which forked from [Cinnamon's ISO builder](https://github.com/ubuntucinnamon/iso-builder-devel), which forked from [Elementary's ISO builder](https://github.com/elementary/os) :) 
 
+---
 This is the new Rhino Linux (RL) ISO builder (replaces the formerly known [RRR-builder](https://github.com/rollingrhinoremix/RRR-builder)) which creates images from scratch and gives us (even) more control over the final image. To set up the builder:
 
 - `sudo apt-get update && sudo apt-get install --reinstall debootstrap -y`
