@@ -82,7 +82,7 @@ actions:
 
   - action: run
     chroot: true
-    command: systemctl enable modem-start.service && systemctl enable resizefs.service
+    command: systemctl enable resizefs.service
 
   - action: run
     chroot: true
