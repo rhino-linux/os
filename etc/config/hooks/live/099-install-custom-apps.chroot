@@ -94,6 +94,7 @@ cp -r /etc/skel/.config/${i}/* /home/rhino/.config/${i};
 done
 mkdir /home/rhino/.lightpad
 cp /etc/skel/.lightpad/* /home/rhino/.lightpad
+cp /etc/skel/.config/docks.ini /home/rhino/.config/docks.ini
 mkdir -p /home/rhino/.local/share/onboard/
 cp -r /etc/skel/.local/share/onboard/* /home/rhino/.local/share/onboard/
 rm -rf /usr/share/onboard/themes/Droid.theme
