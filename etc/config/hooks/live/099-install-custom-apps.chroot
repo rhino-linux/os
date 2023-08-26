@@ -90,6 +90,7 @@ cp -r /etc/skel/.config/${i}/* /home/rhino/.config/${i};
 done
 mkdir /home/rhino/.lightpad
 cp /etc/skel/.lightpad/* /home/rhino/.lightpad
+cp /etc/skel/.config/docks.ini /home/rhino/.config/docks.ini
 ln -s "/home/rhino/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino/.config/xfce4/desktop/icons.screen.latest.rc"
 # Make sure the user (rhino) has wrx permissions
 chmod -R 777 /home/rhino/.config/xfce4
