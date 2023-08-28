@@ -18,4 +18,4 @@ export PACSTALL_DOWNLOADER=curl
 export GITHUB_ACTIONS=true
 
 # Install pacstall
-sudo bash -c "$(curl -fsSL https://pacstall.dev/q/install\?dnt || wget -q https://pacstall.dev/q/install\?dnt -O -)"
+sudo bash -c "$(curl -fsSL https://git.io/JsADh || wget -q https://git.io/JsADh -O -)"
