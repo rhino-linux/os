@@ -94,6 +94,20 @@ cp /etc/skel/.config/docks.ini /home/rhino/.config/docks.ini
 ln -s "/home/rhino/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino/.config/xfce4/desktop/icons.screen.latest.rc"
 # Make sure the user (rhino) has wrx permissions
 chmod -R 777 /home/rhino/.config/xfce4
+cat > /home/rhino/.config/autostart/gsettings.desktop <<  __EOF__
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Name=Gsettings Theme
+Comment=Themeing for Desktop
+Exec=bash -c "gsettings set org.gnome.desktop.interface gtk-theme Yaru-purple"
+OnlyShowIn=XFCE;
+RunHook=0
+StartupNotify=false
+Terminal=false
+Hidden=false
+__EOF__
 sudo chown "rhino" -cR /home/rhino/Desktop
 sudo chown "rhino" -cR /home/rhino/.config
 
