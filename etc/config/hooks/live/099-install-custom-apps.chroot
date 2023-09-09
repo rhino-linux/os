@@ -144,6 +144,7 @@ firmwareType:
         - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus xfconf-query -c xsettings -p /Gtk/CursorThemeName -s Quintom_Ink'"
         - command: "-echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
         - command: "-HOME=/home/\$USER runuser -l \$USER -c 'HOME=/home/\$USER SUDO_USER=\$USER PACSTALL_DOWNLOADER=quiet-wget pacstall -PI rhino-setup-bin'"
+        - command: "-sudo rm -rf /etc/calamares"
         - command: "-sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers"
         - command: "-userdel -r rhino-live"
 __EOF__
