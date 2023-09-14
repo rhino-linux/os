@@ -13,7 +13,7 @@ jobs:
       - name: Change APT repository URLs because of the Ubuntu Archive slowdowns
         run: |
           sudo sed -i 's/azure\.archive\.ubuntu\.com/mirrors.mit.edu/g' /etc/apt/sources.list
-          sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list && sudo apt-get update && sudo apt-get dist-upgrade -yq
+          sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
         
       - name: Update APT cache
         run: sudo apt-get update
