@@ -11,7 +11,9 @@ jobs:
           path: os
       
       - name: Change APT repository URLs because of the Ubuntu Archive slowdowns
-        run: sudo sed -i 's/azure\.archive\.ubuntu\.com/mirrors.mit.edu/g' /etc/apt/sources.list
+        run: |
+          sudo sed -i 's/azure\.archive\.ubuntu\.com/mirrors.mit.edu/g' /etc/apt/sources.list
+          sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list && sudo apt-get update && sudo apt-get dist-upgrade -yq
         
       - name: Update APT cache
         run: sudo apt-get update
@@ -21,23 +23,11 @@ jobs:
 
       - name: Set up rclone config
         run: |
-          # Normally we'd be able to run something like
-          # 'rclone config create ...', but that isn't working for some reason.
-          # So we'll make the config manually instead.
-          #
-          # See https://github.com/rhino-linux/os/actions/runs/5396018584/jobs/9799166656
-          # as an example.
-          mkdir ~/.config/rclone
-          echo "
-          [sourceforge]
-          type = sftp
-          host = frs.sourceforge.net
-          pass = ${{ secrets.SOURCEFORGE_PASS }}
-          use_insecure_cipher = true
-          shell_type = unix
-          md5sum_command = none
-          sha1sum_command = none
-          " > ~/.config/rclone/rclone.conf
+          ssh-keygen -t rsa -q -f "/home/runner/.ssh/id_rsa" -N ""
+          mkdir -p /home/runner/.config/rclone
+          rclone config create sourceforge sftp type sftp host frs.sourceforge.net user ${{ secrets.SOURCEFORGE_USER }} shell_type unix use_insecure_cipher true pass ${{ secrets.SOURCEFORGE_PASS }} --obscure -vv
+          # test connection with host
+          rclone lsf --sftp-ask-password -vv sourceforge:/home/frs/project/rhino-linux-builder
 
       - name: Download release assets from latest CI run
         run: gh run download -p '*' "$(gh run list -w devel.yml --json databaseId -q '.[].databaseId' -L 1)"
@@ -72,6 +62,6 @@ jobs:
             fi
             mv "${image}"/"${image}" "${TRUEVER}/"
             sha256sum "${TRUEVER}/${image}" >> "${TRUEVER}/${image}".sha256
-            rclone copyto --progress "${TRUEVER}/${image}.sha256" "sourceforge:/home/frs/project/rhino-linux-builder/${TRUEVER}/${image}.sha256"
-            rclone copyto --progress "${TRUEVER}/${image}" "sourceforge:/home/frs/project/rhino-linux-builder/${TRUEVER}/${image}";
+            rclone copyto --progress --sftp-ask-password "${TRUEVER}/${image}.sha256" "sourceforge:/home/frs/project/rhino-linux-builder/${TRUEVER}/${image}.sha256"
+            rclone copyto --progress --sftp-ask-password "${TRUEVER}/${image}" "sourceforge:/home/frs/project/rhino-linux-builder/${TRUEVER}/${image}";
           done
