@@ -50,7 +50,7 @@ jobs:
         key: tar-tab-${{ github.run_id }}
         
     - name: Deploy to partition
-      run: sudo ./debos-docker -m 10G pinetab.yaml
+      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-pinetab.img" -m 10G pinetab.yaml
       
     - name: Place output folder
       run: sudo mkdir -p builds/tab
@@ -80,7 +80,7 @@ jobs:
         key: tar-tab-${{ github.run_id }}
         
     - name: Deploy to partition
-      run: sudo ./debos-docker -m 10G pinetab2.yaml
+      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-pinetab2.img" -m 10G pinetab2.yaml
       
     - name: Place output folder
       run: sudo mkdir -p builds/tab2
