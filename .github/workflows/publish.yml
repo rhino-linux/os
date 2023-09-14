@@ -23,11 +23,8 @@ jobs:
 
       - name: Set up rclone config
         run: |
-          ssh-keygen -t rsa -q -f "/home/runner/.ssh/id_rsa" -N ""
           mkdir -p /home/runner/.config/rclone
-          rclone config create sourceforge sftp type sftp host frs.sourceforge.net user ${{ secrets.SOURCEFORGE_USER }} shell_type unix use_insecure_cipher true pass ${{ secrets.SOURCEFORGE_PASS }} --obscure -vv
-          # test connection with host
-          rclone lsf --sftp-ask-password -vv sourceforge:/home/frs/project/rhino-linux-builder
+          rclone config create sourceforge sftp host frs.sourceforge.net user ${{ secrets.SOURCEFORGE_USER }} shell_type unix use_insecure_cipher true pass ${{ secrets.SOURCEFORGE_PASS }} --obscure
 
       - name: Download release assets from latest CI run
         run: gh run download -p '*' "$(gh run list -w devel.yml --json databaseId -q '.[].databaseId' -L 1)"
