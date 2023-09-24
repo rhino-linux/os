@@ -17,7 +17,7 @@ actions:
   - action: run
     description: clean
     chroot: true
-    command: apt-get remove linux*6.3* -yq
+    command: apt-get remove linux*6.5.0* -yq
 
   - action: run
     description: sudo workaround
