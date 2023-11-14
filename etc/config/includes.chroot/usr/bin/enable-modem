@@ -9,12 +9,14 @@ done
 
 sleep 2
 
-# Set modem audio configs
-if echo "AT+QDAI=1,0,0,2,0,1,1,1" | atinout - /dev/EG25.AT - | grep -q OK; then
-	echo "Successfully configured modem audio"
-else
-	echo "Failed to set modem audio up: $?"
-fi
+## This section is from xenial. As far as we can tell, it doesn't work correctly anymore, so we will 
+## drop usage of it; but keep for archival purposes, or in case we figure out how to make use of it again.
+## Set modem audio configs
+#if echo "AT+QDAI=1,0,0,2,0,1,1,1" | atinout - /dev/EG25.AT - | grep -q OK; then
+#	echo "Successfully configured modem audio"
+#else
+#	echo "Failed to set modem audio up: $?"
+#fi
 
 # Wait until the modem is enabled
 /usr/share/ofono/scripts/enable-modem | grep -q "quectelqmi"

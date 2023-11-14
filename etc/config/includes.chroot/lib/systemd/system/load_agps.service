@@ -1,0 +1,11 @@
+[Unit]
+Description=load agps to speed up gpsd
+After=gpsd.service eg25-manager.service ofono.service lomiri-location-service.service
+
+[Service]
+Type=oneshot
+ExecStartPre=/bin/sleep 30
+ExecStart=/usr/bin/python3 /usr/bin/load_agps_data.py
+
+[Install]
+WantedBy=multi-user.target
