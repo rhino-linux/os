@@ -22,7 +22,7 @@ git config --global --add safe.directory '*'
 #HOME=/home/rhino-live runuser -l rhino-live -c 'pacstall -U pacstall:develop'
 #Pacstall installs
 pushd /home/rhino-live
-HOME=/home/rhino-live runuser -l rhino-live -c 'if [ $(dpkg --print-architecture) = arm64 ]; then FIREFOX="firefox-arm64-deb"; else FIREFOX="firefox-bin"; fi; SUDO_USER=rhino-live PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb ${FIREFOX} vscodium-deb celeste-bin linux-kernel-stable rhino-core quintom-cursor-theme-git timeshift fake-ubuntu-advantage-tools-deb'
+HOME=/home/rhino-live runuser -l rhino-live -c 'if [ $(dpkg --print-architecture) = arm64 ]; then FIREFOX="firefox-arm64-deb"; else FIREFOX="firefox-bin"; fi; SUDO_USER=rhino-live PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb ${FIREFOX} vscodium-deb celeste-bin linux-kernel-stable rhino-core rhino-setup-bin quintom-cursor-theme-git timeshift fake-ubuntu-advantage-tools-deb'
 popd
 #HOME=/home/rhino-live runuser -l rhino-live -c 'pacstall -U pacstall:master'
 
@@ -139,13 +139,10 @@ firmwareType:
         - command: "-HOME=/home/\$USER runuser -m -u \$USER -- sh -c  'codium --install-extension omni-dracula.vsix'"
         - command: "-rm omni-dracula.vsix"
         - command: "-chown -cR \$USER /home/\$USER/.config"
-        - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus gsettings set org.gnome.desktop.interface gtk-theme Yaru-purple'"
+        - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus gsettings set org.gnome.desktop.interface gtk-theme Yaru-purple-dark'"
         - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Dark'"
         - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus xfconf-query -c xsettings -p /Gtk/CursorThemeName -s Quintom_Ink'"
-        - command: "-echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
-        - command: "-HOME=/home/\$USER runuser -l \$USER -c 'HOME=/home/\$USER SUDO_USER=\$USER PACSTALL_DOWNLOADER=quiet-wget pacstall -PI rhino-setup-bin'"
         - command: "-sudo rm -rf /etc/calamares"
-        - command: "-sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers"
         - command: "-userdel -r rhino-live"
 __EOF__
 
@@ -201,6 +198,7 @@ mkdir /home/rhino-live/.lightpad
 cp /etc/skel/.lightpad/* /home/rhino-live/.lightpad
 cp /etc/skel/.config/docks.ini /home/rhino-live/.config/docks.ini
 ln -s "/home/rhino-live/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino-live/.config/xfce4/desktop/icons.screen.latest.rc"
+sudo rm /home/rhino-live/.config/autostart/rhino-setup.desktop
 # Make sure the user (rhino) has wrx permissions
 chmod -R 777 /home/rhino-live/.config/xfce4
 cat > /home/rhino-live/.config/autostart/gsettings.desktop <<  __EOF__
@@ -210,7 +208,7 @@ Version=1.0
 Type=Application
 Name=Gsettings Theme
 Comment=Themeing for Desktop
-Exec=bash -c "gsettings set org.gnome.desktop.interface gtk-theme Yaru-purple"
+Exec=bash -c "gsettings set org.gnome.desktop.interface gtk-theme Yaru-purple-dark"
 OnlyShowIn=XFCE;
 RunHook=0
 StartupNotify=false
