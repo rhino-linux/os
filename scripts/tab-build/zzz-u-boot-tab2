@@ -4,7 +4,7 @@ set -ex
 kern="$DPKG_MAINTSCRIPT_PACKAGE"
 kver=${kern/linux-image-/}
 
-U_BOOT_PARAMETERS="consoleblank=0 loglevel=7 rw splash plymouth.ignore-serial-consoles vt.global_cursor_default=0" \
+U_BOOT_PARAMETERS="console=ttyS2,1500000 consoleblank=0 loglevel=7 rw splash plymouth.ignore-serial-consoles vt.global_cursor_default=0" \
 /etc/kernel/postinst.d/zz-u-boot-menu $kver
 
 bootpoint=$(df | grep /boot | tail -n1 | awk '{print $1}')
