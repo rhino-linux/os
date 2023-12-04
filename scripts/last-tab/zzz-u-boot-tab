@@ -4,5 +4,13 @@ set -ex
 kern="$DPKG_MAINTSCRIPT_PACKAGE"
 kver=${kern/linux-image-/}
 
-U_BOOT_PARAMETERS="consoleblank=0 loglevel=7 rw splash plymouth.ignore-serial-consoles vt.global_cursor_default=0" \
+if [[ -f /boot/u-boot-rockchip.bin ]]; then
+  CONPLACE="ttyS2,1500000"
+elif [[ -f /boot/u-boot-sunxi-with-spl.bin ]]; then
+  CONPLACE="ttyS0,115200"
+else
+  CONPLACE=""
+fi
+
+U_BOOT_PARAMETERS="console=${CONPLACE} consoleblank=0 loglevel=7 rw splash plymouth.ignore-serial-consoles vt.global_cursor_default=0" \
 /etc/kernel/postinst.d/zz-u-boot-menu $kver
