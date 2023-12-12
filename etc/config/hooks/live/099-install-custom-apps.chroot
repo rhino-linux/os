@@ -84,7 +84,7 @@ sudo chown -cR rhino /home/rhino/.config/VSCodium/
 
 # The rhino user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
 rm -rf /home/rhino/.config/xfce4
-for i in xfce4 Kvantum plank autostart ulauncher xfce4; do
+for i in xfce4 Kvantum plank autostart ulauncher cortile; do
 mkdir -p /home/rhino/.config/${i}
 cp -r /etc/skel/.config/${i}/* /home/rhino/.config/${i};
 done
