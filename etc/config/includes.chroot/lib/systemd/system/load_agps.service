@@ -1,6 +1,6 @@
 [Unit]
 Description=load agps to speed up gpsd
-After=gpsd.service eg25-manager.service ofono.service lomiri-location-service.service
+After=gpsd.service eg25-manager.service ofono.service
 
 [Service]
 Type=oneshot
