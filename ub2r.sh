@@ -250,7 +250,7 @@ if [[ ${NAME} != "Rhino Linux" ]]; then
   fi
 else
   echo "[${BYellow}*${NC}] ${BYellow}WARNING${NC}: Rhino Linux appears to already be installed."
-  ask "[${BYellow}*${NC}] Do you want to change suites?" N
+  ask "[${BYellow}*${NC}] Do you want to change suites/kernels?" N
   if ((answer == 0)); then
     echo "[${BCyan}~${NC}] No changes made. Exiting..."
     exit 0
