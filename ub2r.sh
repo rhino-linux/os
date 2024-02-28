@@ -149,11 +149,12 @@ function unicorn_flavor() {
   sudo chown $USER -cR /home/$USER/.config
 }
 
-function install_core() {
+function select_core() {
   echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Rhino Linux has three versions of our app suite. Which would you like to install?"
   echo "[${BCyan}~${NC}] ${BWhite}1)${NC} ${BPurple}rhino-server-core${NC}: TUI tool suite w/ basic development tools"
   echo "[${BCyan}~${NC}] ${BWhite}2)${NC} ${BPurple}rhino-ubxi-core${NC}: TUI+GUI app suite w/ GTK applications"
   echo "[${BCyan}~${NC}] ${BWhite}3)${NC} ${BPurple}rhino-core${NC}: Full suite w/ Unicorn Desktop Environment"
+  unset packages
   while true; do
     read -p "[${BYellow}*${NC}] Enter your choice (${BGreen}1${NC}/${BGreen}2${NC}/${BGreen}3${NC}): " choice
     case $choice in
@@ -172,18 +173,15 @@ function install_core() {
       *) ;;
     esac
   done
-  echo "Installing ${BPurple}${packages[0]}${NC} suite..."
-  pacstall -I ${packages[*]} || exit 1
-  if [[ ${packages[0]} == "rhino-core" ]]; then
-    unicorn_flavor
-  fi
+  echo "[${BGreen}+${NC}] Selected to install ${BPurple}${packages[0]}${NC}."
 }
 
-function install_kernel() {
+function select_kernel() {
   echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Rhino Linux ships two versions of the Ubuntu mainline kernel:"
   echo "[${BCyan}~${NC}] ${BWhite}1)${NC} ${BPurple}linux-kernel${NC}: tracks the kernel ${YELLOW}mainline${NC} branch, with versions ${CYAN}X${NC}.${CYAN}X${NC}.${CYAN}0${NC}{${CYAN}-rcX${NC}}"
   echo "[${BCyan}~${NC}] ${BWhite}2)${NC} ${BPurple}linux-kernel-stable${NC}: tracks the kernel ${YELLOW}stable${NC} branch, with versions ${CYAN}X${NC}.(${CYAN}X-1${NC}).${CYAN}X${NC}"
   echo "[${BCyan}~${NC}] Would you like to install either of them? You can also say ${BRed}N${NC}/${BRed}n${NC} to remain on your current kernel."
+  unset kern_package
   while true; do
     read -p "[${BYellow}*${NC}] Enter your choice (${BGreen}1${NC}/${BGreen}2${NC}/${BRed}N${NC}): " choice
     case $choice in
@@ -203,10 +201,23 @@ function install_kernel() {
     esac
   done
   if [[ ${kern_package} != "none" ]]; then
-    echo "Installing ${BPurple}${kern_package}${NC}..."
-    pacstall -I ${kern_package} || exit 1
+    echo "[${BGreen}+${NC}] Selected to install ${BPurple}${kern_package}${NC}."
+  else
+    echo "[${BCyan}~${NC}] Will not install any new kernels."
+  fi
+}
+
+function install_packages() {
+  if [[ ${kern_package} != "none" ]]; then
+    echo "[${BCyan}~${NC}] Installing ${BPurple}${kern_package}${NC}..."
+    pacstall -PI ${kern_package} || exit 1
   else
     echo "[${BCyan}~${NC}] Not installing any kernels."
+  fi
+  echo "[${BCyan}~${NC}] Installing ${BPurple}${packages[0]}${NC} suite..."
+  pacstall -PI ${packages[*]} || exit 1
+  if [[ ${packages[0]} == "rhino-core" ]]; then
+    unicorn_flavor
   fi
 }
 
@@ -220,11 +231,15 @@ if [[ ${NAME} != "Rhino Linux" ]]; then
     cleanup
     exit 1
   }
-  install_kernel || {
+  select_kernel || {
     cleanup
     exit 1
   }
-  if install_core; then
+  select_core || {
+    cleanup
+    exit 1
+  }
+  if install_packages; then
     echo "[${BYellow}*${NC}] ${BYellow}WARNING${NC}: Removing ${CYAN}/etc/apt/sources.list${NC} backup"
     sudo rm -f /etc/apt/sources.list-rhino.bak
     echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: You can now run ${BPurple}rpk update${NC} to update the rest of your packages."
@@ -240,6 +255,7 @@ else
     echo "[${BCyan}~${NC}] No changes made. Exiting..."
     exit 0
   else
-    install_core || exit 1
+    select_core || exit 1
+    install_packages || exit 1
   fi
 fi
