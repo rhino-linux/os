@@ -124,7 +124,7 @@ function update_sources() {
 function install_pacstall() {
   if ! [[ -f "/usr/bin/pacstall" ]]; then
     echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Installing Pacstall..."
-    sudo bash -c "$(curl -fsSL https://pacstall.dev/q/install || wget -q https://pacstall.dev/q/install -O -)"
+    echo -e "Y\nN" | sudo bash -c "$(curl -fsSL https://pacstall.dev/q/install || wget -q https://pacstall.dev/q/install -O -)"
   fi
 }
 
@@ -203,18 +203,18 @@ function select_kernel() {
   if [[ ${kern_package} != "none" ]]; then
     echo "[${BGreen}+${NC}] Selected to install ${BPurple}${kern_package}${NC}."
   else
-    echo "[${BCyan}~${NC}] Will not install any new kernels."
+    echo "[${BGreen}+${NC}] Will not install any new kernels."
   fi
 }
 
 function install_packages() {
   if [[ ${kern_package} != "none" ]]; then
-    echo "[${BCyan}~${NC}] Installing ${BPurple}${kern_package}${NC}..."
+    echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Installing ${BPurple}${kern_package}${NC}..."
     pacstall -PI ${kern_package} || exit 1
   else
-    echo "[${BCyan}~${NC}] Not installing any kernels."
+    echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Not installing any kernels."
   fi
-  echo "[${BCyan}~${NC}] Installing ${BPurple}${packages[0]}${NC} suite..."
+  echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Installing ${BPurple}${packages[0]}${NC} suite..."
   pacstall -PI ${packages[*]} || exit 1
   if [[ ${packages[0]} == "rhino-core" ]]; then
     unicorn_flavor
@@ -255,6 +255,7 @@ else
     echo "[${BCyan}~${NC}] No changes made. Exiting..."
     exit 0
   else
+    select_kernel || exit 1
     select_core || exit 1
     install_packages || exit 1
   fi
