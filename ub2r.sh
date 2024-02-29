@@ -203,13 +203,12 @@ function select_kernel() {
 
 function install_packages() {
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Upgrading packages, this may take a while..."
-  export DEBIAN_FRONTEND=noninteractive
   if [[ -f "/usr/bin/rpk" ]]; then
-    rpk update -y
+    DEBIAN_FRONTEND=noninteractive rpk update -y
   elif [[ -f "/usr/bin/nala" ]]; then
-    sudo nala upgrade -y --full --no-autoremove -o Acquire::AllowReleaseInfoChange="true"
+    sudo DEBIAN_FRONTEND=noninteractive nala upgrade -y --full --no-autoremove -o Acquire::AllowReleaseInfoChange="true"
   else
-    sudo apt update --allow-releaseinfo-change && sudo apt upgrade -y
+    sudo DEBIAN_FRONTEND=noninteractive apt update --allow-releaseinfo-change && sudo apt upgrade -y
   fi
   if [[ ${kern_package} != "none" ]]; then
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Installing ${BPurple}${kern_package}${NC}..."
