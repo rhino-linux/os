@@ -203,12 +203,13 @@ function select_kernel() {
 
 function install_packages() {
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Upgrading packages, this may take a while..."
+  sudo apt-get update -qq && sudo DEBIAN_FRONTEND=noninteractive apt-get install base-files postfix -yq
   if [[ -f "/usr/bin/rpk" ]]; then
-    DEBIAN_FRONTEND=noninteractive rpk update -y
+    rpk update -y
   elif [[ -f "/usr/bin/nala" ]]; then
-    sudo DEBIAN_FRONTEND=noninteractive nala upgrade -y --full --no-autoremove -o Acquire::AllowReleaseInfoChange="true"
+    sudo nala upgrade -y --full --no-autoremove -o Acquire::AllowReleaseInfoChange="true"
   else
-    sudo DEBIAN_FRONTEND=noninteractive apt update --allow-releaseinfo-change && sudo apt full-upgrade -y
+    sudo apt-get update --allow-releaseinfo-change && sudo apt-get full-upgrade -y
   fi
   if [[ ${kern_package} != "none" ]]; then
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Installing ${BPurple}${kern_package}${NC}..."
