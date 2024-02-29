@@ -208,7 +208,7 @@ function install_packages() {
   elif [[ -f "/usr/bin/nala" ]]; then
     sudo DEBIAN_FRONTEND=noninteractive nala upgrade -y --full --no-autoremove -o Acquire::AllowReleaseInfoChange="true"
   else
-    sudo DEBIAN_FRONTEND=noninteractive apt update --allow-releaseinfo-change && sudo apt upgrade -y
+    sudo DEBIAN_FRONTEND=noninteractive apt update --allow-releaseinfo-change && sudo apt full-upgrade -y
   fi
   if [[ ${kern_package} != "none" ]]; then
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Installing ${BPurple}${kern_package}${NC}..."
