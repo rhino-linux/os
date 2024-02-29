@@ -12,25 +12,30 @@ if [[ -z $NO_COLOR ]]; then
   export BGreen=$'\033[1;32m'
   export BCyan=$'\033[1;36m'
   export BYellow=$'\033[1;33m'
+  export BBlue=$'\033[1;34m'
   export BPurple=$'\033[1;35m'
   export BRed=$'\033[1;31m'
   export BWhite=$'\033[1;37m'
   export NC=$'\033[0m'
+  export BOLD=$'\033[1m'
 fi
 
 function cleanup() {
   if [[ -f "/etc/apt/sources.list-rhino.bak" ]]; then
-    echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Returning ${CYAN}/etc/apt/sources.list${NC} backup"
+    echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Returning ${CYAN}/etc/apt/sources.list${NC} backup"
     sudo rm -f /etc/apt/sources.list
     sudo mv /etc/apt/sources.list-rhino.bak /etc/apt/sources.list
+    sudo sed -i "s/VERSION_CODENAME\=devel/VERSION_CODENAME\=${VERSION_CODENAME}/g" /usr/lib/os-release
   fi
 }
 
 function get_releaseinfo() {
   source /etc/os-release
   if [[ ${ID} != "ubuntu" ]]; then
-    echo "[${BRed}x${NC}] ${BRed}Error${NC}: not an Ubuntu system!"
+    echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: not an Ubuntu system!"
     exit 1
+  elif [[ ${NAME} != "Rhino Linux" ]]; then
+    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: detected Ubuntu ${BPurple}${VERSION_CODENAME}${NC} system."
   fi
 }
 
@@ -96,34 +101,23 @@ function ask() {
 }
 
 function update_sources() {
-  echo "[${BYellow}*${NC}] ${BYellow}WARNING${NC}: Updating ${CYAN}/etc/apt/sources.list${NC} entries to ${BPurple}./devel${NC}. If you have any PPAs, they may break!"
+  echo "[${BYellow}*${NC}] ${BOLD}WARNING${NC}: Updating ${CYAN}/etc/apt/sources.list${NC} entries to ${BPurple}./devel${NC}. If you have any PPAs, they may break!"
   ask "[${BYellow}*${NC}] Continue?" N
   if ((answer == 0)); then
-    echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: No changes made. Exiting..."
+    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: No changes made. Exiting..."
     exit 0
   else
-    echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Creating backup of ${CYAN}/etc/apt/sources.list${NC} at ${CYAN}/etc/apt/sources.list-rhino.bak${NC}"
+    echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Creating backup of ${CYAN}/etc/apt/sources.list${NC}..."
     sudo cp /etc/apt/sources.list /etc/apt/sources.list-rhino.bak
-    source_codename=$(grep 'deb.*http.*ubuntu' /etc/apt/sources.list | head -n1 | awk '{print $3}')
     sudo sed -i -E "s|(\s)${VERSION_CODENAME}|\1./devel|g" /etc/apt/sources.list
-    sudo sed -i -E "s|(\s)${source_codename}|\1./devel|g" /etc/apt/sources.list
+    sudo sed -i "s/VERSION_CODENAME\=${VERSION_CODENAME}/VERSION_CODENAME\=devel/g" /usr/lib/os-release
+    sudo apt-get update -yq
   fi
-  sudo apt-get update \
-    && if [[ ${VERSION_CODENAME} != "devel" ]]; then
-      echo "[${BYellow}*${NC}] ${BYellow}WARNING${NC}: Updating ${BPurple}base-files${NC} to latest version. This can't be undone!"
-      ask "[${BYellow}*${NC}] Continue?" N
-        if ((answer == 0)); then
-          echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Not installing. Exiting..."
-          exit 0
-        else
-          sudo apt-get install base-files -yq
-        fi
-    fi
 }
 
 function install_pacstall() {
   if ! [[ -f "/usr/bin/pacstall" ]]; then
-    echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Installing Pacstall..."
+    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Installing Pacstall..."
     echo -e "Y\nN" | sudo bash -c "$(curl -fsSL https://pacstall.dev/q/install || wget -q https://pacstall.dev/q/install -O -)"
   fi
 }
@@ -150,37 +144,40 @@ function unicorn_flavor() {
 }
 
 function select_core() {
-  echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Rhino Linux has three versions of our app suite. Which would you like to install?"
-  echo "[${BCyan}~${NC}] ${BWhite}1)${NC} ${BPurple}rhino-server-core${NC}: TUI tool suite w/ basic development tools"
-  echo "[${BCyan}~${NC}] ${BWhite}2)${NC} ${BPurple}rhino-ubxi-core${NC}: TUI+GUI app suite w/ GTK applications"
-  echo "[${BCyan}~${NC}] ${BWhite}3)${NC} ${BPurple}rhino-core${NC}: Full suite w/ Unicorn Desktop Environment"
-  unset packages
+  echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Rhino Linux has three versions of our app suite. Which would you like to install?"
+  echo "[${BBlue}>${NC}] ${BOLD}1)${NC} ${BPurple}rhino-server-core${NC}: TUI tool suite w/ basic development tools"
+  echo "[${BBlue}>${NC}] ${BOLD}2)${NC} ${BPurple}rhino-ubxi-core${NC}: TUI+GUI app suite w/ GTK applications"
+  echo "[${BBlue}>${NC}] ${BOLD}3)${NC} ${BPurple}rhino-core${NC}: Full suite w/ Unicorn Desktop Environment"
+  unset packages core_package
   while true; do
     read -p "[${BYellow}*${NC}] Enter your choice (${BGreen}1${NC}/${BGreen}2${NC}/${BGreen}3${NC}): " choice
     case $choice in
       1)
-        packages=("rhino-server-core" "nala-deb")
+        core_package="rhino-server-core"
+        packages=("nala-deb" "${core_package}")
         break
         ;;
       2)
-        packages=("rhino-ubxi-core" "nala-deb")
+        core_package="rhino-ubxi-core"
+        packages=("nala-deb" "${core_package}")
         break
         ;;
       3)
-        packages=("rhino-core" "quintom-cursor-theme-git" "rhino-setup-bin" "nala-deb")
+        core_package="rhino-core"
+        packages=("quintom-cursor-theme-git" "rhino-setup-bin" "nala-deb" "${core_package}")
         break
         ;;
       *) ;;
     esac
   done
-  echo "[${BGreen}+${NC}] Selected to install ${BPurple}${packages[0]}${NC}."
+  echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Selected to install ${BPurple}${core_package}${NC}."
 }
 
 function select_kernel() {
-  echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Rhino Linux ships two versions of the Ubuntu mainline kernel:"
-  echo "[${BCyan}~${NC}] ${BWhite}1)${NC} ${BPurple}linux-kernel${NC}: tracks the kernel ${YELLOW}mainline${NC} branch, with versions ${CYAN}X${NC}.${CYAN}X${NC}.${CYAN}0${NC}{${CYAN}-rcX${NC}}"
-  echo "[${BCyan}~${NC}] ${BWhite}2)${NC} ${BPurple}linux-kernel-stable${NC}: tracks the kernel ${YELLOW}stable${NC} branch, with versions ${CYAN}X${NC}.(${CYAN}X-1${NC}).${CYAN}X${NC}"
-  echo "[${BCyan}~${NC}] Would you like to install either of them? You can also say ${BRed}N${NC}/${BRed}n${NC} to remain on your current kernel."
+  echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Rhino Linux ships two versions of the Ubuntu mainline kernel:"
+  echo "[${BBlue}>${NC}] ${BOLD}1)${NC} ${BPurple}linux-kernel${NC}: tracks the kernel ${YELLOW}mainline${NC} branch, with versions ${CYAN}X${NC}.${CYAN}X${NC}.${CYAN}0${NC}{${CYAN}-rcX${NC}}"
+  echo "[${BBlue}>${NC}] ${BOLD}2)${NC} ${BPurple}linux-kernel-stable${NC}: tracks the kernel ${YELLOW}stable${NC} branch, with versions ${CYAN}X${NC}.(${CYAN}X-1${NC}).${CYAN}X${NC}"
+  echo "[${BBlue}>${NC}] Would you like to install either of them? You can also say ${BRed}N${NC}/${BRed}n${NC} to remain on your current kernel."
   unset kern_package
   while true; do
     read -p "[${BYellow}*${NC}] Enter your choice (${BGreen}1${NC}/${BGreen}2${NC}/${BRed}N${NC}): " choice
@@ -201,25 +198,27 @@ function select_kernel() {
     esac
   done
   if [[ ${kern_package} != "none" ]]; then
-    echo "[${BGreen}+${NC}] Selected to install ${BPurple}${kern_package}${NC}."
+    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Selected to install ${BPurple}${kern_package}${NC}."
   else
-    echo "[${BGreen}+${NC}] Will not install any new kernels."
+    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Will not install any new kernels."
   fi
 }
 
 function install_packages() {
   if [[ ${kern_package} != "none" ]]; then
-    echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Installing ${BPurple}${kern_package}${NC}..."
+    echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Installing ${BPurple}${kern_package}${NC}..."
     pacstall -PI ${kern_package} || exit 1
   else
-    echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Not installing any kernels."
+    echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Not installing any kernels."
   fi
-  echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: Installing ${BPurple}${packages[0]}${NC} suite..."
+  echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Installing ${BPurple}${core_package}${NC} suite..."
   pacstall -PI ${packages[*]} || exit 1
-  if [[ ${packages[0]} == "rhino-core" ]]; then
+  if [[ ${core_package} == "rhino-core" ]]; then
     unicorn_flavor
   fi
 }
+
+echo "[${BPurple}#${NC}] ${BOLD}Welcome to ub2r: an Ubuntu to Rhino Linux helper${NC}"
 
 get_releaseinfo
 install_pacstall || exit 1
@@ -239,24 +238,33 @@ if [[ ${NAME} != "Rhino Linux" ]]; then
     cleanup
     exit 1
   }
+  echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: All set! We'll do the rest. Starting in 5 seconds..."
+  sleep 5
   if install_packages; then
-    echo "[${BYellow}*${NC}] ${BYellow}WARNING${NC}: Removing ${CYAN}/etc/apt/sources.list${NC} backup"
+    echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Removing ${CYAN}/etc/apt/sources.list${NC} backup..."
     sudo rm -f /etc/apt/sources.list-rhino.bak
-    echo "[${BCyan}~${NC}] ${BCyan}NOTE${NC}: You can now run ${BPurple}rpk update${NC} to update the rest of your packages."
-    echo "[${BCyan}~${NC}] Be sure to reboot when you are done!"
+    neofetch --ascii_distro rhino_small
+    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Complete! You can now run ${BPurple}rpk update${NC} to update the rest of your packages."
+    echo "[${BBlue}>${NC}] Be sure to reboot when you are done!"
   else
     cleanup
     exit 1
   fi
 else
-  echo "[${BYellow}*${NC}] ${BYellow}WARNING${NC}: Rhino Linux appears to already be installed."
-  ask "[${BYellow}*${NC}] Do you want to change suites/kernels?" N
+  echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Rhino Linux appears to already be installed."
+  ask "[${BYellow}*${NC}] Do you want to change kernels and/or suites?" N
   if ((answer == 0)); then
     echo "[${BCyan}~${NC}] No changes made. Exiting..."
     exit 0
   else
     select_kernel || exit 1
     select_core || exit 1
-    install_packages || exit 1
+    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: All set! Starting in 3 seconds..."
+    sleep 3
+    if install_packages; then
+      echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Complete! Be sure to reboot if you installed any new kernels."
+    else
+      exit 1
+    fi
   fi
 fi
