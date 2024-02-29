@@ -203,6 +203,7 @@ function select_kernel() {
 
 function install_packages() {
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Upgrading packages, this may take a while..."
+  export DEBIAN_FRONTEND=noninteractive
   if [[ -f "/usr/bin/rpk" ]]; then
     rpk update -y
   elif [[ -f "/usr/bin/nala" ]]; then
