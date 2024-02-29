@@ -25,7 +25,6 @@ function cleanup() {
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Returning ${CYAN}/etc/apt/sources.list${NC} backup"
     sudo rm -f /etc/apt/sources.list
     sudo mv /etc/apt/sources.list-rhino.bak /etc/apt/sources.list
-    sudo sed -i "s/VERSION_CODENAME\=devel/VERSION_CODENAME\=${VERSION_CODENAME}/g" /usr/lib/os-release
   fi
 }
 
@@ -110,8 +109,6 @@ function update_sources() {
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Creating backup of ${CYAN}/etc/apt/sources.list${NC}..."
     sudo cp /etc/apt/sources.list /etc/apt/sources.list-rhino.bak
     sudo sed -i -E "s|(\s)${VERSION_CODENAME}|\1./devel|g" /etc/apt/sources.list
-    sudo sed -i "s/VERSION_CODENAME\=${VERSION_CODENAME}/VERSION_CODENAME\=devel/g" /usr/lib/os-release
-    sudo apt-get update -yq
   fi
 }
 
@@ -159,12 +156,12 @@ function select_core() {
         ;;
       2)
         core_package="rhino-ubxi-core"
-        packages=("nala-deb" "${core_package}")
+        packages=("nala-deb" "celeste-bin" "timeshift" "${core_package}")
         break
         ;;
       3)
         core_package="rhino-core"
-        packages=("quintom-cursor-theme-git" "rhino-setup-bin" "nala-deb" "${core_package}")
+        packages=("nala-deb" "celeste-bin" "timeshift" "quintom-cursor-theme-git" "${core_package}" "rhino-setup-bin")
         break
         ;;
       *) ;;
@@ -205,6 +202,14 @@ function select_kernel() {
 }
 
 function install_packages() {
+  echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Upgrading packages, this may take a while..."
+  if [[ -f "/usr/bin/rpk" ]]; then
+    rpk update -y
+  elif [[ -f "/usr/bin/nala" ]]; then
+    sudo nala upgrade -y --full --no-autoremove -o Acquire::AllowReleaseInfoChange="true"
+  else
+    sudo apt update --allow-releaseinfo-change && sudo apt upgrade -y
+  fi
   if [[ ${kern_package} != "none" ]]; then
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Installing ${BPurple}${kern_package}${NC}..."
     pacstall -PI ${kern_package} || exit 1
@@ -218,7 +223,7 @@ function install_packages() {
   fi
 }
 
-echo "[${BPurple}#${NC}] ${BOLD}Welcome to ub2r: an Ubuntu to Rhino Linux helper${NC}"
+echo "[${BPurple}#${NC}] ${BOLD}Welcome to ub2r: convert Ubuntu to Rhino Linux${NC}"
 
 get_releaseinfo
 install_pacstall || exit 1
@@ -244,8 +249,8 @@ if [[ ${NAME} != "Rhino Linux" ]]; then
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Removing ${CYAN}/etc/apt/sources.list${NC} backup..."
     sudo rm -f /etc/apt/sources.list-rhino.bak
     neofetch --ascii_distro rhino_small
-    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Complete! You can now run ${BPurple}rpk update${NC} to update the rest of your packages."
-    echo "[${BBlue}>${NC}] Be sure to reboot when you are done!"
+    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Complete! You can now use ${BPurple}rhino-pkg${NC}/${BPurple}rpk${NC} to manage your packages."
+    echo "[${BBlue}>${NC}] Be sure to reboot when you are done checking it out!"
   else
     cleanup
     exit 1
