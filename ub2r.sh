@@ -203,14 +203,7 @@ function select_kernel() {
 
 function install_packages() {
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Upgrading packages, this may take a while..."
-  sudo apt-get update -qq && sudo DEBIAN_FRONTEND=noninteractive apt-get install base-files postfix -yq
-  if [[ -f "/usr/bin/rpk" ]]; then
-    rpk update -y
-  elif [[ -f "/usr/bin/nala" ]]; then
-    sudo nala upgrade -y --full --no-autoremove -o Acquire::AllowReleaseInfoChange="true"
-  else
-    sudo apt-get update --allow-releaseinfo-change && sudo apt-get full-upgrade -y
-  fi
+  sudo apt-get update --allow-releaseinfo-change && sudo DEBIAN_FRONTEND=noninteractive apt-get install base-files postfix -yq && sudo apt-get full-upgrade -y
   if [[ ${kern_package} != "none" ]]; then
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Installing ${BPurple}${kern_package}${NC}..."
     pacstall -PI ${kern_package} || exit 1
@@ -224,7 +217,7 @@ function install_packages() {
   fi
 }
 
-echo "[${BPurple}#${NC}] ${BOLD}Welcome to ub2r: convert Ubuntu to Rhino Linux${NC}"
+echo "[${BPurple}#${NC}] ${BOLD}Welcome to ub2r: A utility to convert Ubuntu to Rhino Linux${NC}"
 
 get_releaseinfo
 install_pacstall || exit 1
