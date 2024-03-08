@@ -99,6 +99,39 @@ function ask() {
   done
 }
 
+function echo_repo_config() {
+  local uri_source="$1" suite="$2" sec="$3" selected_uri_dir="ubuntu" architectures
+  case "$uri_source" in
+    ports)
+      selected_uri_source="ports"
+      architectures="amd64 i386"
+      selected_uri_dir="ubuntu-ports"
+      ;;
+    archive)
+      selected_uri_source="archive"
+      architectures="arm64"
+      ;;
+    security)
+      selected_uri_source="security"
+      architectures="arm64"
+      ;;
+    *)
+      return 1
+    ;;
+  esac
+  echo "Types: deb"
+  echo "URIs: http://${selected_uri_source}.ubuntu.com/${selected_uri_dir}/"
+  if [[ ${sec} == "security" ]]; then
+    echo "Suites: ${suite}-security"
+  else
+    echo "Suites: ${suite} ${suite}-updates ${suite}-backports"
+  fi
+  echo "Components: main universe restricted multiverse"
+  echo "Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg"
+  echo "Architectures-Remove: ${architectures}"
+  echo ""
+}
+
 function update_sources() {
   echo "[${BYellow}*${NC}] ${BOLD}WARNING${NC}: Updating ${CYAN}/etc/apt/sources.list${NC} entries to ${BPurple}./devel${NC}. If you have any PPAs, they may break!"
   ask "[${BYellow}*${NC}] Continue?" N
@@ -107,8 +140,14 @@ function update_sources() {
     exit 0
   else
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Creating backup of ${CYAN}/etc/apt/sources.list${NC}..."
-    sudo cp /etc/apt/sources.list /etc/apt/sources.list-rhino.bak
-    sudo sed -i -E "s|(\s)${VERSION_CODENAME}|\1./devel|g" /etc/apt/sources.list
+    sudo mv /etc/apt/sources.list /etc/apt/sources.list-rhino.bak
+    if [[ $(dpkg --print-architecture) == "arm64" ]]; then
+      echo_repo_config "ports" "./devel" | sudo tee /etc/apt/sources.list.d/rhino.sources > /dev/null
+      echo_repo_config "ports" "./devel" "security" | sudo tee -a /etc/apt/sources.list.d/rhino.sources > /dev/null
+    else
+      echo_repo_config "archive" "./devel" | sudo tee /etc/apt/sources.list.d/rhino.sources > /dev/null
+      echo_repo_config "security" "./devel" "security" | sudo tee -a /etc/apt/sources.list.d/rhino.sources > /dev/null
+    fi
   fi
 }
 
@@ -203,7 +242,7 @@ function select_kernel() {
 
 function install_packages() {
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Upgrading packages, this may take a while..."
-  sudo apt-get update --allow-releaseinfo-change && sudo DEBIAN_FRONTEND=noninteractive apt-get install base-files postfix -yq && sudo apt-get full-upgrade -y
+  sudo apt-get update --allow-releaseinfo-change && sudo DEBIAN_FRONTEND=noninteractive apt-get install base-files postfix -yq && sudo apt-get full-upgrade -y || exit 1
   if [[ ${kern_package} != "none" ]]; then
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Installing ${BPurple}${kern_package}${NC}..."
     pacstall -PI ${kern_package} || exit 1
