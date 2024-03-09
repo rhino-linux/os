@@ -23,8 +23,12 @@ fi
 function cleanup() {
   if [[ -f "/etc/apt/sources.list-rhino.bak" ]]; then
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Returning ${CYAN}/etc/apt/sources.list${NC} backup"
-    sudo rm -f /etc/apt/sources.list
+    sudo rm -f /etc/apt/sources.list.d/ubuntu.sources
     sudo mv /etc/apt/sources.list-rhino.bak /etc/apt/sources.list
+  elif [[ -f "/etc/apt/sources.list.d/ubuntu.sources-rhino.bak" ]]; then
+    echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Returning ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC} backup"
+    sudo rm -f /etc/apt/sources.list.d/ubuntu.sources
+    sudo mv /etc/apt/sources.list.d/ubuntu.sources-rhino.bak /etc/apt/sources.list.d/ubuntu.sources
   fi
 }
 
@@ -133,22 +137,37 @@ function echo_repo_config() {
 }
 
 function update_sources() {
-  echo "[${BYellow}*${NC}] ${BOLD}WARNING${NC}: Updating ${CYAN}/etc/apt/sources.list${NC} entries to ${BPurple}./devel${NC}."
-  echo "[${BBlue}>${NC}] If you have any PPAs, they may break!"
-  echo "[${BBlue}>${NC}] A new deb-822 source list will be created at ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC}."
+  if ((${VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
+    echo "[${BYellow}*${NC}] ${BOLD}WARNING${NC}: Updating ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC} entries to ${BPurple}./devel${NC}."
+    echo "[${BBlue}>${NC}] If you have any PPAs, they may break!"
+    echo "[${BBlue}>${NC}] Other sources contained in this file will be wiped."
+    echo "[${BBlue}>${NC}] A backup will be created while this script runs, and restored if cancelled."
+  else
+    echo "[${BYellow}*${NC}] ${BOLD}WARNING${NC}: Updating ${CYAN}/etc/apt/sources.list${NC} entries to ${BPurple}./devel${NC}."
+    echo "[${BBlue}>${NC}] If you have any PPAs, they may break!"
+    echo "[${BBlue}>${NC}] Other sources contained in this file will be wiped."
+    echo "[${BBlue}>${NC}] A backup will be created while this script runs, and restored if cancelled."
+    echo "[${BBlue}>${NC}] A new deb-822 source list will be created at ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC}."
+  fi
   ask "[${BYellow}*${NC}] Continue?" N
   if ((answer == 0)); then
     echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: No changes made. Exiting..."
     exit 0
   else
-    echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Creating backup of ${CYAN}/etc/apt/sources.list${NC}..."
-    sudo mv /etc/apt/sources.list /etc/apt/sources.list-rhino.bak
-    if [[ $(dpkg --print-architecture) == "arm64" ]]; then
-      echo_repo_config "ports" "./devel" | sudo tee /etc/apt/sources.list.d/ubuntu.sources > /dev/null
-      echo_repo_config "ports" "./devel" "security" | sudo tee -a /etc/apt/sources.list.d/ubuntu.sources > /dev/null
+    if ((${VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
+      echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Creating backup of ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC}..."
+      sudo cp /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources-rhino.bak
+      sudo sed -i -E "s|(\s)${VERSION_CODENAME}|\1./devel|g" /etc/apt/sources.list.d/ubuntu.sources
     else
-      echo_repo_config "archive" "./devel" | sudo tee /etc/apt/sources.list.d/ubuntu.sources > /dev/null
-      echo_repo_config "security" "./devel" "security" | sudo tee -a /etc/apt/sources.list.d/ubuntu.sources > /dev/null
+      echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Creating backup of ${CYAN}/etc/apt/sources.list${NC}..."
+      sudo mv /etc/apt/sources.list /etc/apt/sources.list-rhino.bak
+      if [[ $(dpkg --print-architecture) == "arm64" ]]; then
+        echo_repo_config "ports" "./devel" | sudo tee /etc/apt/sources.list.d/ubuntu.sources > /dev/null
+        echo_repo_config "ports" "./devel" "security" | sudo tee -a /etc/apt/sources.list.d/ubuntu.sources > /dev/null
+      else
+        echo_repo_config "archive" "./devel" | sudo tee /etc/apt/sources.list.d/ubuntu.sources > /dev/null
+        echo_repo_config "security" "./devel" "security" | sudo tee -a /etc/apt/sources.list.d/ubuntu.sources > /dev/null
+      fi
     fi
   fi
 }
@@ -244,7 +263,7 @@ function select_kernel() {
 
 function install_packages() {
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Upgrading packages, this may take a while..."
-  sudo apt-get update --allow-releaseinfo-change && sudo DEBIAN_FRONTEND=noninteractive apt-get install base-files postfix -yq && sudo apt-get full-upgrade -y || exit 1
+  sudo apt-get update --allow-releaseinfo-change && sudo DEBIAN_FRONTEND=noninteractive apt-get -o "Dpkg::Options::=--force-confold" dist-upgrade -y --allow-remove-essential --allow-change-held-packages || exit 1
   if [[ ${kern_package} != "none" ]]; then
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Installing ${BPurple}${kern_package}${NC}..."
     pacstall -PI ${kern_package} || exit 1
@@ -258,6 +277,11 @@ function install_packages() {
   fi
 }
 
+if [[ $(whoami) == "root" ]]; then
+  echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: ub2r cannot be run as root!"
+  exit 1
+fi
+
 echo "[${BPurple}#${NC}] ${BOLD}Welcome to ub2r: A utility to convert Ubuntu to Rhino Linux${NC}"
 
 get_releaseinfo
@@ -270,10 +294,14 @@ if [[ ${NAME} != "Rhino Linux" ]]; then
     cleanup
     exit 1
   }
-  select_kernel || {
-    cleanup
-    exit 1
-  }
+  if grep "Raspberry Pi" /proc/cpuinfo >> /dev/null; then 
+    kern_package="none"
+  else
+    select_kernel || {
+      cleanup
+      exit 1
+    }
+  fi
   select_core || {
     cleanup
     exit 1
@@ -281,7 +309,11 @@ if [[ ${NAME} != "Rhino Linux" ]]; then
   echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: All set! We'll do the rest. Starting in 5 seconds..."
   sleep 5
   if install_packages; then
-    echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Removing ${CYAN}/etc/apt/sources.list${NC} backup..."
+    if ((${VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
+      echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Removing ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC} backup..."
+    else
+      echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Removing ${CYAN}/etc/apt/sources.list${NC} backup..."
+    fi
     sudo rm -f /etc/apt/sources.list-rhino.bak
     neofetch --ascii_distro rhino_small
     echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Complete! You can now use ${BPurple}rhino-pkg${NC}/${BPurple}rpk${NC} to manage your packages."
@@ -297,7 +329,11 @@ else
     echo "[${BCyan}~${NC}] No changes made. Exiting..."
     exit 0
   else
-    select_kernel || exit 1
+    if grep "Raspberry Pi" /proc/cpuinfo >> /dev/null; then 
+      kern_package="none"
+    else
+      select_kernel || exit 1
+    fi
     select_core || exit 1
     echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: All set! Starting in 3 seconds..."
     sleep 3
