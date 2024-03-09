@@ -294,7 +294,7 @@ if [[ ${NAME} != "Rhino Linux" ]]; then
     cleanup
     exit 1
   }
-  if grep "Raspberry Pi" /proc/cpuinfo >> /dev/null; then 
+  if grep "Raspberry Pi" /proc/cpuinfo >> /dev/null; then
     kern_package="none"
   else
     select_kernel || {
@@ -329,7 +329,7 @@ else
     echo "[${BCyan}~${NC}] No changes made. Exiting..."
     exit 0
   else
-    if grep "Raspberry Pi" /proc/cpuinfo >> /dev/null; then 
+    if grep "Raspberry Pi" /proc/cpuinfo >> /dev/null; then
       kern_package="none"
     else
       select_kernel || exit 1
