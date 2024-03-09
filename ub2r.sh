@@ -141,12 +141,12 @@ function update_sources() {
     echo "[${BYellow}*${NC}] ${BOLD}WARNING${NC}: Updating ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC} entries to ${BPurple}./devel${NC}."
     echo "[${BBlue}>${NC}] If you have any PPAs, they may break!"
     echo "[${BBlue}>${NC}] Other sources contained in this file will be wiped."
-    echo "[${BBlue}>${NC}] A backup will be created while this script runs, and restored if cancelled."
+    echo "[${BBlue}>${NC}] A backup will be created while this script runs, and it will be restored if cancelled."
   else
     echo "[${BYellow}*${NC}] ${BOLD}WARNING${NC}: Updating ${CYAN}/etc/apt/sources.list${NC} entries to ${BPurple}./devel${NC}."
     echo "[${BBlue}>${NC}] If you have any PPAs, they may break!"
     echo "[${BBlue}>${NC}] Other sources contained in this file will be wiped."
-    echo "[${BBlue}>${NC}] A backup will be created while this script runs, and restored if cancelled."
+    echo "[${BBlue}>${NC}] A backup will be created while this script runs, and it will be restored if cancelled."
     echo "[${BBlue}>${NC}] A new deb-822 source list will be created at ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC}."
   fi
   ask "[${BYellow}*${NC}] Continue?" N
