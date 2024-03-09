@@ -133,7 +133,9 @@ function echo_repo_config() {
 }
 
 function update_sources() {
-  echo "[${BYellow}*${NC}] ${BOLD}WARNING${NC}: Updating ${CYAN}/etc/apt/sources.list${NC} entries to ${BPurple}./devel${NC}. If you have any PPAs, they may break!"
+  echo "[${BYellow}*${NC}] ${BOLD}WARNING${NC}: Updating ${CYAN}/etc/apt/sources.list${NC} entries to ${BPurple}./devel${NC}."
+  echo "[${BBlue}>${NC}] If you have any PPAs, they may break!"
+  echo "[${BBlue}>${NC}] A new deb-822 source list will be created at ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC}."
   ask "[${BYellow}*${NC}] Continue?" N
   if ((answer == 0)); then
     echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: No changes made. Exiting..."
@@ -142,11 +144,11 @@ function update_sources() {
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Creating backup of ${CYAN}/etc/apt/sources.list${NC}..."
     sudo mv /etc/apt/sources.list /etc/apt/sources.list-rhino.bak
     if [[ $(dpkg --print-architecture) == "arm64" ]]; then
-      echo_repo_config "ports" "./devel" | sudo tee /etc/apt/sources.list.d/rhino.sources > /dev/null
-      echo_repo_config "ports" "./devel" "security" | sudo tee -a /etc/apt/sources.list.d/rhino.sources > /dev/null
+      echo_repo_config "ports" "./devel" | sudo tee /etc/apt/sources.list.d/ubuntu.sources > /dev/null
+      echo_repo_config "ports" "./devel" "security" | sudo tee -a /etc/apt/sources.list.d/ubuntu.sources > /dev/null
     else
-      echo_repo_config "archive" "./devel" | sudo tee /etc/apt/sources.list.d/rhino.sources > /dev/null
-      echo_repo_config "security" "./devel" "security" | sudo tee -a /etc/apt/sources.list.d/rhino.sources > /dev/null
+      echo_repo_config "archive" "./devel" | sudo tee /etc/apt/sources.list.d/ubuntu.sources > /dev/null
+      echo_repo_config "security" "./devel" "security" | sudo tee -a /etc/apt/sources.list.d/ubuntu.sources > /dev/null
     fi
   fi
 }
