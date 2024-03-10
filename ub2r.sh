@@ -408,10 +408,11 @@ if [[ ${OLD_NAME} != "Rhino Linux" ]]; then
   if install_packages; then
     if ((${OLD_VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
       echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Removing ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC} backup..."
+      sudo rm -f /etc/apt/sources.list.d/ubuntu.sources-rhino.bak
     else
       echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Removing ${CYAN}/etc/apt/sources.list${NC} backup..."
+      sudo rm -f /etc/apt/sources.list-rhino.bak
     fi
-    sudo rm -f /etc/apt/sources.list-rhino.bak
     neofetch --ascii_distro rhino_small
     echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: ${BGreen}Finished${NC}! You can now use ${BRmPurple}rhino-pkg${NC}/${BRlPurple}rpk${NC} to manage your packages."
     echo "  [${BBlue}>${NC}] Be sure to reboot when you are done checking it out!"
