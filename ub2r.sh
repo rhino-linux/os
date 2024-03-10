@@ -241,18 +241,17 @@ function unicorn_flavor() {
   sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth 100
   sudo update-alternatives --set default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth
   sudo update-alternatives --set x-cursor-theme /usr/share/icons/Quintom_Ink/cursor.theme
-  echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
-  mkdir -p /home/$USER/.config/Kvantum
-  echo "theme=KvRhinoDark" >> /home/$USER/.config/Kvantum/kvantum.kvconfig
-  sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
-  (cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png)
-  rm -rf /home/$USER/.config/xfce4
-  mkdir -p /home/$USER/.config/xfce4
-  mkdir -p /home/$USER/.config/Kvantum
-  cp -r /etc/skel/.config/xfce4/* /home/$USER/.config/xfce4
-  cp -r /etc/skel/.config/Kvantum/* /home/$USER/.config/Kvantum
-  ln -s "/home/$USER/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/$USER/.config/xfce4/desktop/icons.screen.latest.rc"
-  chmod -R 777 /home/$USER/.config/xfce4
+  if ! grep kvantum /etc/environment; then
+    echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
+  fi
+  sudo mkdir -p /home/$USER/.config/Kvantum
+  echo "theme=KvRhinoDark" | sudo tee /home/$USER/.config/Kvantum/kvantum.kvconfig
+  sudo mkdir -p /home/$USER/.config/xfce4
+  sudo mkdir -p /home/$USER/.config/Kvantum
+  sudo cp -r /etc/skel/.config/xfce4/* /home/$USER/.config/xfce4
+  sudo cp -r /etc/skel/.config/Kvantum/* /home/$USER/.config/Kvantum
+  sudo ln -s "/home/$USER/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/$USER/.config/xfce4/desktop/icons.screen.latest.rc"
+  sudo chmod -R 777 /home/$USER/.config/xfce4
   sudo chown $USER -cR /home/$USER/.config
 }
 
