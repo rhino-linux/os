@@ -274,7 +274,6 @@ function select_core() {
   done
   echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Selected to install ${BPurple}${core_package}${NC}."
   sleep 2
-  echo ""
 }
 
 function select_kernel() {
@@ -360,8 +359,8 @@ if [[ ${OLD_NAME} != "Rhino Linux" ]]; then
     cleanup
     exit 1
   }
-  echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: All set! We'll do the rest. Starting in 5 seconds..."
-  sleep 5
+  echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: All set! We'll do the rest. Starting in 3 seconds..."
+  sleep 3
   if install_packages; then
     if ((${OLD_VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
       echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Removing ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC} backup..."
