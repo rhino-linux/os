@@ -364,7 +364,7 @@ echo -e "┌──────────────────────�
 
 get_releaseinfo
 echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: You may be asked to enter your password more than once."
-sleep 2
+sleep 1
 echo ""
 
 if [[ ${OLD_NAME} != "Rhino Linux" ]]; then
