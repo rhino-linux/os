@@ -30,16 +30,21 @@ fi
 
 function cleanup() {
   local sources_file
-  if [[ -f "/etc/apt/sources.list-rhino.bak" ]]; then
-    echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Returning ${CYAN}/etc/apt/sources.list${NC} backup"
-    sudo rm -f /etc/apt/sources.list.d/ubuntu.sources
-    sudo mv /etc/apt/sources.list-rhino.bak /etc/apt/sources.list
-  elif [[ -f "/etc/apt/sources.list.d/ubuntu.sources-rhino.bak" ]]; then
-    echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Returning ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC} backup"
-    sudo rm -f /etc/apt/sources.list.d/ubuntu.sources
-    sudo mv /etc/apt/sources.list.d/ubuntu.sources-rhino.bak /etc/apt/sources.list.d/ubuntu.sources
-  fi
   source /etc/os-release
+  if [[ ${NAME} != "Rhino Linux" ]]; then
+    if [[ -f "/etc/apt/sources.list-rhino.bak" ]]; then
+      echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Returning ${CYAN}/etc/apt/sources.list${NC} backup"
+      sudo rm -f /etc/apt/sources.list.d/ubuntu.sources
+      sudo mv /etc/apt/sources.list-rhino.bak /etc/apt/sources.list
+    elif [[ -f "/etc/apt/sources.list.d/ubuntu.sources-rhino.bak" ]]; then
+      echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Returning ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC} backup"
+      sudo rm -f /etc/apt/sources.list.d/ubuntu.sources
+      sudo mv /etc/apt/sources.list.d/ubuntu.sources-rhino.bak /etc/apt/sources.list.d/ubuntu.sources
+    fi
+  else
+    sudo rm -f /etc/apt/sources.list.d/ubuntu.sources-rhino.bak
+    sudo rm -f /etc/apt/sources.list-rhino.bak
+  fi
   if [[ -n ${OLD_VERSION_CODENAME} ]]; then
     if [[ ${VERSION_CODENAME} != "${OLD_VERSION_CODENAME}" && ${VERSION_CODENAME} != "devel" ]]; then
       echo "[${BYellow}⚠${NC}] ${BOLD}CRITICAL${NC}: ${BCyan}lsb_release${NC} changed during install!"
