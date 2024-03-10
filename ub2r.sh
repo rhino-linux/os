@@ -18,12 +18,10 @@ if [[ -z $NO_COLOR ]]; then
   export BWhite=$'\033[1;37m'
   export NC=$'\033[0m'
   export BOLD=$'\033[1m'
-  export CRORANGE=$'\e[38;5;196m'
   export UBORANGE=$'\e[38;5;166m'
   export RLPURPLE=$'\e[38;5;104m'
   export RMPURPLE=$'\e[38;5;98m'
   export RDPURPLE=$'\e[38;5;55m'
-  export BCrOrange=$'\e[1m\e[38;5;196m'
   export BUbOrange=$'\e[1m\e[38;5;166m'
   export BRlPurple=$'\e[1m\e[38;5;104m'
   export BRmPurple=$'\e[1m\e[38;5;98m'
@@ -44,8 +42,8 @@ function cleanup() {
   source /etc/os-release
   if [[ -n ${OLD_VERSION_CODENAME} ]]; then
     if [[ ${VERSION_CODENAME} != "${OLD_VERSION_CODENAME}" ]]; then
-      echo "[${BCrOrange}⚠${NC}] ${BOLD}CRITICAL${NC}: ${BCyan}lsb_release${NC} changed during install!"
-      echo "[${BBlue}>${NC}] Updating sources to ${BPurple}${VERSION_CODENAME}${NC} to avoid system breakage."
+      echo "[${BYellow}⚠${NC}] ${BOLD}CRITICAL${NC}: ${BCyan}lsb_release${NC} changed during install!"
+      echo "  [${BBlue}>${NC}] Updating sources to ${BPurple}${VERSION_CODENAME}${NC} to avoid system breakage."
       if [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
         sources_file="/etc/apt/sources.list.d/ubuntu.sources"
       else
@@ -70,18 +68,20 @@ function get_releaseinfo() {
     USER="$(whoami)"
   fi
   if [[ ${ID} != "ubuntu" ]]; then
-    echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: not an Ubuntu system!"
+    echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: not an Ubuntu-based system!"
     exit 1
-  elif [[ ${NAME} != "Rhino Linux" ]]; then
-    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: detected an Ubuntu system."
-    echo "[${BBlue}>${NC}] ${BOLD}NAME${NC}: ${BGreen}${OLD_NAME}${NC}"
-    echo "[${BBlue}>${NC}] ${BOLD}VERSION ID${NC}: ${BYellow}${OLD_VERSION_ID}${NC}"
-    echo "[${BBlue}>${NC}] ${BOLD}CODENAME${NC}: ${BPurple}${OLD_VERSION_CODENAME}${NC}"
-    echo "[${BBlue}>${NC}] ${BOLD}USER${NC}: ${BCyan}${USER}${NC}"
+  elif [[ ${OLD_NAME} == "Ubuntu" ]]; then
+    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: detected an ${BUbOrange}Ubuntu${NC} system."
+    echo "  [${BBlue}>${NC}] ${BOLD}VERSION ID${NC}: ${BGreen}${OLD_VERSION_ID}${NC}"
+    echo "  [${BBlue}>${NC}] ${BOLD}CODENAME${NC}: ${BPurple}${OLD_VERSION_CODENAME}${NC}"
+    echo "  [${BBlue}>${NC}] ${BOLD}USER${NC}: ${BCyan}${USER}${NC}"
+  elif [[ ${OLD_NAME} == "Rhino Linux" ]]; then
+    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: detected a ${BRmPurple}Rhino Linux${NC} system."
+    echo "  [${BBlue}>${NC}] ${BOLD}VERSION ID${NC}: ${BGreen}${OLD_VERSION_ID}${NC}"
+    echo "  [${BBlue}>${NC}] ${BOLD}USER${NC}: ${BCyan}${USER}${NC}"
   else
-    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: detected a Rhino Linux system."
-    echo "[${BBlue}>${NC}] ${BOLD}VERSION ID${NC}: ${BYellow}${OLD_VERSION_ID}${NC}"
-    echo "[${BBlue}>${NC}] ${BOLD}USER${NC}: ${BCyan}${USER}${NC}"
+    echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: not a Rhino Linux compatible system!"
+    exit 1
   fi
 }
 
@@ -182,15 +182,15 @@ function echo_repo_config() {
 function update_sources() {
   if ((${OLD_VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
     echo "[${BYellow}*${NC}] ${BOLD}WARNING${NC}: Updating ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC} entries to ${BPurple}./devel${NC}."
-    echo "[${BBlue}>${NC}] If you have any PPAs, they may break!"
-    echo "[${BBlue}>${NC}] Other sources contained in this file will be wiped."
-    echo "[${BBlue}>${NC}] A backup will be created while this script runs, and it will be restored if cancelled."
+    echo "  [${BBlue}>${NC}] If you have any PPAs, they may break!"
+    echo "  [${BBlue}>${NC}] Other sources contained in this file will be wiped."
+    echo "  [${BBlue}>${NC}] A backup will be created while this script runs, and it will be restored if cancelled."
   else
     echo "[${BYellow}*${NC}] ${BOLD}WARNING${NC}: Updating ${CYAN}/etc/apt/sources.list${NC} entries to ${BPurple}./devel${NC}."
-    echo "[${BBlue}>${NC}] If you have any PPAs, they may break!"
-    echo "[${BBlue}>${NC}] Other sources contained in this file will be wiped."
-    echo "[${BBlue}>${NC}] A backup will be created while this script runs, and it will be restored if cancelled."
-    echo "[${BBlue}>${NC}] A new deb-822 source list will be created at ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC}."
+    echo "  [${BBlue}>${NC}] If you have any PPAs, they may break!"
+    echo "  [${BBlue}>${NC}] Other sources contained in this file will be wiped."
+    echo "  [${BBlue}>${NC}] A backup will be created while this script runs, and it will be restored if cancelled."
+    echo "  [${BBlue}>${NC}] A new deb-822 source list will be created at ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC}."
   fi
   ask "[${BYellow}*${NC}] Continue?" N
   if ((answer == 0)); then
@@ -245,9 +245,9 @@ function unicorn_flavor() {
 
 function select_core() {
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Rhino Linux has three versions of our app suite. Which would you like to install?"
-  echo "[${BBlue}>${NC}] ${BOLD}1)${NC} ${BPurple}rhino-server-core${NC}: TUI tool suite w/ basic development tools"
-  echo "[${BBlue}>${NC}] ${BOLD}2)${NC} ${BPurple}rhino-ubxi-core${NC}: TUI+GUI app suite w/ GTK applications"
-  echo "[${BBlue}>${NC}] ${BOLD}3)${NC} ${BPurple}rhino-core${NC}: Full suite w/ Unicorn Desktop Environment"
+  echo "  [${BBlue}>${NC}] ${BOLD}1)${NC} ${BPurple}rhino-server-core${NC}: TUI tool suite w/ basic development tools"
+  echo "  [${BBlue}>${NC}] ${BOLD}2)${NC} ${BPurple}rhino-ubxi-core${NC}: TUI+GUI app suite w/ GTK applications"
+  echo "  [${BBlue}>${NC}] ${BOLD}3)${NC} ${BPurple}rhino-core${NC}: Full suite w/ Unicorn Desktop Environment"
   unset packages core_package
   while true; do
     read -p "[${BYellow}*${NC}] Enter your choice (${BGreen}1${NC}/${BGreen}2${NC}/${BGreen}3${NC}): " choice
@@ -275,9 +275,9 @@ function select_core() {
 
 function select_kernel() {
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Rhino Linux ships two versions of the Ubuntu mainline kernel:"
-  echo "[${BBlue}>${NC}] ${BOLD}1)${NC} ${BPurple}linux-kernel${NC}: tracks the kernel ${YELLOW}mainline${NC} branch, with versions ${CYAN}X${NC}.${CYAN}X${NC}.${CYAN}0${NC}{${CYAN}-rcX${NC}}"
-  echo "[${BBlue}>${NC}] ${BOLD}2)${NC} ${BPurple}linux-kernel-stable${NC}: tracks the kernel ${YELLOW}stable${NC} branch, with versions ${CYAN}X${NC}.(${CYAN}X-1${NC}).${CYAN}X${NC}"
-  echo "[${BBlue}>${NC}] Would you like to install either of them? You can also say ${BRed}N${NC}/${BRed}n${NC} to remain on your current kernel."
+  echo "  [${BBlue}>${NC}] ${BOLD}1)${NC} ${BPurple}linux-kernel${NC}: tracks the kernel ${YELLOW}mainline${NC} branch, with versions ${CYAN}X${NC}.${CYAN}X${NC}.${CYAN}0${NC}{${CYAN}-rcX${NC}}"
+  echo "  [${BBlue}>${NC}] ${BOLD}2)${NC} ${BPurple}linux-kernel-stable${NC}: tracks the kernel ${YELLOW}stable${NC} branch, with versions ${CYAN}X${NC}.(${CYAN}X-1${NC}).${CYAN}X${NC}"
+  echo "  [${BBlue}>${NC}] Would you like to install either of them? You can also say ${BRed}N${NC}/${BRed}n${NC} to remain on your current kernel."
   unset kern_package
   while true; do
     read -p "[${BYellow}*${NC}] Enter your choice (${BGreen}1${NC}/${BGreen}2${NC}/${BRed}N${NC}): " choice
@@ -325,9 +325,10 @@ if [[ $(whoami) == "root" ]]; then
   exit 1
 fi
 
-echo "[${BPurple}#${NC}] ${BOLD}Welcome to ub2r: A utility to convert Ubuntu to Rhino Linux${NC}"
+echo -e "┌─────────────────────────────┐\n│       Welcome to ${BRlPurple}ub2r${NC}       │\n│      A tool to convert      │\n│    ${BUbOrange}Ubuntu${NC} to ${BRmPurple}Rhino Linux${NC}    │\n└─────────────────────────────┘"
 
 get_releaseinfo
+echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: You may be asked to enter your password more than once."
 install_pacstall || exit 1
 
 if [[ ${OLD_NAME} != "Rhino Linux" ]]; then
@@ -360,7 +361,7 @@ if [[ ${OLD_NAME} != "Rhino Linux" ]]; then
     sudo rm -f /etc/apt/sources.list-rhino.bak
     neofetch --ascii_distro rhino_small
     echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Complete! You can now use ${BPurple}rhino-pkg${NC}/${BPurple}rpk${NC} to manage your packages."
-    echo "[${BBlue}>${NC}] Be sure to reboot when you are done checking it out!"
+    echo "  [${BBlue}>${NC}] Be sure to reboot when you are done checking it out!"
   else
     cleanup
     exit 1
