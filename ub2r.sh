@@ -198,11 +198,11 @@ function update_sources() {
     exit 0
   else
     if ((${OLD_VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
-      echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Creating backup of ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC}..."
+      echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Creating backup of ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC}..."
       sudo cp /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources-rhino.bak
       sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|\1./devel|g" /etc/apt/sources.list.d/ubuntu.sources
     else
-      echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Creating backup of ${CYAN}/etc/apt/sources.list${NC}..."
+      echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Creating backup of ${CYAN}/etc/apt/sources.list${NC}..."
       sudo mv /etc/apt/sources.list /etc/apt/sources.list-rhino.bak
       if [[ $(dpkg --print-architecture) == "arm64" ]]; then
         echo_repo_config "ports" "./devel" | sudo tee /etc/apt/sources.list.d/ubuntu.sources > /dev/null
@@ -213,11 +213,13 @@ function update_sources() {
       fi
     fi
   fi
+  echo ""
+  sleep 1
 }
 
 function install_pacstall() {
   if ! [[ -f "/usr/bin/pacstall" ]]; then
-    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Installing Pacstall..."
+    echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Installing Pacstall..."
     echo -e "Y\nN" | sudo bash -c "$(curl -fsSL https://pacstall.dev/q/install || wget -q https://pacstall.dev/q/install -O -)"
   fi
 }
@@ -271,6 +273,8 @@ function select_core() {
     esac
   done
   echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Selected to install ${BPurple}${core_package}${NC}."
+  echo ""
+  sleep 2
 }
 
 function select_kernel() {
@@ -302,9 +306,12 @@ function select_kernel() {
   else
     echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Will not install any new kernels."
   fi
+  echo ""
+  sleep 2
 }
 
 function install_packages() {
+  install_pacstall || exit 1
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Upgrading packages, this may take a while..."
   sudo apt-get update --allow-releaseinfo-change && sudo DEBIAN_FRONTEND=noninteractive apt-get -o "Dpkg::Options::=--force-confold" dist-upgrade -y --allow-remove-essential --allow-change-held-packages || exit 1
   if [[ ${kern_package} != "none" ]]; then
@@ -316,7 +323,7 @@ function install_packages() {
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Installing ${BPurple}${core_package}${NC} suite..."
   pacstall -PI ${packages[*]} || exit 1
   if [[ ${core_package} == "rhino-core" ]]; then
-    unicorn_flavor
+    unicorn_flavor || exit 1
   fi
 }
 
@@ -326,10 +333,13 @@ if [[ $(whoami) == "root" ]]; then
 fi
 
 echo -e "┌─────────────────────────────┐\n│       Welcome to ${BRlPurple}ub2r${NC}       │\n│      A tool to convert      │\n│    ${BUbOrange}Ubuntu${NC} to ${BRmPurple}Rhino Linux${NC}    │\n└─────────────────────────────┘"
+sleep 1
 
 get_releaseinfo
+sleep 1
 echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: You may be asked to enter your password more than once."
-install_pacstall || exit 1
+echo ""
+sleep 2
 
 if [[ ${OLD_NAME} != "Rhino Linux" ]]; then
   trap "cleanup && exit 1" EXIT
