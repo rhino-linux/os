@@ -18,6 +18,16 @@ if [[ -z $NO_COLOR ]]; then
   export BWhite=$'\033[1;37m'
   export NC=$'\033[0m'
   export BOLD=$'\033[1m'
+  export CRORANGE=$'\e[38;5;196m'
+  export UBORANGE=$'\e[38;5;166m'
+  export RLPURPLE=$'\e[38;5;104m'
+  export RMPURPLE=$'\e[38;5;98m'
+  export RDPURPLE=$'\e[38;5;55m'
+  export BCrOrange=$'\e[1m\e[38;5;196m'
+  export BUbOrange=$'\e[1m\e[38;5;166m'
+  export BRlPurple=$'\e[1m\e[38;5;104m'
+  export BRmPurple=$'\e[1m\e[38;5;98m'
+  export BRdPurple=$'\e[1m\e[38;5;55m'
 fi
 
 function cleanup() {
@@ -34,7 +44,7 @@ function cleanup() {
   source /etc/os-release
   if [[ -n ${OLD_VERSION_CODENAME} ]]; then
     if [[ ${VERSION_CODENAME} != "${OLD_VERSION_CODENAME}" ]]; then
-      echo "[${BYellow}***${NC}] ${BOLD}CRITICAL${NC}: lsb_release changed during install!"
+      echo "[${BCrOrange}⚠${NC}] ${BOLD}CRITICAL${NC}: ${BCyan}lsb_release${NC} changed during install!"
       echo "[${BBlue}>${NC}] Updating sources to ${BPurple}${VERSION_CODENAME}${NC} to avoid system breakage."
       if [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
         sources_file="/etc/apt/sources.list.d/ubuntu.sources"
@@ -44,7 +54,7 @@ function cleanup() {
       if [[ ${VERSION_CODENAME} == "devel" ]]; then
         sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|\1./devel|g" ${sources_file}
       else
-        sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|${VERSION_CODENAME}|g" ${sources_file}
+        sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|\1${VERSION_CODENAME}|g" ${sources_file}
       fi
     fi
   fi
