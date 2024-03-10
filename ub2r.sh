@@ -372,6 +372,7 @@ function install_packages() {
     elif [[ ${pkg} == "${core_package}" ]]; then
       pacstall -PI ${pkg} || exit 1
       if [[ ${pkg} == "rhino-core" ]]; then
+        sudo apt install lightdm-gtk-greeter -yq || exit 1
         unicorn_flavor || exit 1
       fi
     else
