@@ -213,8 +213,8 @@ function update_sources() {
       fi
     fi
   fi
+  sleep 2
   echo ""
-  sleep 1
 }
 
 function install_pacstall() {
@@ -273,8 +273,8 @@ function select_core() {
     esac
   done
   echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Selected to install ${BPurple}${core_package}${NC}."
-  echo ""
   sleep 2
+  echo ""
 }
 
 function select_kernel() {
@@ -306,8 +306,8 @@ function select_kernel() {
   else
     echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Will not install any new kernels."
   fi
-  echo ""
   sleep 2
+  echo ""
 }
 
 function install_packages() {
@@ -338,8 +338,8 @@ sleep 1
 get_releaseinfo
 sleep 1
 echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: You may be asked to enter your password more than once."
-echo ""
 sleep 2
+echo ""
 
 if [[ ${OLD_NAME} != "Rhino Linux" ]]; then
   trap "cleanup && exit 1" EXIT
