@@ -1,34 +1,78 @@
 #!/bin/bash
 
 declare -gx PS4=$'\E[0;10m\E[1m\033[1;31m\033[1;37m[\033[1;35m${BASH_SOURCE[0]##*/}:\033[1;34m${FUNCNAME[0]:-NOFUNC}():\033[1;33m${LINENO}\033[1;37m] - \033[1;33mDEBUG: \E[0;10m'
+shopt -s extglob
 
 # Colors
 if [[ -z $NO_COLOR ]]; then
-  export RED=$'\033[0;31m'
-  export GREEN=$'\033[0;32m'
-  export YELLOW=$'\033[0;33m'
-  export BLUE=$'\033[0;34m'
-  export PURPLE=$'\033[0;35m'
-  export CYAN=$'\033[0;36m'
-  export WHITE=$'\033[0;37m'
-  export BGreen=$'\033[1;32m'
-  export BCyan=$'\033[1;36m'
-  export BYellow=$'\033[1;33m'
-  export BBlue=$'\033[1;34m'
-  export BPurple=$'\033[1;35m'
-  export BRed=$'\033[1;31m'
-  export BWhite=$'\033[1;37m'
-  export NC=$'\033[0m'
-  export BOLD=$'\033[1m'
-  export UBORANGE=$'\e[38;5;166m'
-  export RLPURPLE=$'\e[38;5;104m'
-  export RMPURPLE=$'\e[38;5;98m'
-  export RDPURPLE=$'\e[38;5;55m'
-  export BUbOrange=$'\e[1m\e[38;5;166m'
-  export BRlPurple=$'\e[1m\e[38;5;104m'
-  export BRmPurple=$'\e[1m\e[38;5;98m'
-  export BRdPurple=$'\e[1m\e[38;5;55m'
+  RED=$'\033[0;31m'
+  GREEN=$'\033[0;32m'
+  YELLOW=$'\033[0;33m'
+  BLUE=$'\033[0;34m'
+  PURPLE=$'\033[0;35m'
+  CYAN=$'\033[0;36m'
+  WHITE=$'\033[0;37m'
+  BGreen=$'\033[1;32m'
+  BCyan=$'\033[1;36m'
+  BYellow=$'\033[1;33m'
+  BBlue=$'\033[1;34m'
+  BPurple=$'\033[1;35m'
+  BRed=$'\033[1;31m'
+  BWhite=$'\033[1;37m'
+  NC=$'\033[0m'
+  BOLD=$'\033[1m'
+  UBORANGE=$'\e[38;5;166m'
+  RLPURPLE=$'\e[38;5;104m'
+  RMPURPLE=$'\e[38;5;98m'
+  RDPURPLE=$'\e[38;5;55m'
+  BUbOrange=$'\e[1m\e[38;5;166m'
+  BRlPurple=$'\e[1m\e[38;5;104m'
+  BRmPurple=$'\e[1m\e[38;5;98m'
+  BRdPurple=$'\e[1m\e[38;5;55m'
 fi
+
+function echo_repo_config() {
+  local uri_source="$1" suite="$2" sec="$3" selected_uri_dir="ubuntu" architectures
+  case "$uri_source" in
+    ports)
+      selected_uri_source="ports"
+      architectures="amd64 i386"
+      selected_uri_dir="ubuntu-ports"
+      ;;
+    archive)
+      selected_uri_source="archive"
+      architectures="arm64"
+      ;;
+    security)
+      selected_uri_source="security"
+      architectures="arm64"
+      ;;
+    *)
+      return 1
+    ;;
+  esac
+  echo "Types: deb"
+  echo "URIs: http://${selected_uri_source}.ubuntu.com/${selected_uri_dir}/"
+  if [[ ${sec} == "security" ]]; then
+    echo "Suites: ${suite}-security"
+  else
+    echo "Suites: ${suite} ${suite}-updates ${suite}-backports"
+  fi
+  echo "Components: main universe restricted multiverse"
+  echo "Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg"
+  echo "Architectures-Remove: ${architectures}"
+  echo ""
+}
+
+function generate_sources() {
+  if [[ $(dpkg --print-architecture) == "arm64" ]]; then
+    echo_repo_config "ports" "./devel" | sudo tee /etc/apt/sources.list.d/ubuntu.sources > /dev/null
+    echo_repo_config "ports" "./devel" "security" | sudo tee -a /etc/apt/sources.list.d/ubuntu.sources > /dev/null
+  else
+    echo_repo_config "archive" "./devel" | sudo tee /etc/apt/sources.list.d/ubuntu.sources > /dev/null
+    echo_repo_config "security" "./devel" "security" | sudo tee -a /etc/apt/sources.list.d/ubuntu.sources > /dev/null
+  fi
+}
 
 function cleanup() {
   local sources_file sources_bak
@@ -41,7 +85,7 @@ function cleanup() {
   else
     unset sources_file sources_bak
   fi
-  source /etc/os-release
+  source /etc/os-release && \
   if [[ ${NAME} != "Rhino Linux" ]]; then
     if [[ -n "${sources_bak}" ]]; then
       echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Returning ${CYAN}${sources_file}${NC} backup..."
@@ -66,19 +110,35 @@ function cleanup() {
       echo "  [${BBlue}>${NC}] You should select the same options; a fast track will be provided."
       echo "  [${BBlue}>${NC}] Removing ${CYAN}${sources_file}${NC} backup to avoid system breakage."
       sudo rm -f "${sources_bak}"
+      if ! grep devel /etc/apt/sources.list.d/ubuntu.sources; then
+        generate_sources
+      fi
     fi
+  fi
+}
+
+function test_compat() {
+  local devarch
+  if [[ -z $USER ]]; then
+    export USER="$(whoami)"
+  fi
+  if [[ ${USER} == "root" ]]; then
+    echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: ${BRmPurple}ub2r${NC} cannot be run as root!"
+    exit 1
+  fi
+  devarch=${HOSTTYPE}
+  if ! [[ ${devarch} == @(aarch64|arm64|x86_64|amd64) ]]; then
+    echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: Rhino Linux only supports ${BCyan}amd64${NC} + ${BCyan}arm64${NC} as base architectures!"
+    exit 1
   fi
 }
 
 function get_releaseinfo() {
   unset OLD_VERSION_CODENAME OLD_VERSION_ID OLD_NAME
-  source /etc/os-release
+  source /etc/os-release && \
   OLD_VERSION_CODENAME="${VERSION_CODENAME}"
   OLD_VERSION_ID="${VERSION_ID}"
   OLD_NAME="${NAME}"
-  if [[ -z $USER ]]; then
-    USER="$(whoami)"
-  fi
   if [[ ${ID} != "ubuntu" ]]; then
     echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: not an ${BUbOrange}Ubuntu${NC}-based system!"
     exit 1
@@ -158,39 +218,6 @@ function ask() {
   done
 }
 
-function echo_repo_config() {
-  local uri_source="$1" suite="$2" sec="$3" selected_uri_dir="ubuntu" architectures
-  case "$uri_source" in
-    ports)
-      selected_uri_source="ports"
-      architectures="amd64 i386"
-      selected_uri_dir="ubuntu-ports"
-      ;;
-    archive)
-      selected_uri_source="archive"
-      architectures="arm64"
-      ;;
-    security)
-      selected_uri_source="security"
-      architectures="arm64"
-      ;;
-    *)
-      return 1
-    ;;
-  esac
-  echo "Types: deb"
-  echo "URIs: http://${selected_uri_source}.ubuntu.com/${selected_uri_dir}/"
-  if [[ ${sec} == "security" ]]; then
-    echo "Suites: ${suite}-security"
-  else
-    echo "Suites: ${suite} ${suite}-updates ${suite}-backports"
-  fi
-  echo "Components: main universe restricted multiverse"
-  echo "Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg"
-  echo "Architectures-Remove: ${architectures}"
-  echo ""
-}
-
 function update_sources() {
   if ((${OLD_VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
     echo "[${BYellow}*${NC}] ${BOLD}WARNING${NC}: Updating ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC} entries to ${BPurple}./devel${NC}."
@@ -216,13 +243,7 @@ function update_sources() {
     else
       echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Creating backup of ${CYAN}/etc/apt/sources.list${NC}..."
       sudo mv /etc/apt/sources.list /etc/apt/sources.list-rhino.bak
-      if [[ $(dpkg --print-architecture) == "arm64" ]]; then
-        echo_repo_config "ports" "./devel" | sudo tee /etc/apt/sources.list.d/ubuntu.sources > /dev/null
-        echo_repo_config "ports" "./devel" "security" | sudo tee -a /etc/apt/sources.list.d/ubuntu.sources > /dev/null
-      else
-        echo_repo_config "archive" "./devel" | sudo tee /etc/apt/sources.list.d/ubuntu.sources > /dev/null
-        echo_repo_config "security" "./devel" "security" | sudo tee -a /etc/apt/sources.list.d/ubuntu.sources > /dev/null
-      fi
+      generate_sources
     fi
   fi
   echo ""
@@ -353,10 +374,7 @@ function install_packages() {
   done
 }
 
-if [[ $(whoami) == "root" ]]; then
-  echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: ${BRlPurple}ub2r${NC} cannot be run as root!"
-  exit 1
-fi
+test_compat
 
 echo -e "${RDPURPLE}┌─────────────────────────────┐\n│${NC}       Welcome to ${BRlPurple}ub2r${NC}       ${RDPURPLE}│\n│${NC}      A tool to convert      ${RDPURPLE}│\n│${NC}    ${BUbOrange}Ubuntu${NC} to ${BRmPurple}Rhino Linux${NC}    ${RDPURPLE}│\n└─────────────────────────────┘${NC}"
 
