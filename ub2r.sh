@@ -41,7 +41,7 @@ function cleanup() {
   fi
   source /etc/os-release
   if [[ -n ${OLD_VERSION_CODENAME} ]]; then
-    if [[ ${VERSION_CODENAME} != "${OLD_VERSION_CODENAME}" ]]; then
+    if [[ ${VERSION_CODENAME} != "${OLD_VERSION_CODENAME}" && ${VERSION_CODENAME} != "devel" ]]; then
       echo "[${BYellow}⚠${NC}] ${BOLD}CRITICAL${NC}: ${BCyan}lsb_release${NC} changed during install!"
       echo "  [${BBlue}>${NC}] Updating sources to ${BPurple}${VERSION_CODENAME}${NC} to avoid system breakage."
       if [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
