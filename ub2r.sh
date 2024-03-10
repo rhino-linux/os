@@ -106,11 +106,11 @@ function cleanup() {
   else
     if [[ -n "${sources_bak}" ]]; then
       echo "[${BYellow}⚠${NC}] ${BOLD}CRITICAL${NC}: script exited, but ${BRmPurple}Rhino Linux${NC} appears to be installed."
-      echo "  [${BBlue}>${NC}] Configuration likely incomplete. It is highly recommended to re-run this script."
-      echo "  [${BBlue}>${NC}] You should select the same options; a fast track will be provided."
+      echo "  [${BBlue}>${NC}] Configuration likely incomplete. It is ${BOLD}highly${NC} recommended to re-run this script."
+      echo "  [${BBlue}>${NC}] You should select the same options. A fast track will be provided."
       echo "  [${BBlue}>${NC}] Removing ${CYAN}${sources_file}${NC} backup to avoid system breakage."
       sudo rm -f "${sources_bak}"
-      if ! grep devel /etc/apt/sources.list.d/ubuntu.sources; then
+      if ! grep devel /etc/apt/sources.list.d/ubuntu.sources >> /dev/null; then
         generate_sources
       fi
     fi
@@ -262,16 +262,18 @@ function unicorn_flavor() {
   sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth 100
   sudo update-alternatives --set default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth
   sudo update-alternatives --set x-cursor-theme /usr/share/icons/Quintom_Ink/cursor.theme
-  if ! grep kvantum /etc/environment; then
+  if ! grep kvantum /etc/environment >> /dev/null; then
     echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
   fi
   sudo mkdir -p /home/$USER/.config/Kvantum
-  echo "theme=KvRhinoDark" | sudo tee /home/$USER/.config/Kvantum/kvantum.kvconfig
+  echo "theme=KvRhinoDark" | sudo tee /home/$USER/.config/Kvantum/kvantum.kvconfig > /dev/null
   sudo mkdir -p /home/$USER/.config/xfce4
   sudo mkdir -p /home/$USER/.config/Kvantum
   sudo cp -r /etc/skel/.config/xfce4/* /home/$USER/.config/xfce4
   sudo cp -r /etc/skel/.config/Kvantum/* /home/$USER/.config/Kvantum
-  sudo ln -s "/home/$USER/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/$USER/.config/xfce4/desktop/icons.screen.latest.rc"
+  if ![[ -f "/home/$USER/.config/xfce4/desktop/icons.screen.latest.rc" ]]; then
+    sudo ln -s "/home/$USER/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/$USER/.config/xfce4/desktop/icons.screen.latest.rc"
+  fi
   sudo chmod -R 777 /home/$USER/.config/xfce4
   sudo chown $USER -cR /home/$USER/.config
 }
