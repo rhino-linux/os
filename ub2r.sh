@@ -43,7 +43,7 @@ function cleanup() {
     if [[ ${VERSION_CODENAME} == "devel" ]]; then
       sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|\1./devel|g" ${sources_file}
     else
-      sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|\1${VERSION_CODENAME}|g" ${sources_file}
+      sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|${VERSION_CODENAME}|g" ${sources_file}
     fi
   fi
 }
