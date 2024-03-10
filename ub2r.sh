@@ -225,7 +225,6 @@ function update_sources() {
       fi
     fi
   fi
-  sleep 2
   echo ""
 }
 
