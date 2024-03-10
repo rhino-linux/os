@@ -271,7 +271,7 @@ function unicorn_flavor() {
   sudo mkdir -p /home/$USER/.config/Kvantum
   sudo cp -r /etc/skel/.config/xfce4/* /home/$USER/.config/xfce4
   sudo cp -r /etc/skel/.config/Kvantum/* /home/$USER/.config/Kvantum
-  if ![[ -f "/home/$USER/.config/xfce4/desktop/icons.screen.latest.rc" ]]; then
+  if ! [[ -f "/home/$USER/.config/xfce4/desktop/icons.screen.latest.rc" ]]; then
     sudo ln -s "/home/$USER/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/$USER/.config/xfce4/desktop/icons.screen.latest.rc"
   fi
   sudo chmod -R 777 /home/$USER/.config/xfce4
