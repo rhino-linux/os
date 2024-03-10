@@ -344,7 +344,7 @@ function install_packages() {
   fi
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Installing ${BPurple}${core_package}${NC} suite..."
   for pkg in "${packages[@]}"; do
-    if ! is_package_installed "${i}"; then
+    if ! is_package_installed "${pkg}"; then
       pacstall -PI ${pkg} || exit 1
     elif [[ ${pkg} == "${core_package}" ]]; then
       pacstall -PI ${pkg} || exit 1
