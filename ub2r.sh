@@ -80,7 +80,7 @@ function get_releaseinfo() {
     USER="$(whoami)"
   fi
   if [[ ${ID} != "ubuntu" ]]; then
-    echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: not an Ubuntu-based system!"
+    echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: not an ${BUbOrange}Ubuntu${NC}-based system!"
     exit 1
   elif [[ ${OLD_NAME} == "Ubuntu" ]]; then
     echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: detected an ${BUbOrange}Ubuntu${NC} system."
@@ -92,7 +92,7 @@ function get_releaseinfo() {
     echo "  [${BBlue}>${NC}] ${BOLD}VERSION ID${NC}: ${BYellow}${OLD_VERSION_ID}${NC}"
     echo "  [${BBlue}>${NC}] ${BOLD}USER${NC}: ${BCyan}${USER}${NC}"
   else
-    echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: not a Rhino Linux compatible system!"
+    echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: not a ${BRlPurple}Rhino Linux${NC} compatible system!"
     exit 1
   fi
 }
@@ -355,7 +355,7 @@ function install_packages() {
 }
 
 if [[ $(whoami) == "root" ]]; then
-  echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: ub2r cannot be run as root!"
+  echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: ${BRlPurple}ub2r${NC} cannot be run as root!"
   exit 1
 fi
 
@@ -396,7 +396,7 @@ if [[ ${OLD_NAME} != "Rhino Linux" ]]; then
     fi
     sudo rm -f /etc/apt/sources.list-rhino.bak
     neofetch --ascii_distro rhino_small
-    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Complete! You can now use ${BPurple}rhino-pkg${NC}/${BPurple}rpk${NC} to manage your packages."
+    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: ${BGreen}Finished${NC}! You can now use ${BRmPurple}rhino-pkg${NC}/${BRlPurple}rpk${NC} to manage your packages."
     echo "  [${BBlue}>${NC}] Be sure to reboot when you are done checking it out!"
   else
     cleanup
@@ -419,7 +419,7 @@ else
     sleep 3
     echo ""
     if install_packages; then
-      echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Complete! Be sure to reboot if you installed any new kernels."
+      echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: ${BGreen}Finished${NC}! Be sure to reboot if you installed any new kernels."
     else
       exit 1
     fi
