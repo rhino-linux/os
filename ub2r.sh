@@ -359,7 +359,7 @@ if [[ $(whoami) == "root" ]]; then
   exit 1
 fi
 
-echo -e "┌─────────────────────────────┐\n│       Welcome to ${BRlPurple}ub2r${NC}       │\n│      A tool to convert      │\n│    ${BUbOrange}Ubuntu${NC} to ${BRmPurple}Rhino Linux${NC}    │\n└─────────────────────────────┘"
+echo -e "${RDPURPLE}┌─────────────────────────────┐\n│${NC}       Welcome to ${BRlPurple}ub2r${NC}       ${RDPURPLE}│\n│${NC}      A tool to convert      ${RDPURPLE}│\n│${NC}    ${BUbOrange}Ubuntu${NC} to ${BRmPurple}Rhino Linux${NC}    ${RDPURPLE}│\n└─────────────────────────────┘${NC}"
 
 get_releaseinfo
 echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: You may be asked to enter your password more than once."
