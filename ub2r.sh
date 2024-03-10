@@ -21,6 +21,7 @@ if [[ -z $NO_COLOR ]]; then
 fi
 
 function cleanup() {
+  local sources_file
   if [[ -f "/etc/apt/sources.list-rhino.bak" ]]; then
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Returning ${CYAN}/etc/apt/sources.list${NC} backup"
     sudo rm -f /etc/apt/sources.list.d/ubuntu.sources
@@ -30,15 +31,41 @@ function cleanup() {
     sudo rm -f /etc/apt/sources.list.d/ubuntu.sources
     sudo mv /etc/apt/sources.list.d/ubuntu.sources-rhino.bak /etc/apt/sources.list.d/ubuntu.sources
   fi
+  source /etc/os-release
+  if [[ ${VERSION_CODENAME} != "${OLD_VERSION_CODENAME}" ]]; then
+    echo "[${BYellow}***${NC}] ${BOLD}CRITICAL${NC}: lsb_release changed during install!"
+    echo "[${BBlue}>${NC}] Updating sources to ${BPurple}${VERSION_CODENAME}${NC} to avoid system breakage."
+    if [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
+      sources_file="/etc/apt/sources.list.d/ubuntu.sources"
+    else
+      sources_file="/etc/apt/sources.list"
+    fi
+    if [[ ${VERSION_CODENAME} == "devel" ]]; then
+      sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|\1./devel|g" ${sources_file}
+    else
+      sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|(\s)${VERSION_CODENAME}|g" ${sources_file}
+    fi
+  fi
 }
 
 function get_releaseinfo() {
+  unset OLD_VERSION_CODENAME OLD_VERSION_ID OLD_NAME
   source /etc/os-release
+  OLD_VERSION_CODENAME="${VERSION_CODENAME}"
+  OLD_VERSION_ID="${VERSION_ID}"
+  OLD_NAME="${NAME}"
+  if [[ -z $USER ]]; then
+    USER="$(whoami)"
+  fi
   if [[ ${ID} != "ubuntu" ]]; then
     echo "[${BRed}!${NC}] ${BOLD}ERROR${NC}: not an Ubuntu system!"
     exit 1
   elif [[ ${NAME} != "Rhino Linux" ]]; then
-    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: detected Ubuntu ${BPurple}${VERSION_CODENAME}${NC} system."
+    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: detected an Ubuntu system."
+    echo "[${BBlue}>${NC}] ${BOLD}NAME${NC}: ${BGreen}${OLD_NAME}${NC}"
+    echo "[${BBlue}>${NC}] ${BOLD}VERSION ID${NC}: ${BYellow}${OLD_VERSION_ID}${NC}"
+    echo "[${BBlue}>${NC}] ${BOLD}CODENAME${NC}: ${BPurple}${OLD_VERSION_CODENAME}${NC}"
+    echo "[${BBlue}>${NC}] ${BOLD}USER${NC}: ${BCyan}${USER}${NC}"
   fi
 }
 
@@ -137,7 +164,7 @@ function echo_repo_config() {
 }
 
 function update_sources() {
-  if ((${VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
+  if ((${OLD_VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
     echo "[${BYellow}*${NC}] ${BOLD}WARNING${NC}: Updating ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC} entries to ${BPurple}./devel${NC}."
     echo "[${BBlue}>${NC}] If you have any PPAs, they may break!"
     echo "[${BBlue}>${NC}] Other sources contained in this file will be wiped."
@@ -154,10 +181,10 @@ function update_sources() {
     echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: No changes made. Exiting..."
     exit 0
   else
-    if ((${VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
+    if ((${OLD_VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
       echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Creating backup of ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC}..."
       sudo cp /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources-rhino.bak
-      sudo sed -i -E "s|(\s)${VERSION_CODENAME}|\1./devel|g" /etc/apt/sources.list.d/ubuntu.sources
+      sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|\1./devel|g" /etc/apt/sources.list.d/ubuntu.sources
     else
       echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Creating backup of ${CYAN}/etc/apt/sources.list${NC}..."
       sudo mv /etc/apt/sources.list /etc/apt/sources.list-rhino.bak
@@ -287,7 +314,7 @@ echo "[${BPurple}#${NC}] ${BOLD}Welcome to ub2r: A utility to convert Ubuntu to 
 get_releaseinfo
 install_pacstall || exit 1
 
-if [[ ${NAME} != "Rhino Linux" ]]; then
+if [[ ${OLD_NAME} != "Rhino Linux" ]]; then
   trap "cleanup && exit 1" EXIT
   trap "cleanup && exit 1" INT
   update_sources || {
@@ -309,7 +336,7 @@ if [[ ${NAME} != "Rhino Linux" ]]; then
   echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: All set! We'll do the rest. Starting in 5 seconds..."
   sleep 5
   if install_packages; then
-    if ((${VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
+    if ((${OLD_VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
       echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Removing ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC} backup..."
     else
       echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Removing ${CYAN}/etc/apt/sources.list${NC} backup..."
