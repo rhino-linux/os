@@ -66,6 +66,10 @@ function get_releaseinfo() {
     echo "[${BBlue}>${NC}] ${BOLD}VERSION ID${NC}: ${BYellow}${OLD_VERSION_ID}${NC}"
     echo "[${BBlue}>${NC}] ${BOLD}CODENAME${NC}: ${BPurple}${OLD_VERSION_CODENAME}${NC}"
     echo "[${BBlue}>${NC}] ${BOLD}USER${NC}: ${BCyan}${USER}${NC}"
+  else
+    echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: detected a Rhino Linux system."
+    echo "[${BBlue}>${NC}] ${BOLD}VERSION ID${NC}: ${BYellow}${OLD_VERSION_ID}${NC}"
+    echo "[${BBlue}>${NC}] ${BOLD}USER${NC}: ${BCyan}${USER}${NC}"
   fi
 }
 
