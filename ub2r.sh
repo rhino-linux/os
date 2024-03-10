@@ -105,7 +105,7 @@ function cleanup() {
     fi
   else
     if [[ -n "${sources_bak}" ]]; then
-      echo "[${BYellow}⚠${NC}] ${BOLD}CRITICAL${NC}: script exited, but ${BRlPurple}Rhino Linux${NC} appears to be installed."
+      echo "[${BYellow}⚠${NC}] ${BOLD}CRITICAL${NC}: script exited, but ${BRmPurple}Rhino Linux${NC} appears to be installed."
       echo "  [${BBlue}>${NC}] Configuration likely incomplete. It is highly recommended to re-run this script."
       echo "  [${BBlue}>${NC}] You should select the same options; a fast track will be provided."
       echo "  [${BBlue}>${NC}] Removing ${CYAN}${sources_file}${NC} backup to avoid system breakage."
@@ -375,9 +375,7 @@ function install_packages() {
 }
 
 test_compat
-
 echo -e "${RDPURPLE}┌─────────────────────────────┐\n│${NC}       Welcome to ${BRlPurple}ub2r${NC}       ${RDPURPLE}│\n│${NC}      A tool to convert      ${RDPURPLE}│\n│${NC}    ${BUbOrange}Ubuntu${NC} to ${BRmPurple}Rhino Linux${NC}    ${RDPURPLE}│\n└─────────────────────────────┘${NC}"
-
 get_releaseinfo
 echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: You may be asked to enter your password more than once."
 sleep 1
