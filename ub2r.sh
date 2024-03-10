@@ -266,8 +266,10 @@ function unicorn_flavor() {
     echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
   fi
   if ! [[ -f /etc/lightdm/rhino-blur.png ]]; then
-    sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
-    (cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png)
+    sudo rm -f /etc/lightdm/lightdm-gtk-greeter.conf
+    (cd /etc/lightdm/ && \
+    sudo wget -q https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && \
+    sudo wget -q https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png)
   fi
   sudo mkdir -p /home/$USER/.config/Kvantum
   echo "theme=KvRhinoDark" | sudo tee /home/$USER/.config/Kvantum/kvantum.kvconfig > /dev/null
@@ -442,6 +444,7 @@ else
     sleep 3
     echo ""
     if install_packages; then
+      neofetch --ascii_distro rhino_small
       echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: ${BGreen}Finished${NC}! Be sure to reboot if you installed any new kernels."
     else
       exit 1
