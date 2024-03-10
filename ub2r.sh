@@ -265,6 +265,10 @@ function unicorn_flavor() {
   if ! grep kvantum /etc/environment >> /dev/null; then
     echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
   fi
+  if ! [[ -f /etc/lightdm/rhino-blur.png ]]; then
+    sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
+    (cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png)
+  fi
   sudo mkdir -p /home/$USER/.config/Kvantum
   echo "theme=KvRhinoDark" | sudo tee /home/$USER/.config/Kvantum/kvantum.kvconfig > /dev/null
   sudo mkdir -p /home/$USER/.config/xfce4
