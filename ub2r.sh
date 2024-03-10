@@ -32,18 +32,20 @@ function cleanup() {
     sudo mv /etc/apt/sources.list.d/ubuntu.sources-rhino.bak /etc/apt/sources.list.d/ubuntu.sources
   fi
   source /etc/os-release
-  if [[ ${VERSION_CODENAME} != "${OLD_VERSION_CODENAME}" ]]; then
-    echo "[${BYellow}***${NC}] ${BOLD}CRITICAL${NC}: lsb_release changed during install!"
-    echo "[${BBlue}>${NC}] Updating sources to ${BPurple}${VERSION_CODENAME}${NC} to avoid system breakage."
-    if [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
-      sources_file="/etc/apt/sources.list.d/ubuntu.sources"
-    else
-      sources_file="/etc/apt/sources.list"
-    fi
-    if [[ ${VERSION_CODENAME} == "devel" ]]; then
-      sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|\1./devel|g" ${sources_file}
-    else
-      sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|${VERSION_CODENAME}|g" ${sources_file}
+  if [[ -n ${OLD_VERSION_CODENAME} ]]; then
+    if [[ ${VERSION_CODENAME} != "${OLD_VERSION_CODENAME}" ]]; then
+      echo "[${BYellow}***${NC}] ${BOLD}CRITICAL${NC}: lsb_release changed during install!"
+      echo "[${BBlue}>${NC}] Updating sources to ${BPurple}${VERSION_CODENAME}${NC} to avoid system breakage."
+      if [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
+        sources_file="/etc/apt/sources.list.d/ubuntu.sources"
+      else
+        sources_file="/etc/apt/sources.list"
+      fi
+      if [[ ${VERSION_CODENAME} == "devel" ]]; then
+        sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|\1./devel|g" ${sources_file}
+      else
+        sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|${VERSION_CODENAME}|g" ${sources_file}
+      fi
     fi
   fi
 }
