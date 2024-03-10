@@ -29,36 +29,41 @@ if [[ -z $NO_COLOR ]]; then
 fi
 
 function cleanup() {
-  local sources_file
+  local sources_file sources_bak
+  if [[ -f "/etc/apt/sources.list.d/ubuntu.sources-rhino.bak" ]]; then
+    sources_file="/etc/apt/sources.list.d/ubuntu.sources"
+    sources_bak="${sources_file}-rhino.bak"
+  elif [[ -f "/etc/apt/sources.list-rhino.bak" ]]; then
+    sources_file="/etc/apt/sources.list"
+    sources_bak="${sources_file}-rhino.bak"
+  else
+    unset sources_file sources_bak
+  fi
   source /etc/os-release
   if [[ ${NAME} != "Rhino Linux" ]]; then
-    if [[ -f "/etc/apt/sources.list-rhino.bak" ]]; then
-      echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Returning ${CYAN}/etc/apt/sources.list${NC} backup"
-      sudo rm -f /etc/apt/sources.list.d/ubuntu.sources
-      sudo mv /etc/apt/sources.list-rhino.bak /etc/apt/sources.list
-    elif [[ -f "/etc/apt/sources.list.d/ubuntu.sources-rhino.bak" ]]; then
-      echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Returning ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC} backup"
-      sudo rm -f /etc/apt/sources.list.d/ubuntu.sources
-      sudo mv /etc/apt/sources.list.d/ubuntu.sources-rhino.bak /etc/apt/sources.list.d/ubuntu.sources
+    if [[ -n "${sources_bak}" ]]; then
+      echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Returning ${CYAN}${sources_file}${NC} backup..."
+      sudo rm -f "${sources_file}"
+      sudo mv "${sources_bak}" "${sources_file}"
+    fi
+    if [[ -n ${OLD_VERSION_CODENAME} ]]; then
+      if [[ ${VERSION_CODENAME} != "${OLD_VERSION_CODENAME}" ]]; then
+        echo "[${BYellow}⚠${NC}] ${BOLD}CRITICAL${NC}: ${BCyan}lsb_release${NC} changed during install!"
+        echo "  [${BBlue}>${NC}] Updating ${CYAN}${sources_file}${NC} entries to ${BPurple}${VERSION_CODENAME}${NC} to avoid system breakage."
+        if [[ ${VERSION_CODENAME} == "devel" ]]; then
+          sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|\1./devel|g" ${sources_file}
+        else
+          sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|\1${VERSION_CODENAME}|g" ${sources_file}
+        fi
+      fi
     fi
   else
-    sudo rm -f /etc/apt/sources.list.d/ubuntu.sources-rhino.bak
-    sudo rm -f /etc/apt/sources.list-rhino.bak
-  fi
-  if [[ -n ${OLD_VERSION_CODENAME} ]]; then
-    if [[ ${VERSION_CODENAME} != "${OLD_VERSION_CODENAME}" && ${VERSION_CODENAME} != "devel" ]]; then
-      echo "[${BYellow}⚠${NC}] ${BOLD}CRITICAL${NC}: ${BCyan}lsb_release${NC} changed during install!"
-      echo "  [${BBlue}>${NC}] Updating sources to ${BPurple}${VERSION_CODENAME}${NC} to avoid system breakage."
-      if [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
-        sources_file="/etc/apt/sources.list.d/ubuntu.sources"
-      else
-        sources_file="/etc/apt/sources.list"
-      fi
-      if [[ ${VERSION_CODENAME} == "devel" ]]; then
-        sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|\1./devel|g" ${sources_file}
-      else
-        sudo sed -i -E "s|(\s)${OLD_VERSION_CODENAME}|\1${VERSION_CODENAME}|g" ${sources_file}
-      fi
+    if [[ -n "${sources_bak}" ]]; then
+      echo "[${BYellow}⚠${NC}] ${BOLD}CRITICAL${NC}: script exited, but ${BRlPurple}Rhino Linux${NC} appears to be installed."
+      echo "  [${BBlue}>${NC}] Configuration likely incomplete. It is highly recommended to re-run this script."
+      echo "  [${BBlue}>${NC}] You should select the same options; a fast track will be provided."
+      echo "  [${BBlue}>${NC}] Removing ${CYAN}${sources_file}${NC} backup to avoid system breakage."
+      sudo rm -f "${sources_bak}"
     fi
   fi
 }
@@ -314,7 +319,18 @@ function select_kernel() {
   echo ""
 }
 
+function is_package_installed() {
+    local input="${1}"
+    while read -r line; do
+        if [[ ${line} == "${input}" ]]; then
+            return 0
+        fi
+    done < <(pacstall -L)
+    return 1
+}
+
 function install_packages() {
+  local pkg
   install_pacstall || exit 1
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Upgrading packages, this may take a while..."
   sudo apt-get update --allow-releaseinfo-change && sudo DEBIAN_FRONTEND=noninteractive apt-get -o "Dpkg::Options::=--force-confold" dist-upgrade -y --allow-remove-essential --allow-change-held-packages || exit 1
@@ -325,10 +341,18 @@ function install_packages() {
     echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Not installing any kernels."
   fi
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Installing ${BPurple}${core_package}${NC} suite..."
-  pacstall -PI ${packages[*]} || exit 1
-  if [[ ${core_package} == "rhino-core" ]]; then
-    unicorn_flavor || exit 1
-  fi
+  for pkg in "${packages[@]}"; do
+    if ! is_package_installed "${i}"; then
+      pacstall -PI ${pkg} || exit 1
+    elif [[ ${pkg} == "${core_package}" ]]; then
+      pacstall -PI ${pkg} || exit 1
+      if [[ ${pkg} == "rhino-core" ]]; then
+        unicorn_flavor || exit 1
+      fi
+    else
+      echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: ${BPurple}${pkg}${NC} is already installed."
+    fi
+  done
 }
 
 if [[ $(whoami) == "root" ]]; then
