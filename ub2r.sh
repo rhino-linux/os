@@ -285,7 +285,6 @@ function select_core() {
     esac
   done
   echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Selected to install ${BPurple}${core_package}${NC}."
-  sleep 2
 }
 
 function select_kernel() {
@@ -317,7 +316,6 @@ function select_kernel() {
   else
     echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: Will not install any new kernels."
   fi
-  sleep 2
   echo ""
 }
 
@@ -363,10 +361,8 @@ if [[ $(whoami) == "root" ]]; then
 fi
 
 echo -e "┌─────────────────────────────┐\n│       Welcome to ${BRlPurple}ub2r${NC}       │\n│      A tool to convert      │\n│    ${BUbOrange}Ubuntu${NC} to ${BRmPurple}Rhino Linux${NC}    │\n└─────────────────────────────┘"
-sleep 1
 
 get_releaseinfo
-sleep 1
 echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: You may be asked to enter your password more than once."
 sleep 2
 echo ""
