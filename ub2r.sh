@@ -91,6 +91,9 @@ function cleanup() {
       echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Returning ${CYAN}${sources_file}${NC} backup..."
       sudo rm -f "${sources_file}"
       sudo mv "${sources_bak}" "${sources_file}"
+      if [[ ${sources_file} == "/etc/apt/sources.list" ]]; then
+        sudo rm -f /etc/apt/sources.list.d/ubuntu.sources
+      fi
     fi
     if [[ -n ${OLD_VERSION_CODENAME} ]]; then
       if [[ ${VERSION_CODENAME} != "${OLD_VERSION_CODENAME}" ]]; then
