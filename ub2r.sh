@@ -416,7 +416,7 @@ if [[ ${OLD_NAME} != "Rhino Linux" ]]; then
   sleep 3
   echo ""
   if install_packages; then
-    if ((${OLD_VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
+    if ((${OLD_VERSION_ID%%.*} >= 24)) && [[ -f /etc/apt/sources.list.d/ubuntu.sources-rhino.bak ]]; then
       echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Removing ${CYAN}/etc/apt/sources.list.d/ubuntu.sources${NC} backup..."
       sudo rm -f /etc/apt/sources.list.d/ubuntu.sources-rhino.bak
     else
