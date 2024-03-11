@@ -372,15 +372,14 @@ function install_packages() {
   fi
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Installing ${BPurple}${core_package}${NC} suite..."
   for pkg in "${packages[@]}"; do
-    if ! is_package_installed "${pkg}"; then
+    if [[ ${pkg} == "${core_package}" ]]; then
       pacstall -PI ${pkg} || exit 1
-    elif [[ ${pkg} == "${core_package}" ]]; then
-      pacstall -PI ${pkg} \
-      && if [[ ${core_package} == "rhino-core" ]]; then
+      if [[ ${pkg} == "rhino-core" ]]; then
         sudo apt install lightdm-gtk-greeter -yq || exit 1
         unicorn_flavor || exit 1
-      fi \
-      || exit 1
+      fi
+    elif ! is_package_installed "${pkg}"; then
+      pacstall -PI ${pkg} || exit 1
     else
       echo "[${BGreen}+${NC}] ${BOLD}INFO${NC}: ${BPurple}${pkg}${NC} is already installed."
     fi
