@@ -13,7 +13,7 @@ jobs:
       run: |
         sudo rm -rf /var/lib/apt/lists/*
         sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
-        sudo apt-get update && sudo apt-get install --reinstall debootstrap -y
+        sudo apt-get update && sudo apt-get install --reinstall debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-deb -y
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
         sudo mv /usr/share/debootstrap/functions functions
@@ -43,7 +43,7 @@ jobs:
       run: |
         sudo rm -rf /var/lib/apt/lists/*
         sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
-        sudo apt-get update && sudo apt-get install --reinstall debootstrap -y
+        sudo apt-get update && sudo apt-get install --reinstall debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-deb -y
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
         sudo mv /usr/share/debootstrap/functions functions
@@ -76,7 +76,7 @@ jobs:
         sudo rm -rf /etc/apt/sources.list.d/microsoft-prod.list
         sudo rm -rf /var/lib/apt/lists/*
         sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
-        sudo apt-get update && sudo apt-get install debootstrap mtools dosfstools qemu-user-static binfmt-support -y
+        sudo apt-get update && sudo apt-get install debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-deb -y
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
         sudo mv /usr/share/debootstrap/functions functions
@@ -138,7 +138,7 @@ jobs:
         sudo rm -rf /etc/apt/sources.list.d/microsoft-prod.list
         sudo rm -rf /var/lib/apt/lists/*
         sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
-        sudo apt-get update && sudo apt-get install debootstrap -y
+        sudo apt-get update && sudo apt-get install debootstrap  mtools dosfstools qemu-user-static binfmt-support dpkg-deb -y
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
         sudo mv /usr/share/debootstrap/functions functions
@@ -229,7 +229,7 @@ jobs:
         sudo rm -rf /etc/apt/sources.list.d/microsoft-prod.list
         sudo rm -rf /var/lib/apt/lists/*
         sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
-        sudo apt-get update && sudo apt-get install debootstrap mtools dosfstools qemu-user-static binfmt-support -y
+        sudo apt-get update && sudo apt-get install debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-deb -y
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
         sudo mv /usr/share/debootstrap/functions functions
