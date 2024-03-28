@@ -44,7 +44,7 @@ jobs:
         sudo rm -rf /var/lib/apt/lists/*
         sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
         sudo apt-get update && sudo apt-get install --reinstall debootstrap -y
-        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/lunar
+        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
         sudo mv /usr/share/debootstrap/functions functions
         sudo patch -i 0002-remove-WRONGSUITE-error.patch
@@ -77,7 +77,7 @@ jobs:
         sudo rm -rf /var/lib/apt/lists/*
         sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
         sudo apt-get update && sudo apt-get install debootstrap mtools dosfstools qemu-user-static binfmt-support -y
-        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/lunar
+        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
         sudo mv /usr/share/debootstrap/functions functions
         sudo patch -i 0002-remove-WRONGSUITE-error.patch
@@ -139,7 +139,7 @@ jobs:
         sudo rm -rf /var/lib/apt/lists/*
         sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
         sudo apt-get update && sudo apt-get install debootstrap -y
-        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/lunar
+        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
         sudo mv /usr/share/debootstrap/functions functions
         sudo patch -i 0002-remove-WRONGSUITE-error.patch
@@ -230,7 +230,7 @@ jobs:
         sudo rm -rf /var/lib/apt/lists/*
         sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
         sudo apt-get update && sudo apt-get install debootstrap mtools dosfstools qemu-user-static binfmt-support -y
-        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/lunar
+        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
         sudo mv /usr/share/debootstrap/functions functions
         sudo patch -i 0002-remove-WRONGSUITE-error.patch
