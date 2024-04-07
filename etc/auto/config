@@ -14,7 +14,7 @@ lb config noauto \
     --parent-distribution "./$BASECODENAME" \
     --archive-areas "main restricted universe multiverse" \
     --parent-archive-areas "main restricted universe multiverse" \
-    --linux-packages "linux linux-modules-extra linux-tools linux-firmware" \
+    --linux-packages "linux linux-modules linux-tools linux-firmware" \
     --linux-flavours "raspi" \
     --mirror-bootstrap "$MIRROR_URL" \
     --parent-mirror-bootstrap "$MIRROR_URL" \
