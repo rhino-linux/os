@@ -30,12 +30,6 @@ jobs:
     container:
       image: "ubuntu:latest"
       options: --privileged
-      env:
-        TERM: xterm
-        shell: bash
-        USER: dio
-        LOGNAME: dio
-        DEBIAN_FRONTEND: noninteractive
     steps:
     - uses: actions/checkout@v4
       with:
@@ -84,12 +78,6 @@ jobs:
     container:
       image: "ubuntu:latest"
       options: --privileged
-      env:
-        TERM: xterm
-        shell: bash
-        USER: dio
-        LOGNAME: dio
-        DEBIAN_FRONTEND: noninteractive
     strategy:
       matrix:
         include:
