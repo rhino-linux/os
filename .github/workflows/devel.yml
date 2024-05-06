@@ -4,15 +4,52 @@ on:
   workflow_dispatch
 
 jobs:
-  build_amd64:
-    runs-on: buildjet-4vcpu-ubuntu-2204
+  build:
+    strategy:
+      matrix:
+        include:
+          - target: amd64
+            runs-on: buildjet-4vcpu-ubuntu-2204
+            type: iso
+            id: build_amd64
+          - target: arm64
+            runs-on: buildjet-4vcpu-ubuntu-2204-arm
+            type: iso
+            id: build_arm64
+          - target: pine
+            runs-on: buildjet-4vcpu-ubuntu-2204-arm
+            type: tarball
+            ref: pinephone
+            id: build_pine_tarball
+          - target: rpi
+            runs-on: buildjet-4vcpu-ubuntu-2204-arm
+            type: tarball
+            ref: rpi
+            id: build_rpi_tarball
+          - target: tab
+            runs-on: buildjet-4vcpu-ubuntu-2204-arm
+            type: tarball
+            ref: pinetab
+            id: build_tab_tarball
+    runs-on: ${{ matrix.runs-on }}
+    container:
+      image: "ubuntu:latest"
+      options: --privileged
+      env:
+        TERM: xterm
+        shell: bash
+        USER: dio
+        LOGNAME: dio
+        DEBIAN_FRONTEND: noninteractive
     steps:
-    - uses: actions/checkout@v3.5.0
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ matrix.ref }}
 
     - name: Install needed packages
       run: |
         sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/mantic/g' /etc/apt/sources.list
+        sudo sed -i 's/jammy/noble/g' /etc/apt/sources.list
         sudo apt-get update && sudo apt-get install --reinstall debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
@@ -20,291 +57,91 @@ jobs:
         sudo patch -i 0002-remove-WRONGSUITE-error.patch
         sudo mv functions /usr/share/debootstrap/functions
         sudo cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
+        if [ "${{ matrix.type }}" == "tarball" ]; then
+          sudo cp binary_rootfs /usr/lib/live/build/binary_rootfs
+        fi
 
     - name: Make scripts executable
       run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
 
-    - name: Build ISO
+    - name: Build system image
       run: |
         sudo ./build.sh etc/terraform.conf
-        echo "ISOX64=$(cd builds/amd64; ls *.iso)"  >> $GITHUB_ENV
+        if [[ "${{ matrix.type }}" == "iso" ]]; then
+          echo "OUT_ISO=$(cd builds/${{ matrix.target }}; ls *.iso)"  >> $GITHUB_ENV
+        fi
 
-    - uses: actions/upload-artifact@v3.1.2
+    - uses: actions/upload-artifact@v4.3.3
+      if: matrix.type == 'iso'
       with:
-        name: ${{ env.ISOX64 }}
-        path: builds/amd64/${{ env.ISOX64 }}
-        
-  build_arm64:
-    runs-on: buildjet-4vcpu-ubuntu-2204-arm
-    steps:
-    - uses: actions/checkout@v3.5.0
+        name: ${{ env.OUT_ISO }}
+        path: builds/${{ matrix.target }}/${{ env.OUT_ISO }}
 
-    - name: Install needed packages
-      run: |
-        sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/mantic/g' /etc/apt/sources.list
-        sudo apt-get update && sudo apt-get install --reinstall debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
-        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
-        sudo dpkg -i debs/live-build_*_all.deb
-        sudo mv /usr/share/debootstrap/functions functions
-        sudo patch -i 0002-remove-WRONGSUITE-error.patch
-        sudo mv functions /usr/share/debootstrap/functions
-        sudo cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
-        
-    - name: Make scripts executable
-      run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
-
-    - name: Build ISO
-      run: |
-        sudo ./build.sh etc/terraform.conf
-        echo "ISOA64=$(cd builds/arm64; ls *.iso)" >> $GITHUB_ENV
-
-    - uses: actions/upload-artifact@v3.1.2
-      with:
-        name: ${{ env.ISOA64 }}
-        path: builds/arm64/${{ env.ISOA64 }}
-
-  build_pine_tarball:
-    runs-on: buildjet-4vcpu-ubuntu-2204-arm
-    steps:
-    - uses: actions/checkout@v3.5.0
-      with:
-        ref: 'pinephone'
-
-    - name: Install needed packages
-      run: |
-        sudo rm -rf /etc/apt/sources.list.d/microsoft-prod.list
-        sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/mantic/g' /etc/apt/sources.list
-        sudo apt-get update && sudo apt-get install debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
-        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
-        sudo dpkg -i debs/live-build_*_all.deb
-        sudo mv /usr/share/debootstrap/functions functions
-        sudo patch -i 0002-remove-WRONGSUITE-error.patch
-        sudo mv functions /usr/share/debootstrap/functions
-        sudo cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
-        sudo cp binary_rootfs /usr/lib/live/build/binary_rootfs
-        
-    - name: Make scripts executable
-      run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
-
-    - name: Build tarball
-      run: sudo ./build.sh etc/terraform.conf
-      
-    - uses: actions/cache@v3.3.1
+    - uses: actions/cache@v4.0.2
+      if: matrix.type == 'tarball'
       with:
         path: binary/
-        key: tar-pine-${{ github.run_id }}
+        key: tar-${{ matrix.target }}-${{ github.run_id }}
 
-  deploy_pine:
-    needs: build_pine_tarball
+  deploy:
+    needs: build
     runs-on: buildjet-4vcpu-ubuntu-2204
+    container:
+      image: "ubuntu:latest"
+      options: --privileged
+      env:
+        TERM: xterm
+        shell: bash
+        USER: dio
+        LOGNAME: dio
+        DEBIAN_FRONTEND: noninteractive
+    strategy:
+      matrix:
+        include:
+          - target: pinephone-unified
+            parent: pine
+            ref: pinephone
+            out: pinephone-unified
+          - target: raspberrypi-desktop
+            parent: rpi
+            ref: rpi
+            out: rpi-desktop
+          - target: raspberrypi-server
+            parent: rpi
+            ref: rpi
+            out: rpi-server
+          - target: pinetab
+            parent: tab
+            ref: pinetab
+            out: pinetab
+          - target: pinetab2
+            parent: tab
+            ref: pinetab
+            out: pinetab2
     steps:
-    - uses: actions/checkout@v3.5.0
+    - uses: actions/checkout@v4
       with:
-        ref: 'pinephone'
-    
-    - uses: actions/cache@v3.3.1
+        ref: ${{ matrix.ref }}
+
+    - uses: actions/cache@v4.0.2
       with:
         path: binary/
-        key: tar-pine-${{ github.run_id }}
-        
+        key: tar-${{ matrix.parent }}-${{ github.run_id }}
+
     - name: Deploy to partition
-      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-pinephone-unified.img" -m 10G pinephone-unified.yaml
-      
-    - name: Place output folder
-      run: sudo mkdir -p builds/pine
-      
+      run: |
+        source ./etc/terraform.conf
+        VER="${VERSION}${SUBVER}"
+        sudo ./debos-docker --privileged -t image:"Rhino-Linux-${VER}-${{ matrix.out }}.img" -m 10G ${ matrix.target }.yaml
+
     - name: Move to output folder and compress
       run: |
-        sudo mv Rhino*unified.img builds/pine/
-        sudo xz -v builds/pine/Rhino*unified.img
-        echo "IMGPP=$(cd builds/pine; ls *.img.xz)" >> $GITHUB_ENV
+        sudo mkdir -p builds/${{ matrix.type }}
+        sudo mv Rhino*${{ matrix.out }}.img builds/${{ matrix.out }}/
+        sudo xz -v builds/${{ matrix.out }}/Rhino*${{ matrix.out }}.img
+        echo "OUT_IMAGE=$(cd builds/${{ matrix.out }}; ls *.img.xz)" >> $GITHUB_ENV
 
-    - uses: actions/upload-artifact@v3.1.2
+    - uses: actions/upload-artifact@v4.3.3
       with:
-        name: ${{ env.IMGPP }}
-        path: builds/pine/${{ env.IMGPP }}
-
-  build_rpi_tarball:
-    runs-on: buildjet-4vcpu-ubuntu-2204-arm
-    steps:
-    - uses: actions/checkout@v3.5.0
-      with:
-        ref: 'rpi'
-
-    - name: Install needed packages
-      run: |
-        sudo rm -rf /etc/apt/sources.list.d/microsoft-prod.list
-        sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/mantic/g' /etc/apt/sources.list
-        sudo apt-get update && sudo apt-get install debootstrap  mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
-        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
-        sudo dpkg -i debs/live-build_*_all.deb
-        sudo mv /usr/share/debootstrap/functions functions
-        sudo patch -i 0002-remove-WRONGSUITE-error.patch
-        sudo mv functions /usr/share/debootstrap/functions
-        sudo cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
-        
-    - name: Make scripts executable
-      run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
-
-    - name: Build tarball
-      run: sudo ./build.sh etc/terraform.conf
-      
-    - uses: actions/cache@v3.3.1
-      with:
-        path: binary/
-        key: tar-rpi-${{ github.run_id }}
-
-  deploy_rpi_desktop:
-    needs: build_rpi_tarball
-    runs-on: buildjet-4vcpu-ubuntu-2204
-    steps:     
-    - uses: actions/checkout@v3.5.0
-      with:
-        ref: 'rpi'
-    
-    - uses: actions/cache@v3.3.1
-      with:
-        path: binary/
-        key: tar-rpi-${{ github.run_id }}
-        
-    - name: Deploy to partition
-      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-rpi-desktop.img" -m 10G raspberrypi-desktop.yaml
-      
-    - name: Place output folder
-      run: sudo mkdir -p builds/rpi-desktop
-      
-    - name: Move to output folder and compress
-      run: |
-        sudo mv Rhino*rpi-desktop.img builds/rpi-desktop/
-        sudo xz -v builds/rpi-desktop/Rhino*rpi-desktop.img
-        echo "IMGRPD=$(cd builds/rpi-desktop; ls *.img.xz)" >> $GITHUB_ENV
-
-    - uses: actions/upload-artifact@v3.1.2
-      with:
-        name: ${{ env.IMGRPD }}
-        path: builds/rpi-desktop/${{ env.IMGRPD }}
-
-  deploy_rpi_server:
-    needs: build_rpi_tarball
-    runs-on: buildjet-4vcpu-ubuntu-2204
-    steps:     
-    - uses: actions/checkout@v3.5.0
-      with:
-        ref: 'rpi'
-    
-    - uses: actions/cache@v3.3.1
-      with:
-        path: binary/
-        key: tar-rpi-${{ github.run_id }}
-        
-    - name: Deploy to partition
-      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-rpi-server.img" -m 10G raspberrypi-server.yaml
-      
-    - name: Place output folder
-      run: sudo mkdir -p builds/rpi-server
-      
-    - name: Move to output folder and compress
-      run: |
-        sudo mv Rhino*rpi-server.img builds/rpi-server/
-        sudo xz -v builds/rpi-server/Rhino*rpi-server.img
-        echo "IMGRPS=$(cd builds/rpi-server; ls *.img.xz)" >> $GITHUB_ENV
-
-    - uses: actions/upload-artifact@v3.1.2
-      with:
-        name: ${{ env.IMGRPS }}
-        path: builds/rpi-server/${{ env.IMGRPS }}
-
-  build_tab_tarball:
-    runs-on: buildjet-4vcpu-ubuntu-2204-arm
-    steps:
-    - uses: actions/checkout@v3.5.0
-      with:
-        ref: 'pinetab'
-
-    - name: Install needed packages
-      run: |
-        sudo rm -rf /etc/apt/sources.list.d/microsoft-prod.list
-        sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/mantic/g' /etc/apt/sources.list
-        sudo apt-get update && sudo apt-get install debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
-        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
-        sudo dpkg -i debs/live-build_*_all.deb
-        sudo mv /usr/share/debootstrap/functions functions
-        sudo patch -i 0002-remove-WRONGSUITE-error.patch
-        sudo mv functions /usr/share/debootstrap/functions
-        sudo cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
-        sudo cp binary_rootfs /usr/lib/live/build/binary_rootfs
-        
-    - name: Make scripts executable
-      run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
-
-    - name: Build tarball
-      run: sudo ./build.sh etc/terraform.conf
-      
-    - uses: actions/cache@v3.3.1
-      with:
-        path: binary/
-        key: tar-tab-${{ github.run_id }}
-
-  deploy_tab1:
-    needs: build_tab_tarball
-    runs-on: buildjet-4vcpu-ubuntu-2204
-    steps:
-    - uses: actions/checkout@v3.5.0
-      with:
-        ref: 'pinetab'
-    
-    - uses: actions/cache@v3.3.1
-      with:
-        path: binary/
-        key: tar-tab-${{ github.run_id }}
-        
-    - name: Deploy to partition
-      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-pinetab.img" -m 10G pinetab.yaml
-      
-    - name: Place output folder
-      run: sudo mkdir -p builds/tab
-      
-    - name: Move to output folder and compress
-      run: |
-        sudo mv Rhino*tab.img builds/tab/
-        sudo xz -v builds/tab/Rhino*tab.img
-        echo "IMGPTA=$(cd builds/tab; ls *.img.xz)" >> $GITHUB_ENV
-
-    - uses: actions/upload-artifact@v3.1.2
-      with:
-        name: ${{ env.IMGPTA }}
-        path: builds/tab/${{ env.IMGPTA }}
-        
-  deploy_tab2:
-    needs: build_tab_tarball
-    runs-on: buildjet-4vcpu-ubuntu-2204
-    steps:
-    - uses: actions/checkout@v3.5.0
-      with:
-        ref: 'pinetab'
-    
-    - uses: actions/cache@v3.3.1
-      with:
-        path: binary/
-        key: tar-tab-${{ github.run_id }}
-        
-    - name: Deploy to partition
-      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-pinetab2.img" -m 10G pinetab2.yaml
-      
-    - name: Place output folder
-      run: sudo mkdir -p builds/tab2
-      
-    - name: Move to output folder and compress
-      run: |
-        sudo mv Rhino*tab2.img builds/tab2/
-        sudo xz -v builds/tab2/Rhino*tab2.img
-        echo "IMGPTB=$(cd builds/tab2; ls *.img.xz)" >> $GITHUB_ENV
-
-    - uses: actions/upload-artifact@v3.1.2
-      with:
-        name: ${{ env.IMGPTB }}
-        path: builds/tab2/${{ env.IMGPTB }}
+        name: ${{ env.OUT_IMAGE }}
+        path: builds/${{ matrix.out }}/${{ env.OUT_IMAGE }}
