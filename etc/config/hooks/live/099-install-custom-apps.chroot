@@ -22,10 +22,8 @@ git config --global --add safe.directory '*'
 sudo sysctl kernel.unprivileged_userns_clone=0
 #HOME=/home/rhino-live runuser -l rhino-live -c 'pacstall -U oklopfer:rhinobwrap'
 #Pacstall installs
-pushd /home/rhino-live
 HOME=/home/rhino-live runuser -l rhino-live -c 'if [ $(dpkg --print-architecture) = arm64 ]; then FIREFOX="firefox-arm64-deb"; else FIREFOX="firefox-bin"; fi; SUDO_USER=rhino-live PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb ${FIREFOX} vscodium-deb celeste-bin linux-kernel-stable rhino-core quintom-cursor-theme-git timeshift fake-ubuntu-advantage-tools-deb'
 HOME=/home/rhino-live runuser -l rhino-live -c 'SUDO_USER=rhino-live PACSTALL_DOWNLOADER=quiet-wget pacstall -PI rhino-setup-bin'
-popd
 #HOME=/home/rhino-live runuser -l rhino-live -c 'pacstall -U pacstall:master'
 
 #Hack: arm64 firefox no snap
