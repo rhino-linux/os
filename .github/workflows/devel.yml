@@ -52,21 +52,14 @@ jobs:
 
     - name: Examine bwrap situation
       run: |
-        echo '#!/bin/bash
-        bwrap --dev-bind "$1" / \
-          --proc /proc \
-          --dev /dev \
-          --tmpfs /tmp \
-          --ro-bind /usr /usr \
-          --ro-bind /bin /bin \
-          --ro-bind /lib /lib \
-          --ro-bind /etc /etc \
-          --symlink usr/lib /lib \
-          --symlink usr/bin /bin \
-          --dir /home \
-          --dir /root \
-          --chdir / \
-          /bin/bash' >> bwrap.sh
+        echo '#!/bin/bash' >> bwrap.sh
+        echo 'bwrap --dev-bind "$1" / \' >> bwrap.sh
+        echo '--proc /proc --dev /dev \' >> bwrap.sh
+        echo '--tmpfs /tmp --ro-bind /usr /usr \' >> bwrap.sh
+        echo '--ro-bind /bin /bin --ro-bind /lib /lib \' >> bwrap.sh
+        echo '--ro-bind /etc /etc --symlink usr/lib /lib \' >> bwrap.sh
+        echo '--symlink usr/bin /bin --dir /home --dir /root \' >> bwrap.sh
+        echo '--chdir / /bin/bash' >> bwrap.sh
         chmod +x bwrap.sh
         cp bwrap.sh /usr/sbin/chroot
 
