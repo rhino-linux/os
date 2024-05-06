@@ -15,7 +15,7 @@ lb config noauto \
     --parent-archive-areas "main restricted universe multiverse" \
     --linux-packages linux-image \
     --linux-flavours "generic" \
-    --bootappend-live "boot=casper quiet splash" \
+    --bootappend-live "boot=casper quiet splash unprivileged_userns_clone=0" \
     --mirror-bootstrap "$MIRROR_URL" \
     --parent-mirror-bootstrap "$MIRROR_URL" \
     --mirror-chroot-security "$SECURITY_URL" \
