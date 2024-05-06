@@ -132,7 +132,7 @@ jobs:
       run: |
         source ./etc/terraform.conf
         VER="${VERSION}${SUBVER}"
-        ./debos-docker --privileged -t image:"Rhino-Linux-${VER}-${{ matrix.out }}.img" -m 10G ${ matrix.target }.yaml
+        ./debos-docker --privileged -t image:"Rhino-Linux-${VER}-${{ matrix.out }}.img" -m 10G ${{ matrix.target }}.yaml
 
     - name: Move to output folder and compress
       run: |
