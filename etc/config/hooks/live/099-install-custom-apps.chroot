@@ -19,6 +19,7 @@ sudo chown "rhino-live" -cR "/home/rhino-live"
 sudo chown "rhino-live" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
+sudo sysctl kernel.unprivileged_userns_clone=0
 #HOME=/home/rhino-live runuser -l rhino-live -c 'pacstall -U oklopfer:rhinobwrap'
 #Pacstall installs
 pushd /home/rhino-live
