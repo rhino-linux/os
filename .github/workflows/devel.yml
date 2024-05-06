@@ -39,7 +39,7 @@ jobs:
       run: |
         rm -rf /var/lib/apt/lists/*
         sed -i 's/jammy/noble/g' /etc/apt/sources.list
-        apt-get update && apt-get install --reinstall sudo debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
+        apt-get update && apt-get install --reinstall sudo debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev bubblewrap curl -y
         ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         dpkg -i debs/live-build_*_all.deb
         mv /usr/share/debootstrap/functions functions
@@ -49,6 +49,14 @@ jobs:
         if [[ "${{ matrix.type }}" == "tarball" ]]; then
           cp binary_rootfs /usr/lib/live/build/binary_rootfs
         fi
+
+    - name: Examine bwrap situation
+      run: |
+        curl -fsSL https://pacstall.dev/q/install\?dnt > pacstall-install.sh || curl -fsSL https://git.io/JsADh > pacstall-install.sh
+        chmod +x ./pacstall-install.sh
+        echo N\n | sudo -E ./pacstall-install.sh
+        rm ./pacstall-install.sh
+        sudo chroot "/" pacstall -PI nala-deb
 
     - name: Make scripts executable
       run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
