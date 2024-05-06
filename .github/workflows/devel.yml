@@ -46,7 +46,7 @@ jobs:
         patch -i 0002-remove-WRONGSUITE-error.patch
         mv functions /usr/share/debootstrap/functions
         cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
-        if [ "${{ matrix.type }}" == "tarball" ]; then
+        if [[ "${{ matrix.type }}" == "tarball" ]]; then
           cp binary_rootfs /usr/lib/live/build/binary_rootfs
         fi
 
