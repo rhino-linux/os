@@ -48,17 +48,17 @@ jobs:
 
     - name: Install needed packages
       run: |
-        sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/noble/g' /etc/apt/sources.list
-        sudo apt-get update && sudo apt-get install --reinstall debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
-        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
-        sudo dpkg -i debs/live-build_*_all.deb
-        sudo mv /usr/share/debootstrap/functions functions
-        sudo patch -i 0002-remove-WRONGSUITE-error.patch
-        sudo mv functions /usr/share/debootstrap/functions
-        sudo cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
+        rm -rf /var/lib/apt/lists/*
+        sed -i 's/jammy/noble/g' /etc/apt/sources.list
+        apt-get update && apt-get install --reinstall debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
+        ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
+        dpkg -i debs/live-build_*_all.deb
+        mv /usr/share/debootstrap/functions functions
+        patch -i 0002-remove-WRONGSUITE-error.patch
+        mv functions /usr/share/debootstrap/functions
+        cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
         if [ "${{ matrix.type }}" == "tarball" ]; then
-          sudo cp binary_rootfs /usr/lib/live/build/binary_rootfs
+          cp binary_rootfs /usr/lib/live/build/binary_rootfs
         fi
 
     - name: Make scripts executable
@@ -66,7 +66,7 @@ jobs:
 
     - name: Build system image
       run: |
-        sudo ./build.sh etc/terraform.conf
+        ./build.sh etc/terraform.conf
         if [[ "${{ matrix.type }}" == "iso" ]]; then
           echo "OUT_ISO=$(cd builds/${{ matrix.target }}; ls *.iso)"  >> $GITHUB_ENV
         fi
@@ -132,13 +132,13 @@ jobs:
       run: |
         source ./etc/terraform.conf
         VER="${VERSION}${SUBVER}"
-        sudo ./debos-docker --privileged -t image:"Rhino-Linux-${VER}-${{ matrix.out }}.img" -m 10G ${ matrix.target }.yaml
+        ./debos-docker --privileged -t image:"Rhino-Linux-${VER}-${{ matrix.out }}.img" -m 10G ${ matrix.target }.yaml
 
     - name: Move to output folder and compress
       run: |
-        sudo mkdir -p builds/${{ matrix.type }}
-        sudo mv Rhino*${{ matrix.out }}.img builds/${{ matrix.out }}/
-        sudo xz -v builds/${{ matrix.out }}/Rhino*${{ matrix.out }}.img
+        mkdir -p builds/${{ matrix.type }}
+        mv Rhino*${{ matrix.out }}.img builds/${{ matrix.out }}/
+        xz -v builds/${{ matrix.out }}/Rhino*${{ matrix.out }}.img
         echo "OUT_IMAGE=$(cd builds/${{ matrix.out }}; ls *.img.xz)" >> $GITHUB_ENV
 
     - uses: actions/upload-artifact@v4.3.3
