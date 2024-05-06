@@ -17,12 +17,12 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
-#HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:develop'
+HOME=/home/rhino runuser -l rhino -c 'pacstall -U oklopfer:rhinobwrap'
 pushd /home/rhino
 HOME=/home/rhino runuser -l rhino -c 'HOME=/home/rhino SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb firefox-arm64-deb vscodium-deb celeste-bin rhino-pine-core timeshift fake-ubuntu-advantage-tools-deb'
 HOME=/home/rhino runuser -l rhino -c 'HOME=/home/rhino SUDO_USER=rhino PACSTALL_DOWNLOADER=quiet-wget pacstall -PI rhino-setup-bin'
 popd
-#HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:master'
+HOME=/home/rhino runuser -l rhino -c 'pacstall -U pacstall:master'
 
 sudo mkdir -p /home/rhino/.config/autostart
 if ! [[ -f "/home/rhino/.config/autostart/rhino-setup.desktop" ]]; then
