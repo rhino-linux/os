@@ -49,6 +49,7 @@ jobs:
         if [[ "${{ matrix.type }}" == "tarball" ]]; then
           cp binary_rootfs /usr/lib/live/build/binary_rootfs
         fi
+        cp lb_chroot_devpts /usr/lib/live/build/lb_chroot_devpts
 
     - name: Make scripts executable
       run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
