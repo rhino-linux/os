@@ -80,10 +80,7 @@ build () {
 # LIVE-BUILD BUILD #
 #------------------#
 "
-  mkdir -p tmp/$BUILD_ARCH/chroot
-  mount --bind tmp/$BUILD_ARCH/chroot tmp/$BUILD_ARCH/chroot
   lb --force build
-  umount tmp/$BUILD_ARCH/chroot
 
   echo -e "
 #---------------------------#
