@@ -4,7 +4,7 @@
 # More pacstall specific things
 export SUDO_USER=rhino-live
 export DEBIAN_FRONTEND=noninteractive
-export PACSTALL_DOWNLOADER=quiet-wget
+export PACSTALL_DOWNLOADER=wget
 export GITHUB_ACTIONS=true
 
 #Pacstall dirs
@@ -18,11 +18,15 @@ sudo chown "rhino-live" -cR "/home/rhino-live"
 sudo chown "rhino-live" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
-HOME=/home/rhino-live runuser -l rhino-live -c 'pacstall -U oklopfer:rhinobwrap'
-#Pacstall installs
-HOME=/home/rhino-live runuser -l rhino-live -c 'if [ $(dpkg --print-architecture) = arm64 ]; then FIREFOX="firefox-arm64-deb"; else FIREFOX="firefox-bin"; fi; SUDO_USER=rhino-live PACSTALL_DOWNLOADER=quiet-wget pacstall -PI nala-deb ${FIREFOX} vscodium-deb celeste-bin linux-kernel-stable rhino-core quintom-cursor-theme-git timeshift fake-ubuntu-advantage-tools-deb'
-HOME=/home/rhino-live runuser -l rhino-live -c 'SUDO_USER=rhino-live PACSTALL_DOWNLOADER=quiet-wget pacstall -PI rhino-setup-bin'
-HOME=/home/rhino-live runuser -l rhino-live -c 'pacstall -U pacstall:master'
+pacstall -U oklopfer:rhinobwrap
+if [[ $(dpkg --print-architecture) = arm64 ]]; then
+    FIREFOX="firefox-arm64-deb"
+else
+    FIREFOX="firefox-bin"
+fi
+sudo pacstall -PI nala-deb ${FIREFOX} vscodium-deb celeste-bin linux-kernel-stable rhino-core quintom-cursor-theme-git timeshift fake-ubuntu-advantage-tools-deb
+sudo pacstall -PI rhino-setup-bin
+pacstall -U pacstall:master
 
 #Hack: arm64 firefox no snap
 if [ $(dpkg --print-architecture) = arm64 ]; then
