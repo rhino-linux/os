@@ -19,8 +19,8 @@ git config --global --add safe.directory '*'
 
 
 pacstall -U oklopfer:rhinobwrap
-sudo SUDO_USER=rhino pacstall -PI nala-deb firefox-arm64-deb vscodium-deb celeste-bin rhino-core quintom-cursor-theme-git raspi-config-deb gldriver-test-deb timeshift fake-ubuntu-advantage-tools-deb
-sudo SUDO_USER=rhino pacstall -PI rhino-setup-bin
+sudo SUDO_USER=rhino pacstall -QPI nala-deb firefox-arm64-deb vscodium-deb celeste-bin rhino-core quintom-cursor-theme-git raspi-config-deb gldriver-test-deb timeshift fake-ubuntu-advantage-tools-deb
+sudo SUDO_USER=rhino pacstall -QPI rhino-setup-bin
 pacstall -U pacstall:master
 
 sudo mkdir -p /home/rhino/.config/autostart
