@@ -67,7 +67,7 @@ jobs:
         name: ${{ env.OUT_ISO }}
         path: builds/${{ matrix.target }}/${{ env.OUT_ISO }}
 
-    - uses: actions/cache@v4.0.2
+    - uses: actions/cache@v3.3.1
       if: matrix.type == 'tarball'
       with:
         path: binary/
@@ -107,7 +107,7 @@ jobs:
       with:
         ref: ${{ matrix.ref }}
 
-    - uses: actions/cache@v4.0.2
+    - uses: actions/cache@v3.3.1
       with:
         path: binary/
         key: tar-${{ matrix.parent }}-${{ github.run_id }}
