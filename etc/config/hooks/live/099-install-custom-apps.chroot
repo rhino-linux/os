@@ -4,7 +4,7 @@
 # More pacstall specific things
 export SUDO_USER=rhino
 export DEBIAN_FRONTEND=noninteractive
-export PACSTALL_DOWNLOADER=quiet-wget
+export PACSTALL_DOWNLOADER=wget
 export GITHUB_ACTIONS=true
 
 sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /tmp/pacstall /var/cache/pacstall /usr/src/pacstall
