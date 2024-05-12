@@ -11,21 +11,21 @@ jobs:
           - target: amd64
             runs-on: buildjet-4vcpu-ubuntu-2204
             type: iso
-         # - target: arm64
-         #   runs-on: buildjet-4vcpu-ubuntu-2204-arm
-         #   type: iso
-         # - target: pine
-         #   runs-on: buildjet-4vcpu-ubuntu-2204-arm
-         #   type: tarball
-         #   ref: pinephone
-         # - target: rpi
-         #   runs-on: buildjet-4vcpu-ubuntu-2204-arm
-         #   type: tarball
-         #   ref: rpi
-         # - target: tab
-         #   runs-on: buildjet-4vcpu-ubuntu-2204-arm
-         #   type: tarball
-         #   ref: pinetab
+          - target: arm64
+            runs-on: buildjet-4vcpu-ubuntu-2204-arm
+            type: iso
+          - target: pine
+            runs-on: buildjet-4vcpu-ubuntu-2204-arm
+            type: tarball
+            ref: pinephone
+          - target: rpi
+            runs-on: buildjet-4vcpu-ubuntu-2204-arm
+            type: tarball
+            ref: rpi
+          - target: tab
+            runs-on: buildjet-4vcpu-ubuntu-2204-arm
+            type: tarball
+            ref: pinetab
     runs-on: ${{ matrix.runs-on }}
     container:
       image: "ubuntu:latest"
