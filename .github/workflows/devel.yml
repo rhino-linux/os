@@ -49,7 +49,7 @@ jobs:
 
     - name: set to tarball
       if: matrix.type == 'tarball'
-      run: cp binary_rootfs /usr/lib/live/build/binary_rootfs
+      run: cp binary_rootfs /usr/lib/live/build/binary_rootfs || echo "no need to change offsets."
 
     - name: Make scripts executable
       run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
