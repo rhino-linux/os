@@ -31,7 +31,7 @@ jobs:
       image: "ubuntu:latest"
       options: --privileged
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3.5.0
       with:
         ref: ${{ matrix.ref }}
 
@@ -103,7 +103,7 @@ jobs:
             ref: pinetab
             out: pinetab2
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3.5.0
       with:
         ref: ${{ matrix.ref }}
 
