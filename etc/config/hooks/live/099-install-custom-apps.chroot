@@ -172,6 +172,19 @@ cd ~
 #Lightdm
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
 ( cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png )
+sudo rm /etc/calamares/modules/displaymanager.conf
+sudo cat > /etc/calamares/modules/displaymanager.conf << __EOF__
+displaymanagers:
+  - lightdm
+
+defaultDesktopEnvironment:
+    executable: "unicorn-session"
+    desktopFile: "unicorn"
+
+basicSetup: false
+sysconfigSetup: false
+
+__EOF__
 
 
 #VSC theme
