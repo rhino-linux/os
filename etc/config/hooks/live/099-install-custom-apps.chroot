@@ -18,6 +18,7 @@ sudo chown "rhino-live" -cR "/home/rhino-live"
 sudo chown "rhino-live" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
+sudo mkdir -p /root/.config/gtk-3.0 /home/rhino-live/.config/gtk-3.0
 pacstall -U oklopfer:rhinobwrap
 if [[ $(dpkg --print-architecture) = arm64 ]]; then
     FIREFOX="firefox-arm64-deb"
