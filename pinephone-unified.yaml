@@ -24,20 +24,20 @@ actions:
     chroot: true
     command: echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
     
-  - action: run
-    description: pacstall workaround
-    chroot: true
-    command:  pacstall -U oklopfer:rhinobwrap
+#  - action: run
+#    description: pacstall workaround
+#    chroot: true
+#    command:  pacstall -U oklopfer:rhinobwrap
 
   - action: run
     description: Install kernel
     chroot: true
-    command: sudo SUDO_USER=rhino NCPU=4 pacstall -QPI linux-headers-okpine-deb linux-image-okpine-deb
+    command: SUDO_USER=rhino pacstall -QPINs linux-headers-okpine-deb linux-image-okpine-deb
     
-  - action: run
-    description: pacstall workaround
-    chroot: true
-    command:  pacstall -U pacstall:master
+#  - action: run
+#    description: pacstall workaround
+#    chroot: true
+#    command:  pacstall -U pacstall:master
 
   - action: run
     description: sudo workaround
