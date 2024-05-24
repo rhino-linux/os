@@ -73,6 +73,7 @@ cd ~
 #Calamares
 # Replace Lubuntu Calamares desktop file with ours
 rm /usr/share/applications/calamares.desktop
+rm /usr/share/applications/calamares-launch-oem.desktop
 mkdir -p /home/rhino-live/Desktop
 echo '[Desktop Entry]
 Type=Application
