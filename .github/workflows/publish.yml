@@ -27,7 +27,7 @@ jobs:
           rclone config create sourceforge sftp host frs.sourceforge.net user ${{ secrets.SOURCEFORGE_USER }} shell_type unix use_insecure_cipher true pass ${{ secrets.SOURCEFORGE_PASS }} --obscure
 
       - name: Download release assets from latest CI run
-        run: gh run download -p '*' "$(gh run list -w devel.yml --json databaseId -q '.[].databaseId' -L 1)"
+        run: gh run download -p '*' "$(gh run list -w legacy.yml --json databaseId -q '.[].databaseId' -L 1)"
         env:
           GH_TOKEN: "${{ github.token }}"
           GH_REPO: "${{ github.repository }}"
