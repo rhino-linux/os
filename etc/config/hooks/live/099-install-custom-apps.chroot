@@ -17,7 +17,7 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
-sudo mkdir -p /root/.config/gtk-3.0 /home/rhino-live/.config/gtk-3.0
+sudo mkdir -p /root/.config/gtk-3.0 /home/rhino/.config/gtk-3.0
 SUDO_USER=rhino pacstall -QPINs nala-deb firefox-arm64-deb vscodium-deb celeste-bin rhino-core quintom-cursor-theme-git raspi-config-deb gldriver-test-deb timeshift fake-ubuntu-advantage-tools-deb
 SUDO_USER=rhino pacstall -QPINs rhino-setup-bin
 
