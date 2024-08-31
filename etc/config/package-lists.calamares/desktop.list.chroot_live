@@ -16,7 +16,6 @@ dosfstools
 mtools
 ntfs-3g
 lvm2
-dmraid
 wamerican
 fwupdate
 mokutil
