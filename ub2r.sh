@@ -287,28 +287,39 @@ function unicorn_flavor() {
   sudo chown $USER -cR /home/$USER/.config > /dev/null
 }
 
+function is_apt_package_installed() {
+  if [[ $(dpkg-query -W --showformat='${db:Status-Status}' "${1}" 2> /dev/null) == "installed" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 function select_core() {
   echo "[${BCyan}~${NC}] ${BOLD}NOTE${NC}: Rhino Linux has three versions of our app suite. Which would you like to install?"
   echo "  [${BBlue}>${NC}] ${BOLD}1)${NC} ${BPurple}rhino-server-core${NC}: TUI tool suite w/ basic development tools"
   echo "  [${BBlue}>${NC}] ${BOLD}2)${NC} ${BPurple}rhino-ubxi-core${NC}: TUI+GUI app suite w/ GTK applications"
   echo "  [${BBlue}>${NC}] ${BOLD}3)${NC} ${BPurple}rhino-core${NC}: Full suite w/ Unicorn Desktop Environment"
   unset packages core_package
+  if ! is_apt_package_installed "nala"; then
+    packages+=("nala-deb")
+  fi
   while true; do
     read -p "[${BYellow}*${NC}] Enter your choice (${BGreen}1${NC}/${BGreen}2${NC}/${BGreen}3${NC}): " choice
     case $choice in
       1)
         core_package="rhino-server-core"
-        packages=("nala-deb" "${core_package}")
+        packages+=("${core_package}")
         break
         ;;
       2)
         core_package="rhino-ubxi-core"
-        packages=("nala-deb" "celeste-bin" "timeshift" "${core_package}")
+        packages+=("celeste-bin" "timeshift" "${core_package}")
         break
         ;;
       3)
         core_package="rhino-core"
-        packages=("nala-deb" "celeste-bin" "timeshift" "quintom-cursor-theme-git" "${core_package}" "rhino-setup-bin")
+        packages+=("celeste-bin" "timeshift" "quintom-cursor-theme-git" "${core_package}" "rhino-setup-bin")
         break
         ;;
       *) ;;
