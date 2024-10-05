@@ -39,6 +39,7 @@ jobs:
           PHONE="${HEADVER}-pinephone"
           TAB="${HEADVER}-pinetab"
           RPI="${HEADVER}-rpi"
+          HERE="${PWD}"
           for image in *.iso *.img.xz; do
             case "${image}" in 
               *iso)
@@ -58,7 +59,9 @@ jobs:
               mkdir "${TRUEVER}/"
             fi
             mv "${image}"/"${image}" "${TRUEVER}/"
-            sha256sum "${TRUEVER}/${image}" >> "${TRUEVER}/${image}".sha256
+            cd "${TRUEVER}"
+            sha256sum "${image}" >> "${image}.sha256"
+            cd "${HERE}"
             rclone copyto --progress --sftp-ask-password "${TRUEVER}/${image}.sha256" "sourceforge:/home/frs/project/rhino-linux-builder/${TRUEVER}/${image}.sha256"
             rclone copyto --progress --sftp-ask-password "${TRUEVER}/${image}" "sourceforge:/home/frs/project/rhino-linux-builder/${TRUEVER}/${image}";
           done
