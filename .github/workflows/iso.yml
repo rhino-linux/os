@@ -7,14 +7,14 @@ jobs:
   build_amd64:
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
-    - uses: actions/checkout@v3.5.0
+    - uses: actions/checkout@v4
 
     - name: Install needed packages
       run: |
         sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
-        sudo apt-get update && sudo apt-get install --reinstall debootstrap -y
-        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/lunar
+        sudo sed -i 's/jammy/mantic/g' /etc/apt/sources.list
+        sudo apt-get update && sudo apt-get install --reinstall debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
+        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
         sudo mv /usr/share/debootstrap/functions functions
         sudo patch -i 0002-remove-WRONGSUITE-error.patch
@@ -29,7 +29,7 @@ jobs:
         sudo ./build.sh etc/terraform.conf
         echo "ISOX64=$(cd builds/amd64; ls *.iso)"  >> $GITHUB_ENV
 
-    - uses: actions/upload-artifact@v3.1.2
+    - uses: actions/upload-artifact@v4.3.3
       with:
         name: ${{ env.ISOX64 }}
         path: builds/amd64/${{ env.ISOX64 }}
@@ -37,14 +37,14 @@ jobs:
   build_arm64:
     runs-on: buildjet-4vcpu-ubuntu-2204-arm
     steps:
-    - uses: actions/checkout@v3.5.0
+    - uses: actions/checkout@v4
 
     - name: Install needed packages
       run: |
         sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
-        sudo apt-get update && sudo apt-get install --reinstall debootstrap -y
-        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/lunar
+        sudo sed -i 's/jammy/mantic/g' /etc/apt/sources.list
+        sudo apt-get update && sudo apt-get install --reinstall debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
+        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
         sudo mv /usr/share/debootstrap/functions functions
         sudo patch -i 0002-remove-WRONGSUITE-error.patch
@@ -59,10 +59,7 @@ jobs:
         sudo ./build.sh etc/terraform.conf
         echo "ISOA64=$(cd builds/arm64; ls *.iso)" >> $GITHUB_ENV
 
-    - uses: actions/upload-artifact@v3.1.2
+    - uses: actions/upload-artifact@v4.3.3
       with:
         name: ${{ env.ISOA64 }}
         path: builds/arm64/${{ env.ISOA64 }}
-
-
-
