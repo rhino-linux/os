@@ -31,7 +31,7 @@ thunar
 thunar-volman
 ubuntu-drivers-common
 unzip
-wireless-tools
+libiw30t64
 wpasupplicant
 xdg-user-dirs
 xdg-user-dirs-gtk
