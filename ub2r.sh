@@ -314,12 +314,12 @@ function select_core() {
         ;;
       2)
         core_package="rhino-ubxi-core"
-        packages+=("celeste-bin" "timeshift" "${core_package}")
+        packages+=("timeshift" "${core_package}")
         break
         ;;
       3)
         core_package="rhino-core"
-        packages+=("celeste-bin" "timeshift" "quintom-cursor-theme-git" "${core_package}" "rhino-setup-bin")
+        packages+=("timeshift" "quintom-cursor-theme-git" "${core_package}" "rhino-setup-bin")
         break
         ;;
       *) ;;
