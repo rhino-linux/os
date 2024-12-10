@@ -212,7 +212,6 @@ cp -r /etc/skel/.config/${i}/* /home/rhino-live/.config/${i};
 done
 mkdir /home/rhino-live/.lightpad
 cp /etc/skel/.lightpad/* /home/rhino-live/.lightpad
-cp /etc/skel/.config/docks.ini /home/rhino-live/.config/docks.ini
 ln -s "/home/rhino-live/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino-live/.config/xfce4/desktop/icons.screen.latest.rc"
 sudo rm /home/rhino-live/.config/autostart/rhino-setup.desktop
 # Make sure the user (rhino) has wrx permissions
@@ -234,6 +233,20 @@ __EOF__
 sudo chown "rhino-live" -cR /home/rhino-live/Desktop
 sudo chown "rhino-live" -cR /home/rhino-live/.config
 echo -e "[/home/rhino-live/Desktop/calamares.desktop]\nrow=0\ncol=0\n" >> /home/rhino-live/.config/xfce4/desktop/icons.screen.latest.rc
+
+echo '[PlankDockItemPreferences]
+Launcher=file:///usr/share/applications/calamares.desktop' | tee -a /home/rhino-live/.config/plank/dock1/08-calamares.dockitem > /dev/null
+echo "[dock1]
+current-workspace-only=false
+dock-items=['00-uniLauncher.dockitem', '01-uniApps.dockitem', '02-uniDesktop.dockitem', '03-firefox.dockitem', '04-FileManager.dockitem', '05-codium.dockitem', '06-xfce4-terminal.dockitem', '07-org.rhinolinux.system.dockitem', '08-calamares.dockitem']
+hide-mode='intelligent'
+icon-size=48
+pinned-only=false
+position='left'
+pressure-reveal=false
+theme='rhinoplank'
+zoom-enabled=true
+zoom-percent=115" | tee -a /home/rhino-live/.config/docks.ini > /dev/null
 
 sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
 sudo rm /usr/share/xsessions/xfce.desktop /usr/share/xsessions/xubuntu.desktop
