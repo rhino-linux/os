@@ -17,7 +17,7 @@ sudo apt-get install qml-module-qtquick2 qml-module-qtquick-window2 -q -y
 sudo dpkg --force-depends --remove snapd-seed-glue
 sudo dpkg --force-depends --remove calamares-settings-ubuntu-common calamares-settings-lubuntu
 # So it can be downgraded, not the best permanent solution however
-curl -L -q http://mirrors.kernel.org/ubuntu/pool/universe/c/calamares-settings-ubuntu/calamares-settings-ubuntu-common_24.10.5_amd64.deb -o calamares-settings-ubuntu-common.deb
+curl -L -q http://mirrors.kernel.org/ubuntu/pool/universe/c/calamares-settings-ubuntu/calamares-settings-ubuntu-common_24.10.5_$(dpkg --print-architecture).deb -o calamares-settings-ubuntu-common.deb
 curl -L -q http://mirrors.kernel.org/ubuntu/pool/universe/c/calamares-settings-ubuntu/calamares-settings-lubuntu_24.10.5_all.deb -o calamares-settings-lubuntu.deb
 sudo dpkg -i calamares-settings-ubuntu-common.deb calamares-settings-lubuntu.deb
 rm calamares-settings-ubuntu-common.deb calamares-settings-lubuntu.deb
