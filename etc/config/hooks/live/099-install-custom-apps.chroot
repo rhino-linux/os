@@ -256,5 +256,5 @@ sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
 sudo rm /usr/share/xsessions/xfce.desktop /usr/share/xsessions/xubuntu.desktop
 
 sudo apt-get clean
-sudo apt-get remove linux*6.8.0* -yq
+sudo apt-get remove linux*6.11.0* -yq
 sudo update-initramfs -u
