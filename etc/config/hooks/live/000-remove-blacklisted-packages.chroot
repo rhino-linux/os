@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Description: Remove seed branches and remove blacklisted packages
 
 echo "Fixing snapd not being able to remove itself"
