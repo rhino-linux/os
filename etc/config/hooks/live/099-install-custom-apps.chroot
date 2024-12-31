@@ -157,6 +157,7 @@ true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
 
 ( cd /etc/calamares/branding && sudo git clone https://github.com/rhino-linux/calamares rhino )
 sudo sed -i 's/lubuntu/rhino/g' /etc/calamares/settings.conf
+sudo sed -i 's/\- pkgselectprocess//g' /etc/calamares/settings.conf
 sudo sed -i 's/\- pkgselect//g' /etc/calamares/settings.conf
 
 if [ $(dpkg --print-architecture) = arm64 ]; then
