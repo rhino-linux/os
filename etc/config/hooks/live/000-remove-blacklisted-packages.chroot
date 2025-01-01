@@ -24,7 +24,7 @@ else
 fi
 curl -L -q "${calam_link}" -o calamares-settings-ubuntu-common.deb
 curl -L -q http://mirrors.kernel.org/ubuntu/pool/universe/c/calamares-settings-ubuntu/calamares-settings-lubuntu_24.10.5_all.deb -o calamares-settings-lubuntu.deb
-sudo dpkg -i calamares-settings-ubuntu-common.deb calamares-settings-lubuntu.deb
+sudo apt install ./calamares-settings-ubuntu-common.deb ./calamares-settings-lubuntu.deb
 rm calamares-settings-ubuntu-common.deb calamares-settings-lubuntu.deb
 
 apt-get autoremove --purge -f -q -y \
