@@ -21,6 +21,8 @@ fwupdate
 mokutil
 calamares-settings-lubuntu
 calamares
+qml6-module-qtquick-window
+dracut-core
 zram-config
 rsync
 libglib2.0-bin
