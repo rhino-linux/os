@@ -157,8 +157,17 @@ true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
 
 ( cd /etc/calamares/branding && sudo git clone https://github.com/rhino-linux/calamares rhino )
 sudo sed -i 's/lubuntu/rhino/g' /etc/calamares/settings.conf
+# These modules require Snap
 sudo sed -i 's/\- pkgselectprocess//g' /etc/calamares/settings.conf
 sudo sed -i 's/\- pkgselect//g' /etc/calamares/settings.conf
+
+# In newer Ubuntu versions, the filesystem is split
+sudo rm /etc/calamares/modules/unpackfs.conf
+echo 'unpack:
+    -   source: "/cdrom/casper/filesystem.squashfs"
+        sourcefs: "squashfs"
+        destination: ""
+        condition: true' | sudo tee -a /etc/calamares/modules/unpackfs.conf
 
 if [ $(dpkg --print-architecture) = arm64 ]; then
 GNU="aarch"; 
