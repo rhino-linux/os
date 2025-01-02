@@ -27,6 +27,16 @@ curl -L -q http://mirrors.kernel.org/ubuntu/pool/universe/c/calamares-settings-u
 sudo apt install ./calamares-settings-ubuntu-common.deb ./calamares-settings-lubuntu.deb -y
 rm calamares-settings-ubuntu-common.deb calamares-settings-lubuntu.deb
 
+echo "" >> /etc/apt/preferences.d/calamares.pref
+echo "Package: calamares-settings-ubuntu-common" >> /etc/apt/preferences.d/calamares.pref
+echo "Pin: release o=*" >> /etc/apt/preferences.d/calamares.pref
+echo "Pin-Priority: -1" >> /etc/apt/preferences.d/calamares.pref
+
+echo "" >> /etc/apt/preferences.d/calamares.pref
+echo "Package: calamares-settings-lubuntu" >> /etc/apt/preferences.d/calamares.pref
+echo "Pin: release o=*" >> /etc/apt/preferences.d/calamares.pref
+echo "Pin-Priority: -1" >> /etc/apt/preferences.d/calamares.pref
+
 apt-get autoremove --purge -f -q -y \
     ubuntu-desktop \
     ubuntu-session \
