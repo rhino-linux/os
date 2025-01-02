@@ -2,7 +2,6 @@
 # Description: Add/install Pacstall
 
 apt-get update -yq
-apt-get dist-upgrade -yq
 apt-get install axel nano gnome-disk-utility dbus-x11 dconf-editor openssh-server -yq
 sudo systemctl enable ssh
 
