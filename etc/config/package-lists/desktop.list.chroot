@@ -59,6 +59,8 @@ mugshot
 fonts-firacode
 mpv
 language-pack-ko
+fonts-noto-core
+fonts-noto-extra
 fonts-noto-cjk
 fonts-noto-cjk-extra
 flash-kernel
