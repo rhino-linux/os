@@ -7,4 +7,6 @@ mv live/initrd.img-* casper/initrd.lz
 mv live/vmlinuz-* casper/vmlinuz
 mv live/filesystem.packages-remove casper/filesystem.manifest-remove
 mv live/filesystem.packages casper/filesystem.manifest
+mkdir -p casper/boot/grub/themes
+cp -r usr/share/grub/themes/rhino casper/boot/grub/themes/rhino
 printf "$(sudo du -sx --block-size=1 ./ | cut -f1)" > casper/filesystem.size
