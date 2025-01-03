@@ -1,0 +1,3 @@
+[submodule "etc/config/includes.binary/grub"]
+	path = etc/config/includes.binary/grub
+	url = https://github.com/rhino-linux/grub.git
