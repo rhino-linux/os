@@ -18,8 +18,7 @@ sudo chown "rhino" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
 sudo mkdir -p /root/.config/gtk-3.0 /home/rhino/.config/gtk-3.0 /root/.config/gtk-4.0 /home/rhino/.config/gtk-4.0
-SUDO_USER=rhino pacstall -QPINs nala-deb firefox-arm64-deb vscodium-deb celeste-bin rhino-core quintom-cursor-theme-git raspi-config-deb gldriver-test-deb timeshift fake-ubuntu-advantage-tools-deb
-SUDO_USER=rhino pacstall -QPINs rhino-setup-bin
+SUDO_USER=rhino pacstall -QPINs nala-deb firefox-arm64-deb vscodium-deb celeste-bin rhino-core quintom-cursor-theme-git raspi-config-deb gldriver-test-deb timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin hello-rhino-bin
 
 sudo mkdir -p /home/rhino/.config/autostart
 if ! [[ -f "/home/rhino/.config/autostart/rhino-setup.desktop" ]]; then
