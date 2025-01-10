@@ -24,8 +24,7 @@ if [[ $(dpkg --print-architecture) = arm64 ]]; then
 else
     FIREFOX="firefox-bin"
 fi
-SUDO_USER=rhino-live pacstall -QPINs nala-deb ${FIREFOX} vscodium-deb celeste-bin linux-kernel-stable rhino-core quintom-cursor-theme-git rhino-grub-theme-git timeshift fake-ubuntu-advantage-tools-deb
-SUDO_USER=rhino-live pacstall -QPINs rhino-setup-bin
+SUDO_USER=rhino-live pacstall -QPINs nala-deb ${FIREFOX} vscodium-deb celeste-bin linux-kernel-stable rhino-core quintom-cursor-theme-git rhino-grub-theme-git timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin hello-rhino-bin
 
 #Hack: arm64 firefox no snap
 if [ $(dpkg --print-architecture) = arm64 ]; then
