@@ -226,7 +226,8 @@ done
 mkdir /home/rhino-live/.lightpad
 cp /etc/skel/.lightpad/* /home/rhino-live/.lightpad
 ln -s "/home/rhino-live/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino-live/.config/xfce4/desktop/icons.screen.latest.rc"
-sudo rm /home/rhino-live/.config/autostart/rhino-setup.desktop
+sudo rm -f /home/rhino-live/.config/autostart/rhino-setup.desktop
+sudo rm -f /home/rhino-live/.config/autostart/hello-rhino.desktop
 # Make sure the user (rhino) has wrx permissions
 chmod -R 777 /home/rhino-live/.config/xfce4
 cat > /home/rhino-live/.config/autostart/gsettings.desktop <<  __EOF__
