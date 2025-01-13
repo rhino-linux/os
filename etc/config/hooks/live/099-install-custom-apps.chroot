@@ -123,8 +123,11 @@ StartupNotify=true
 Categories=Qt;System;
 Keywords=installer;calamares;system;' | tee -a /usr/share/applications/calamares.desktop > /dev/null
 sudo chmod 755 /usr/share/applications/calamares.desktop
-sudo ln -s /usr/share/applications/calamares.desktop /home/rhino-live/Desktop/calamares.desktop
-sudo chown "rhino-live" -cR /usr/share/applications/calamares.desktop
+sudo cp /usr/share/applications/calamares.desktop /home/rhino-live/Desktop/calamares.desktop
+for f in "/usr/share/applications/calamares.desktop" "/home/rhino-live/Desktop/calamares.desktop"; do
+  gio set -t string "${f}" metadata::xfce-exe-checksum "$(sha256sum ${f} | awk '{print $1}')"
+done
+sudo chown "rhino-live" -cR /home/rhino-live/Desktop/calamares.desktop
 sudo rm /usr/share/applications/lubuntu-calamares.desktop
 
 mkdir /home/rhino-live/.config/autostart/
