@@ -5,7 +5,7 @@ on:
 
 jobs:
   build_amd64:
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
       with:
@@ -14,7 +14,6 @@ jobs:
     - name: Install needed packages
       run: |
         sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/noble/g' /etc/apt/sources.list
         sudo apt-get update && sudo apt-get install --reinstall debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
@@ -37,7 +36,7 @@ jobs:
         path: builds/amd64/${{ env.ISOX64 }}
         
   build_arm64:
-    runs-on: buildjet-4vcpu-ubuntu-2204-arm
+    runs-on: ubuntu-24.04-arm
     steps:
     - uses: actions/checkout@v4
       with:
@@ -46,7 +45,6 @@ jobs:
     - name: Install needed packages
       run: |
         sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/noble/g' /etc/apt/sources.list
         sudo apt-get update && sudo apt-get install --reinstall debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
@@ -69,7 +67,7 @@ jobs:
         path: builds/arm64/${{ env.ISOA64 }}
 
   build_pine_tarball:
-    runs-on: buildjet-4vcpu-ubuntu-2204-arm
+    runs-on: ubuntu-24.04-arm
     steps:
     - uses: actions/checkout@v4
       with:
@@ -79,7 +77,6 @@ jobs:
       run: |
         sudo rm -rf /etc/apt/sources.list.d/microsoft-prod.list
         sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/noble/g' /etc/apt/sources.list
         sudo apt-get update && sudo apt-get install debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
@@ -102,7 +99,7 @@ jobs:
 
   deploy_pine:
     needs: build_pine_tarball
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
       with:
@@ -131,7 +128,7 @@ jobs:
         path: builds/pine/${{ env.IMGPP }}
 
   build_rpi_tarball:
-    runs-on: buildjet-4vcpu-ubuntu-2204-arm
+    runs-on: ubuntu-24.04-arm
     steps:
     - uses: actions/checkout@v4
       with:
@@ -141,7 +138,6 @@ jobs:
       run: |
         sudo rm -rf /etc/apt/sources.list.d/microsoft-prod.list
         sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/noble/g' /etc/apt/sources.list
         sudo apt-get update && sudo apt-get install debootstrap  mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
@@ -163,7 +159,7 @@ jobs:
 
   deploy_rpi_desktop:
     needs: build_rpi_tarball
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     steps:     
     - uses: actions/checkout@v4
       with:
@@ -193,7 +189,7 @@ jobs:
 
   deploy_rpi_server:
     needs: build_rpi_tarball
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     steps:     
     - uses: actions/checkout@v4
       with:
@@ -222,7 +218,7 @@ jobs:
         path: builds/rpi-server/${{ env.IMGRPS }}
 
   build_tab_tarball:
-    runs-on: buildjet-4vcpu-ubuntu-2204-arm
+    runs-on: ubuntu-24.04-arm
     steps:
     - uses: actions/checkout@v4
       with:
@@ -232,7 +228,6 @@ jobs:
       run: |
         sudo rm -rf /etc/apt/sources.list.d/microsoft-prod.list
         sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/noble/g' /etc/apt/sources.list
         sudo apt-get update && sudo apt-get install debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
         sudo dpkg -i debs/live-build_*_all.deb
@@ -255,7 +250,7 @@ jobs:
 
   deploy_tab1:
     needs: build_tab_tarball
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
       with:
@@ -285,7 +280,7 @@ jobs:
         
   deploy_tab2:
     needs: build_tab_tarball
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
       with:

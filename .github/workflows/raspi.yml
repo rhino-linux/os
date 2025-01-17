@@ -5,9 +5,9 @@ on:
 
 jobs:
   build_rpi_tarball:
-    runs-on: buildjet-4vcpu-ubuntu-2204-arm
+    runs-on: ubuntu-24.04-arm
     steps:
-    - uses: actions/checkout@v3.5.0
+    - uses: actions/checkout@v4
       with:
         ref: 'rpi'
 
@@ -15,7 +15,6 @@ jobs:
       run: |
         sudo rm -rf /etc/apt/sources.list.d/microsoft-prod.list
         sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
         sudo apt-get update && sudo apt-get install debootstrap -y
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/lunar
         sudo dpkg -i debs/live-build_*_all.deb
@@ -30,20 +29,20 @@ jobs:
     - name: Build tarball
       run: sudo ./build.sh etc/terraform.conf
       
-    - uses: actions/cache@v3.3.1
+    - uses: actions/cache@v4.0.2
       with:
         path: binary/
         key: tar-rpi-${{ github.run_id }}
 
   deploy_rpi_desktop:
     needs: build_rpi_tarball
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     steps:     
-    - uses: actions/checkout@v3.5.0
+    - uses: actions/checkout@v4
       with:
         ref: 'rpi'
     
-    - uses: actions/cache@v3.3.1
+    - uses: actions/cache@v4.0.2
       with:
         path: binary/
         key: tar-rpi-${{ github.run_id }}
@@ -60,20 +59,20 @@ jobs:
         sudo xz -v builds/rpi-desktop/Rhino*rpi-desktop.img
         echo "IMGRPD=$(cd builds/rpi-desktop; ls *.img.xz)" >> $GITHUB_ENV
 
-    - uses: actions/upload-artifact@v3.1.2
+    - uses: actions/upload-artifact@v4.3.3
       with:
         name: ${{ env.IMGRPD }}
         path: builds/rpi-desktop/${{ env.IMGRPD }}
 
   deploy_rpi_server:
     needs: build_rpi_tarball
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     steps:     
-    - uses: actions/checkout@v3.5.0
+    - uses: actions/checkout@v4
       with:
         ref: 'rpi'
     
-    - uses: actions/cache@v3.3.1
+    - uses: actions/cache@v4.0.2
       with:
         path: binary/
         key: tar-rpi-${{ github.run_id }}
@@ -90,7 +89,7 @@ jobs:
         sudo xz -v builds/rpi-server/Rhino*rpi-server.img
         echo "IMGRPS=$(cd builds/rpi-server; ls *.img.xz)" >> $GITHUB_ENV
 
-    - uses: actions/upload-artifact@v3.1.2
+    - uses: actions/upload-artifact@v4.3.3
       with:
         name: ${{ env.IMGRPS }}
         path: builds/rpi-server/${{ env.IMGRPS }}

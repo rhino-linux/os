@@ -5,9 +5,9 @@ on:
 
 jobs:
   build_pine_tarball:
-    runs-on: buildjet-8vcpu-ubuntu-2204-arm
+    runs-on: ubuntu-24.04-arm
     steps:
-    - uses: actions/checkout@v3.5.0
+    - uses: actions/checkout@v4
       with:
         ref: 'pinephone'
 
@@ -15,7 +15,6 @@ jobs:
       run: |
         sudo rm -rf /etc/apt/sources.list.d/microsoft-prod.list
         sudo rm -rf /var/lib/apt/lists/*
-        sudo sed -i 's/jammy/.\/devel/g' /etc/apt/sources.list
         sudo apt-get update && sudo apt-get install debootstrap mtools dosfstools qemu-user-static binfmt-support -y
         sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/lunar
         sudo dpkg -i debs/live-build_*_all.deb
@@ -31,20 +30,20 @@ jobs:
     - name: Build tarball
       run: sudo ./build.sh etc/terraform.conf
       
-    - uses: actions/cache@v3.3.1
+    - uses: actions/cache@v4.0.2
       with:
         path: binary/
         key: tar-pine-${{ github.run_id }}
 
   deploy_pine:
     needs: build_pine_tarball
-    runs-on: buildjet-8vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3.5.0
+    - uses: actions/checkout@v4
       with:
         ref: 'pinephone'
     
-    - uses: actions/cache@v3.3.1
+    - uses: actions/cache@v4.0.2
       with:
         path: binary/
         key: tar-pine-${{ github.run_id }}
@@ -61,7 +60,7 @@ jobs:
         sudo xz -v builds/pine/Rhino*unified.img
         echo "IMGPP=$(cd builds/pine; ls *.img.xz)" >> $GITHUB_ENV
 
-    - uses: actions/upload-artifact@v3.1.2
+    - uses: actions/upload-artifact@v4.3.3
       with:
         name: ${{ env.IMGPP }}
         path: builds/pine/${{ env.IMGPP }}
