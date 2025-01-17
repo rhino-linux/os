@@ -247,6 +247,21 @@ StartupNotify=false
 Terminal=false
 Hidden=false
 __EOF__
+cat > /home/rhino-live/.config/autostart/calamares_icon.desktop <<  __EOF__
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Name=Calamares Icon Fix
+Comment=Set calamares desktop icon as trusted
+Exec=bash -c "f=/home/rhino-live/Desktop/calamares.desktop; gio set -t string \${f} metadata::xfce-exe-checksum \$(sha256sum \${f} | awk '{print \$1}')"
+done"
+OnlyShowIn=XFCE;
+RunHook=0
+StartupNotify=false
+Terminal=false
+Hidden=false
+__EOF__
 sudo chown "rhino-live" -cR /home/rhino-live/Desktop
 sudo chown "rhino-live" -cR /home/rhino-live/.config
 echo -e "[/home/rhino-live/Desktop/calamares.desktop]\nrow=0\ncol=0\n" >> /home/rhino-live/.config/xfce4/desktop/icons.screen.latest.rc
