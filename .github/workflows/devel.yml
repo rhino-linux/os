@@ -31,7 +31,7 @@ jobs:
       image: "ubuntu:latest"
       options: --privileged
     steps:
-    - uses: actions/checkout@v3.5.0
+    - uses: actions/checkout@v4
       with:
         ref: ${{ matrix.ref }}
 
@@ -66,7 +66,7 @@ jobs:
         name: ${{ env.OUT_ISO }}
         path: builds/${{ matrix.target }}/${{ env.OUT_ISO }}
 
-    - uses: actions/cache@v3.3.1
+    - uses: actions/cache@v4.0.2
       if: matrix.type == 'tarball'
       with:
         path: binary/
@@ -74,7 +74,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     container:
       image: "ubuntu:latest"
       options: --privileged
@@ -102,11 +102,11 @@ jobs:
             ref: pinetab
             out: pinetab2
     steps:
-    - uses: actions/checkout@v3.5.0
+    - uses: actions/checkout@v4
       with:
         ref: ${{ matrix.ref }}
 
-    - uses: actions/cache@v3.3.1
+    - uses: actions/cache@v4.0.2
       with:
         path: binary/
         key: tar-${{ matrix.parent }}-${{ github.run_id }}
