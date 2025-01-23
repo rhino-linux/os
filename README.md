@@ -1,3 +1,7 @@
+### Issues Tracker
+
+To report issues or propose new features for this repository, visit [our tracker](https://github.com/rhino-linux/tracker).
+
 ## Rhino Linux ISO Builder
 ---
 Originally forked from [Vanilla-OS's ISO builder](https://github.com/Vanilla-OS/live-iso), which forked from [Cinnamon's ISO builder](https://github.com/ubuntucinnamon/iso-builder-devel), which forked from [Elementary's ISO builder](https://github.com/elementary/os) :) 
