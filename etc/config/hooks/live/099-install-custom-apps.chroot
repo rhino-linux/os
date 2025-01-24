@@ -163,6 +163,9 @@ sudo sed -i 's/lubuntu/rhino/g' /etc/calamares/settings.conf
 sudo sed -i 's/\- pkgselectprocess//g' /etc/calamares/settings.conf
 sudo sed -i 's/\- pkgselect//g' /etc/calamares/settings.conf
 
+# The Live image user is not removed when instaalled on disk
+sudo sed -i '/\/bin\/bash/a userdel rhino-live' /usr/libexec/fixconkeys-part2
+
 # In newer Ubuntu versions, the filesystem is split
 sudo rm /etc/calamares/modules/unpackfs.conf
 echo 'unpack:
