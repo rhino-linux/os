@@ -288,4 +288,5 @@ sudo rm /usr/share/xsessions/xfce.desktop /usr/share/xsessions/xubuntu.desktop
 
 sudo apt-get clean
 sudo apt-get remove linux*6.11.0* -yq
+sudo apt-get remove xterm -y
 sudo update-initramfs -u
