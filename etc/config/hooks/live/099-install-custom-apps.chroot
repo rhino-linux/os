@@ -110,7 +110,7 @@ sudo chown "rhino" -cR /home/rhino/.config
 
 sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
 sudo rm /usr/share/xsessions/xfce.desktop /usr/share/xsessions/xubuntu.desktop
-sudo mv /usr/share/backgrounds/xfce/xfce-x.svg /usr/share/backgrounds/xfce/xfce-uglyrat.svg
+[[ -f /usr/share/backgrounds/xfce/xfce-x.svg ]] && sudo mv /usr/share/backgrounds/xfce/xfce-x.svg /usr/share/backgrounds/xfce/xfce-uglyrat.svg
 sudo ln -sf /usr/share/backgrounds/xfce/rolling-rhino-default.png /usr/share/backgrounds/xfce/xfce-x.svg
 sudo rm /etc/lightdm/lightdm.conf
 echo '[SeatDefaults]
