@@ -26,6 +26,9 @@ else
 fi
 SUDO_USER=rhino-live pacstall -QPINs nala-deb ${FIREFOX} vscodium-deb celeste-bin linux-kernel-stable rhino-core quintom-cursor-theme-git rhino-grub-theme-git timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin hello-rhino-bin
 
+# TEMP: hotfix pipewire
+echo N | rhino-hotfix PipeWire
+
 #Hack: arm64 firefox no snap
 if [ $(dpkg --print-architecture) = arm64 ]; then
 echo "" >> /etc/apt/preferences.d/rhino.pref
