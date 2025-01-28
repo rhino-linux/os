@@ -288,6 +288,8 @@ zoom-percent=115" | tee -a /home/rhino-live/.config/docks.ini > /dev/null
 
 sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
 sudo rm /usr/share/xsessions/xfce.desktop /usr/share/xsessions/xubuntu.desktop
+sudo mv /usr/share/backgrounds/xfce/xfce-x.svg /usr/share/backgrounds/xfce/xfce-uglyrat.svg
+sudo ln -sf /usr/share/backgrounds/xfce/rolling-rhino-default.png /usr/share/backgrounds/xfce/xfce-x.svg
 
 sudo apt-get clean
 sudo apt-get remove linux*6.11.0* -yq
