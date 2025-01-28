@@ -1,3 +1,6 @@
 #!/bin/bash
 
-/usr/sbin/resize2fs $(df -P . | sed -n '$s/[[:blank:]].*//p')
+loc=$(df -P . | sed -n '$s/[[:blank:]].*//p')
+
+/usr/sbin/parted -s ${loc%%p*} resizepart ${loc##*p} 100%
+/usr/sbin/resize2fs ${loc}
