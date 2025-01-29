@@ -70,3 +70,4 @@ ofono
 ofono-scripts
 u-boot-tools
 parted
+expect
