@@ -17,7 +17,7 @@ actions:
   - action: run
     description: clean
     chroot: true
-    command: apt-get remove linux*6.11.0* -yq
+    command: apt-get remove linux*6.12.0* -yq
 
   - action: overlay
     description: Add PT1 bootloader
