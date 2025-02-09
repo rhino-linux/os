@@ -292,5 +292,5 @@ sudo rm /usr/share/xsessions/xfce.desktop /usr/share/xsessions/xubuntu.desktop
 sudo ln -sf /usr/share/backgrounds/xfce/rolling-rhino-default.png /usr/share/backgrounds/xfce/xfce-x.svg
 
 sudo apt-get clean
-sudo apt-get remove linux*6.11.0* -yq
+sudo apt-get remove linux*6.12.0* -yq
 sudo update-initramfs -u
