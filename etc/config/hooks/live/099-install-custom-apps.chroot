@@ -232,6 +232,9 @@ for i in xfce4 Kvantum plank autostart xfce4 ulauncher cortile gtk-3.0 gtk-4.0; 
 mkdir -p /home/rhino-live/.config/${i}
 cp -r /etc/skel/.config/${i}/* /home/rhino-live/.config/${i};
 done
+echo ".-vala-panel-appmenu-core > * {
+  min-width: 100px;
+}" | sudo tee -a /home/rhino-live/.config/gtk-3.0/gtk.css
 mkdir /home/rhino-live/.lightpad
 cp /etc/skel/.lightpad/* /home/rhino-live/.lightpad
 ln -s "/home/rhino-live/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino-live/.config/xfce4/desktop/icons.screen.latest.rc"
