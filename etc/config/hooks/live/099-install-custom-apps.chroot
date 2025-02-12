@@ -271,6 +271,20 @@ StartupNotify=false
 Terminal=false
 Hidden=false
 __EOF__
+cat > /home/rhino-live/.config/autostart/appmenu.desktop <<  __EOF__
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Name=Appmenu Expand Fix
+Comment=Force Appmenu Expand Off
+Exec=bash -c "xfconf-query -c xfce4-panel -p /plugins/plugin-6/plugins/plugin-6/expand -s false"
+OnlyShowIn=XFCE;
+RunHook=0
+StartupNotify=false
+Terminal=false
+Hidden=false
+__EOF__
 sudo chown "rhino-live" -cR /home/rhino-live/Desktop
 sudo chown "rhino-live" -cR /home/rhino-live/.config
 echo -e "[/home/rhino-live/Desktop/calamares.desktop]\nrow=0\ncol=0\n" >> /home/rhino-live/.config/xfce4/desktop/icons.screen.latest.rc
