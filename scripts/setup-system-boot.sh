@@ -52,8 +52,7 @@ dtparam=spi=on" | tee -a /boot/firmware/config.txt
 
 echo "net.ifnames=0 dwc_otg.lpm_enable=0 console=ttyAMA0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline rootwait" | tee -a /boot/firmware/cmdline.txt
 
-cat > /system-boot/boot.scr << __EOF__
-if test -n "$fdt_addr"; then
+echo 'if test -n "$fdt_addr"; then
   fdt addr ${fdt_addr}
   fdt move ${fdt_addr} ${fdt_addr_r}  # implicitly sets fdt active
 else
@@ -133,5 +132,4 @@ for pathprefix in ${fk_image_locations}; do
         ${cmd} ${kernel_addr_r} ${ramdisk_param} ${fdt_addr_r}
     done
   fi
-done
-__EOF__
+done' | tee -a /system-boot/boot.scr
