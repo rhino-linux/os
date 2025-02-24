@@ -5,7 +5,6 @@ echo "Fixing snapd not being able to remove itself"
 
 sed -i 's/^set -e//g' /var/lib/dpkg/info/snapd.prerm # For minimal as snapd fails at some point
 sed -i 's/^set -e//g' /var/lib/dpkg/info/snapd.postrm
-echo 'find / -type f -name "*snap*" -delete 2> /dev/null' >> /var/lib/dpkg/info/snapd.postrm # To make sure snapd is fully removed
 echo 'rm -rf /snap' >> /var/lib/dpkg/info/snapd.postrm
 echo 'rm -rf ~/snap' >> /var/lib/dpkg/info/snapd.postrm
 echo 'rm -rf /root/snap' >> /var/lib/dpkg/info/snapd.postrm
