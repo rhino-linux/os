@@ -18,6 +18,6 @@ export PACSTALL_DOWNLOADER=curl
 export GITHUB_ACTIONS=true
 
 # Install pacstall
-sudo bash -c "$(curl -fsSL https://git.io/JsADh || wget -q https://git.io/JsADh -O -)"
+echo N | sudo bash -c "$(curl -fsSL https://git.io/JsADh || wget -q https://git.io/JsADh -O -)"
 
 # sed -i 's/ cdrom/ [trusted=yes] cdrom/g' /etc/apt/sources.list
