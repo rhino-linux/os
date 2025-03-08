@@ -17,18 +17,12 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
-SUDO_USER=rhino pacstall -QPINs nala-deb firefox-arm64-deb vscodium-deb celeste-bin rhino-pine-core timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin hello-rhino-bin
+SUDO_USER=rhino pacstall -QPINs nala-deb firefox-bin vscodium-deb celeste-bin rhino-pine-core timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin hello-rhino-bin
 
 sudo mkdir -p /home/rhino/.config/autostart
 if ! [[ -f "/home/rhino/.config/autostart/rhino-setup.desktop" ]]; then
   sudo ln -sf "/usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop" "/home/rhino/.config/autostart/rhino-setup.desktop"
 fi
-
-echo "" >> /etc/apt/preferences.d/rhino.pref
-echo "Package: firefox" >> /etc/apt/preferences.d/rhino.pref
-echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino.pref
-echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
-echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref
 
 echo "" >> /etc/apt/preferences.d/rhino.pref
 echo "Package: u-boot-menu" >> /etc/apt/preferences.d/rhino.pref
