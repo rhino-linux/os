@@ -21,9 +21,6 @@ git config --global --add safe.directory '*'
 sudo mkdir -p /root/.config/gtk-3.0 /home/rhino-live/.config/gtk-3.0 /root/.config/gtk-4.0 /home/rhino-live/.config/gtk-4.0
 SUDO_USER=rhino-live pacstall -QPINs nala-deb firefox-bin vscodium-deb celeste-bin linux-kernel-stable rhino-core quintom-cursor-theme-git rhino-grub-theme-git timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin hello-rhino-bin
 
-# TEMP: hotfix pipewire
-echo N | rhino-hotfix PipeWire
-
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
 #Hack: rhino landing
