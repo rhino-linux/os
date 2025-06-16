@@ -31,5 +31,4 @@ fonts-noto-cjk-extra
 btrfs-progs
 openssl
 sbsigntool
-fwts
 cryptsetup
