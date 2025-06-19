@@ -29,7 +29,7 @@ jobs:
     - name: Build tarball
       run: sudo ./build.sh etc/terraform.conf
       
-    - uses: actions/cache@v4.0.2
+    - uses: actions/cache@v4
       with:
         path: binary/
         key: tar-rpi-${{ github.run_id }}
@@ -42,7 +42,7 @@ jobs:
       with:
         ref: 'rpi'
     
-    - uses: actions/cache@v4.0.2
+    - uses: actions/cache@v4
       with:
         path: binary/
         key: tar-rpi-${{ github.run_id }}
@@ -72,7 +72,7 @@ jobs:
       with:
         ref: 'rpi'
     
-    - uses: actions/cache@v4.0.2
+    - uses: actions/cache@v4
       with:
         path: binary/
         key: tar-rpi-${{ github.run_id }}
