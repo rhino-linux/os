@@ -78,11 +78,7 @@ net-tools
 ifupdown
 bridge-utils
 command-not-found
-b43-fwcutter
-dkms
-setserial
 user-setup
-efibootmgr
 secureboot-db
 shim
 shim-signed

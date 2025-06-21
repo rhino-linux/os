@@ -26,6 +26,7 @@ grub-efi-arm64-signed' | sudo tee -a etc/config/package-lists.calamares/pool.lis
 else
 echo 'bcmwl-kernel-source
 microcode-initrd
+intel-microcode
 iucode-tool
 grub-efi-amd64
 grub-efi-amd64-bin
