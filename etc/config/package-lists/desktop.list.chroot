@@ -88,3 +88,7 @@ pipewire
 pipewire-pulse
 parted
 expect
+net-tools
+ifupdown
+bridge-utils
+command-not-found
