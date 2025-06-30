@@ -24,12 +24,7 @@ SUDO_USER=rhino-live pacstall -QPINs nala-deb firefox-bin vscodium-deb celeste-b
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
 #Hack: rhino landing
-if [ $(dpkg --print-architecture) = arm64 ]; then
-sudo rm -r /etc/firefox/syspref.js
-echo 'pref("browser.startup.homepage", "https://rhinolinux.org/landing/");' >> /etc/firefox/syspref.js;
-else
-echo 'pref("browser.startup.homepage", "https://rhinolinux.org/landing/", locked);' >> /lib/firefox/defaults/pref/syspref.js;
-fi
+echo 'pref("browser.startup.homepage", "https://rhinolinux.org/landing/", locked);' >> /lib/firefox/defaults/pref/syspref.js
 
 #Bash colors
 sudo cp "/etc/xdg/xdg-unicorn/.bashrc" "/home/rhino-live/.bashrc"
