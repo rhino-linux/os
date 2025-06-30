@@ -28,8 +28,7 @@ fi
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
 #Hack: rhino landing
-sudo rm -r /etc/firefox/syspref.js
-echo 'pref("browser.startup.homepage", "https://rhinolinux.org/landing/");' >> /etc/firefox/syspref.js
+echo 'pref("browser.startup.homepage", "https://rhinolinux.org/landing/", locked);' >> /lib/firefox/defaults/pref/syspref.js
 
 #Bash colors
 sudo cp "/etc/xdg/xdg-unicorn/.bashrc" "/home/rhino/.bashrc"
