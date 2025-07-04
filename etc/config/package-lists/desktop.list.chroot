@@ -92,3 +92,4 @@ net-tools
 ifupdown
 bridge-utils
 command-not-found
+rclone-browser
