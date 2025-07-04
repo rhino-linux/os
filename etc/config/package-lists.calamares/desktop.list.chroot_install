@@ -102,3 +102,4 @@ btrfs-progs
 openssl
 sbsigntool
 cryptsetup
+rclone-browser
