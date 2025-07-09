@@ -55,11 +55,7 @@ cd ~
 echo "GRUB_THEME=/usr/share/grub/themes/rhino/theme.txt" | sudo tee -a /etc/default/grub >/dev/null
 sudo update-grub
 
-#Calamares
-# Replace Lubuntu Calamares desktop file with ours
-rm /usr/share/applications/calamares.desktop
-rm /usr/share/applications/calamares-launch-oem.desktop
-mkdir -p /home/rhino-live/Desktop
+#Calamares desktop entry
 echo '[Desktop Entry]
 Type=Application
 Version=1.0
@@ -110,16 +106,12 @@ for f in "/usr/share/applications/calamares.desktop" "/home/rhino-live/Desktop/c
     gio set -t string "${f}" metadata::xfce-exe-checksum "$(sha256sum ${f} | awk '{print $1}')"
 done
 sudo chown "rhino-live" -cR /home/rhino-live/Desktop/calamares.desktop
-sudo rm /usr/share/applications/lubuntu-calamares.desktop
 
 mkdir /home/rhino-live/.config/autostart/
 
-echo '#!/bin/sh
-true' | sudo tee /usr/bin/calamares-logs-helper >/dev/null
-
 (cd /etc/calamares/branding && sudo git clone https://github.com/rhino-linux/calamares rhino)
 
-# The Live image user is not removed when instaalled on disk
+# The Live image user is not removed when installed on disk
 sudo sed -i '/\/bin\/bash/a userdel rhino-live' /usr/libexec/fixconkeys-part2
 
 if [ $(dpkg --print-architecture) = arm64 ]; then
