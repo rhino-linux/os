@@ -8,7 +8,7 @@ apt-get install axel nano gnome-disk-utility dbus-x11 -yq
 sudo groupadd rhino-live
 sudo useradd -rm -d /home/rhino-live -g root -s /bin/bash -u 1001 rhino-live
 sudo adduser rhino-live sudo
-echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # Pacstall has issues with sudo despite the user not having a password
+echo '%sudo ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers # Pacstall has issues with sudo despite the user not having a password
 
 # More pacstall specific things
 export SUDO_USER=rhino-live
@@ -18,44 +18,3 @@ export GITHUB_ACTIONS=true
 
 # Install pacstall
 echo N | sudo bash -c "$(curl -fsSL https://git.io/JsADh || wget -q https://git.io/JsADh -O -)"
-
-# WORKAROUND to trust CD Add
-sudo rm /etc/calamares/modules/before_bootloader_context.conf
-sudo touch /etc/calamares/modules/before_bootloader_context.conf
-sudo cat > /etc/calamares/modules/before_bootloader_context.conf << __EOF__
-# Make sure the correct bootloader package is installed for EFI.
-# Also pull in shim so secureboot has a chance at working.
-# Because of edge cases, we ignore BIOS, and do the same
-# procedure for all EFI types.
----
-firmwareType:
-    bios:
-        -    command: sed -i 's/ cdrom/ [trusted=yes] cdrom/g' /etc/apt/sources.list
-        -    timeout: 10
-        -    command: apt-get update --allow-releaseinfo-change
-             timeout: 120
-        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict grub-pc
-             timeout: 300
-        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict shim-signed
-             timeout: 300'
-    "*":
-        -    command: sed -i 's/ cdrom/ [trusted=yes] cdrom/g' /etc/apt/sources.list
-        -    timeout: 10
-        -    command: apt-get update --allow-releaseinfo-change
-             timeout: 120
-        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict grub-efi-\$(dpkg --print-architecture)-signed
-             timeout: 300
-        -    command: apt install -y --no-upgrade -o Acquire::gpgv::Options::=--ignore-time-conflict shim-signed
-             timeout: 300'
-__EOF__
-
-# Unmount partition of even if installation fails
-sudo cat > /etc/calamares/modules/umount.conf << __EOF__
-# This module represents the last part of the installation, the unmounting
-# of partitions used for the install.  After this, there is no regular way
-# to modify the target system anymore.
-#
----
-# when a prior module fails this will still run anyway
-emergency: true
-__EOF__
