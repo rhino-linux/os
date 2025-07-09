@@ -120,9 +120,6 @@ else
     GNU="x86_"
 fi
 
-# TODO: These aren't in `rhino-calamares-settings-git`, so we need to do something about this and I assume they are needed lol.
-if [ $(dpkg --print-architecture) = arm64 ]; then sudo rm /etc/calamares/modules/*386*.conf; fi
-
 #Lightdm
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
 (cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png)
