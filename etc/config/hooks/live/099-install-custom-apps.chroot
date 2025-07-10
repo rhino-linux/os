@@ -47,9 +47,7 @@ HOME=/home/rhino-live runuser -l rhino-live -c 'DISPLAY=:0 XAUTHORITY=/home/rhin
 HOME=/home/rhino-live runuser -l rhino-live -c 'DISPLAY=:0 XAUTHORITY=/home/rhino-live/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus xfconf-query -c xsettings -p /Gtk/CursorThemeName -s Quintom_Ink'
 sudo sed -i "s/'Adwaita'/'Yaru-purple-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
 sudo sed -i "s/'default'/'prefer-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
-cd /usr/share/glib-2.0/schemas
-sudo glib-compile-schemas .
-cd ~
+sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
 
 # Grub
 echo "GRUB_THEME=/usr/share/grub/themes/rhino/theme.txt" | sudo tee -a /etc/default/grub >/dev/null
@@ -109,7 +107,7 @@ sudo chown "rhino-live" -cR /home/rhino-live/Desktop/calamares.desktop
 
 mkdir /home/rhino-live/.config/autostart/
 
-(cd /etc/calamares/branding && sudo git clone https://github.com/rhino-linux/calamares rhino)
+sudo git clone --depth=1 https://github.com/rhino-linux/calamares /etc/calamares/branding/rhino
 
 # The Live image user is not removed when installed on disk
 sudo sed -i '/\/bin\/bash/a userdel rhino-live' /usr/libexec/fixconkeys-part2
