@@ -2,7 +2,7 @@
 # Description: Add/install Pacstall
 
 apt-get update -yq
-apt-get install axel nano gnome-disk-utility dbus-x11 -yq
+apt-get install axel wget nano gnome-disk-utility dbus-x11 -yq
 
 # Create user
 sudo groupadd rhino-live
