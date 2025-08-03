@@ -105,13 +105,6 @@ for f in "/usr/share/applications/calamares.desktop" "/home/rhino-live/Desktop/c
 done
 sudo chown "rhino-live" -cR /home/rhino-live/Desktop/calamares.desktop
 
-mkdir /home/rhino-live/.config/autostart/
-
-sudo git clone --depth=1 https://github.com/rhino-linux/calamares /etc/calamares/branding/rhino
-
-# The Live image user is not removed when installed on disk
-sudo sed -i '/\/bin\/bash/a userdel rhino-live' /usr/libexec/fixconkeys-part2
-
 if [ $(dpkg --print-architecture) = arm64 ]; then
     GNU="aarch"
 else
@@ -121,6 +114,8 @@ fi
 #Lightdm
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
 (cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png)
+
+mkdir /home/rhino-live/.config/autostart/
 
 #VSC theme
 wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage && mv Microsoft.VisualStudio.Services.VSIXPackage /home/rhino-live/omni-dracula.vsix
