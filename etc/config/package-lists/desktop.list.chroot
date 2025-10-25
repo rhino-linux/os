@@ -22,7 +22,6 @@ inputattach
 language-selector-common
 libasound2-plugins
 libsasl2-modules
-libu2f-udev
 lightdm
 lightdm-gtk-greeter
 rfkill
