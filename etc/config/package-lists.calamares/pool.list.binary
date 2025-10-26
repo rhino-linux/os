@@ -2,3 +2,20 @@ b43-fwcutter
 dkms
 setserial
 efibootmgr
+
+#if ARCHITECTURES arm64
+initramfs-tools
+grub-efi-arm64
+grub-efi-arm64-bin
+grub-efi-arm64-signed
+#endif
+
+#if ARCHITECTURES amd64
+bcmwl-kernel-source
+microcode-initrd
+intel-microcode
+iucode-tool
+grub-efi-amd64
+grub-efi-amd64-bin
+grub-efi-amd64-signed
+#endif
