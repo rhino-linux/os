@@ -27,8 +27,7 @@ echo -e "
 "
 
 apt-get update
-apt-get install -y patch gnupg2 binutils zstd ubuntu-keyring libglib2.0-dev libmysqlclient-dev
-apt-get install -y apt-utils
+apt-get install -y patch gnupg2 binutils zstd ubuntu-keyring libglib2.0-dev apt-utils
 ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/devel
 
 build() {
