@@ -1,7 +1,11 @@
 b43-fwcutter
 dkms
 setserial
+user-setup
 efibootmgr
+secureboot-db
+shim
+shim-signed
 
 #if ARCHITECTURES arm64
 initramfs-tools

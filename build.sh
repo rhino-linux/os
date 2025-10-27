@@ -86,17 +86,6 @@ build() {
     cd $BASE_DIR
 }
 
-cat >etc/config/package-lists.calamares/pool.list.binary <<__EOF__
-b43-fwcutter
-dkms
-setserial
-user-setup
-efibootmgr
-secureboot-db
-shim
-shim-signed
-__EOF__
-
 if [[ "$ARCH" == "all" ]]; then
     build amd64
 else
