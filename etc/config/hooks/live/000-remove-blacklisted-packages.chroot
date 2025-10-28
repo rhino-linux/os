@@ -14,7 +14,7 @@ echo "P: Begin executing remove-blacklisted-packages chroot hook..."
 sudo apt-get install qml-module-qtquick2 qml-module-qtquick-window2 -q -y
 # Needed for a calamares module we don't use that (Ubuntu decides to package it anyway)
 sudo dpkg --force-depends --remove snapd-seed-glue
-sudo dpkg --force-depends --remove calamares-settings-ubuntu-common calamares-settings-lubuntu
+sudo dpkg --force-depends --remove calamares-settings-ubuntu-common
 # So it can be downgraded, not the best permanent solution however
 if [[ $(dpkg --print-architecture) == "arm64" ]]; then
   calam_link="http://ports.ubuntu.com/ubuntu-ports/pool/universe/c/calamares-settings-ubuntu/calamares-settings-ubuntu-common_24.10.5_arm64.deb"
@@ -22,17 +22,11 @@ else
   calam_link="http://mirrors.kernel.org/ubuntu/pool/universe/c/calamares-settings-ubuntu/calamares-settings-ubuntu-common_24.10.5_amd64.deb"
 fi
 curl -L -q "${calam_link}" -o calamares-settings-ubuntu-common.deb
-curl -L -q http://mirrors.kernel.org/ubuntu/pool/universe/c/calamares-settings-ubuntu/calamares-settings-lubuntu_24.10.5_all.deb -o calamares-settings-lubuntu.deb
-sudo apt install ./calamares-settings-ubuntu-common.deb ./calamares-settings-lubuntu.deb -y
-rm calamares-settings-ubuntu-common.deb calamares-settings-lubuntu.deb
+sudo apt install ./calamares-settings-ubuntu-common.deb -y
+rm calamares-settings-ubuntu-common.deb
 
 echo "" >> /etc/apt/preferences.d/calamares.pref
 echo "Package: calamares-settings-ubuntu-common" >> /etc/apt/preferences.d/calamares.pref
-echo "Pin: release o=*" >> /etc/apt/preferences.d/calamares.pref
-echo "Pin-Priority: -1" >> /etc/apt/preferences.d/calamares.pref
-
-echo "" >> /etc/apt/preferences.d/calamares.pref
-echo "Package: calamares-settings-lubuntu" >> /etc/apt/preferences.d/calamares.pref
 echo "Pin: release o=*" >> /etc/apt/preferences.d/calamares.pref
 echo "Pin-Priority: -1" >> /etc/apt/preferences.d/calamares.pref
 
