@@ -91,7 +91,7 @@ cp -r /etc/skel/.local/share/onboard/themes/Droid.theme /usr/share/onboard/theme
 ln -s "/home/rhino/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino/.config/xfce4/desktop/icons.screen.latest.rc"
 # Make sure the user (rhino) has wrx permissions
 chmod -R 777 /home/rhino/.config/xfce4
-sudo chown "rhino" -cR /home/rhino/Desktop
+sudo chown "rhino" -cR /home/rhino
 sudo chown "rhino" -cR /home/rhino/.config
 
 sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
