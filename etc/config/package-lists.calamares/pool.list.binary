@@ -19,8 +19,4 @@ broadcom-sta-dkms
 microcode-initrd
 intel-microcode
 iucode-tool
-grub-pc
-grub-efi-amd64
-grub-efi-amd64-bin
-grub-efi-amd64-signed
 #endif
