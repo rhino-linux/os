@@ -98,7 +98,7 @@ StartupNotify=false
 Terminal=false
 Hidden=false
 __EOF__
-sudo chown "rhino" -cR /home/rhino/Desktop
+sudo chown "rhino" -cR /home/rhino
 sudo chown "rhino" -cR /home/rhino/.config
 
 sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
