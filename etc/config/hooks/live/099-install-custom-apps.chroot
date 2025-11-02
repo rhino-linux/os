@@ -264,7 +264,7 @@ StartupNotify=false
 Terminal=false
 Hidden=false
 __EOF__
-sudo chown "rhino-live" -cR /home/rhino-live/Desktop
+sudo chown "rhino-live" -cR /home/rhino-live
 sudo chown "rhino-live" -cR /home/rhino-live/.config
 echo -e "[/home/rhino-live/Desktop/calamares.desktop]\nrow=0\ncol=0\n" >> /home/rhino-live/.config/xfce4/desktop/icons.screen.latest.rc
 
