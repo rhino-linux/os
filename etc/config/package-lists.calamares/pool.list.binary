@@ -15,6 +15,7 @@ grub-efi-arm64-signed
 #endif
 
 #if ARCHITECTURES amd64
+grub-pc
 broadcom-sta-dkms
 microcode-initrd
 intel-microcode
