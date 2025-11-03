@@ -53,6 +53,8 @@ sudo glib-compile-schemas /usr/share/glib-2.0/schemas
 echo "GRUB_THEME=/usr/share/grub/themes/rhino/theme.txt" | sudo tee -a /etc/default/grub >/dev/null
 sudo update-grub
 
+mkdir -p /home/rhino-live/Desktop/
+
 echo '[Desktop Entry]
 Type=Application
 Version=1.0
