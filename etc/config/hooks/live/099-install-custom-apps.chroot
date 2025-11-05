@@ -212,6 +212,11 @@ theme='rhinoplank'
 zoom-enabled=true
 zoom-percent=115" | tee -a /home/rhino-live/.config/docks.ini >/dev/null
 
+sudo mkdir /etc/skel/.config/Kvantum/ /root/.config/Kvantum/
+
+echo '[General]
+theme=KvRhinoDark' | tee /root/.config/Kvantum/kvantum.kvconfig /etc/skel/.config/Kvantum/kvantum.kvconfig >/dev/null
+
 # TODO: This should be seperate from this chroot.
 # The Live image user is not removed when instaalled on disk
 sudo sed -i '/\/bin\/bash/a userdel rhino-live' /usr/libexec/fixconkeys-part2
