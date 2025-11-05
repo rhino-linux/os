@@ -212,6 +212,10 @@ theme='rhinoplank'
 zoom-enabled=true
 zoom-percent=115" | tee -a /home/rhino-live/.config/docks.ini >/dev/null
 
+# TODO: This should be seperate from this chroot.
+# The Live image user is not removed when instaalled on disk
+sudo sed -i '/\/bin\/bash/a userdel rhino-live' /usr/libexec/fixconkeys-part2
+
 sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
 sudo rm /usr/share/xsessions/xfce.desktop /usr/share/xsessions/xubuntu.desktop
 [[ -f /usr/share/backgrounds/xfce/xfce-x.svg ]] && sudo mv /usr/share/backgrounds/xfce/xfce-x.svg /usr/share/backgrounds/xfce/xfce-uglyrat.svg
