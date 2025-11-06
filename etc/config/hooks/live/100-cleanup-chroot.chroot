@@ -10,9 +10,3 @@ rm -f /etc/group-
 rm -f /etc/apt/conf.d/00secure
 rm -rf /home/rhino-live/.cache
 rm -rf /root/.cache
-
-## Cleanup APT cache
-apt-get autopurge -yq
-apt-get clean -q
-
-rm -rf /var/cache/apt/* /var/lib/apt/lists/*
