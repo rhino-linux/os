@@ -5,7 +5,7 @@
 distro_pretty_name="@DISTRO_NAME @VERSION @CHANNEL"
 
 # Set OS name
-echo "$distro_pretty_name /\n /\l" > /etc/issue
+echo "$distro_pretty_name /\n /\l" >/etc/issue
 
 # Set OS info
 echo 'PRETTY_NAME="'$distro_pretty_name'"
@@ -17,6 +17,6 @@ ID=ubuntu
 ID_LIKE=debian
 HOME_URL="https://rhinolinux.org/"
 SUPPORT_URL="https://github.com/rhino-linux"
-BUG_REPORT_URL="https://github.com/rhino-linux"
+BUG_REPORT_URL="https://github.com/rhino-linux/tracker"
 PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
-UBUNTU_CODENAME="@CODENAME"' > /etc/os-release
+UBUNTU_CODENAME="@CODENAME"' >/etc/os-release

@@ -102,3 +102,4 @@ openssl
 sbsigntool
 cryptsetup
 rclone-browser
+wmctrl

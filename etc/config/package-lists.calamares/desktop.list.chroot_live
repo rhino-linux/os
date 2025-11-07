@@ -1,5 +1,6 @@
 casper
 gparted
-calamares-settings-lubuntu
 calamares
 qml6-module-qtquick-window
+qml6-module-qtquick
+squashfs-tools

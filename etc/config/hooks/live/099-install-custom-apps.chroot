@@ -19,27 +19,27 @@ sudo chown "rhino-live" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
 sudo mkdir -p /root/.config/gtk-3.0 /home/rhino-live/.config/gtk-3.0 /root/.config/gtk-4.0 /home/rhino-live/.config/gtk-4.0
-SUDO_USER=rhino-live pacstall -QPINs nala-deb firefox-bin vscodium-deb linux-kernel-stable rhino-core quintom-cursor-theme-git rhino-grub-theme-git timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin hello-rhino-bin
+SUDO_USER=rhino-live pacstall -QPINs nala-deb firefox-bin vscodium-deb linux-kernel-stable rhino-core quintom-cursor-theme-git rhino-grub-theme-git rhino-calamares-settings-git timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin hello-rhino-bin
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
 #Hack: rhino landing
-echo 'pref("browser.startup.homepage", "https://rhinolinux.org/landing/", locked);' >> /lib/firefox/defaults/pref/syspref.js
+echo 'pref("browser.startup.homepage", "https://rhinolinux.org/landing/", locked);' >>/lib/firefox/defaults/pref/syspref.js
 
 #Bash colors
 sudo cp "/etc/xdg/xdg-unicorn/.bashrc" "/home/rhino-live/.bashrc"
 
-#Theming 
+#Theming
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Snow/cursor.theme 55
 sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Quintom_Ink/cursor.theme 55
 sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth 100
 sudo update-alternatives --set default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/Quintom_Ink/cursor.theme
-echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
+echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment >/dev/null
 mkdir -p /home/rhino-live/.config/Kvantum
 mkdir -p /etc/skel/.config/Kvantum
-echo "theme=KvRhinoDark" >> /home/rhino-live/.config/Kvantum/kvantum.kvconfig
-echo "theme=KvRhinoDark" >> /etc/skel/.config/Kvantum/kvantum.kvconfig
+echo "theme=KvRhinoDark" >>/home/rhino-live/.config/Kvantum/kvantum.kvconfig
+echo "theme=KvRhinoDark" >>/etc/skel/.config/Kvantum/kvantum.kvconfig
 xfconf-query -c xsettings -p /Net/ThemeName --set "Yaru-purple-dark"
 HOME=/home/rhino-live runuser -l rhino-live -c 'DISPLAY=:0 XAUTHORITY=/home/rhino-live/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus gsettings set org.gnome.desktop.interface gtk-theme Yaru-purple'
 HOME=/home/rhino-live runuser -l rhino-live -c 'DISPLAY=:0 XAUTHORITY=/home/rhino-live/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus xfconf-query -c xfwm4 -p /general/theme -s Yaru-dark'
@@ -47,19 +47,14 @@ HOME=/home/rhino-live runuser -l rhino-live -c 'DISPLAY=:0 XAUTHORITY=/home/rhin
 HOME=/home/rhino-live runuser -l rhino-live -c 'DISPLAY=:0 XAUTHORITY=/home/rhino-live/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus xfconf-query -c xsettings -p /Gtk/CursorThemeName -s Quintom_Ink'
 sudo sed -i "s/'Adwaita'/'Yaru-purple-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
 sudo sed -i "s/'default'/'prefer-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
-cd /usr/share/glib-2.0/schemas
-sudo glib-compile-schemas .
-cd ~
+sudo glib-compile-schemas /usr/share/glib-2.0/schemas
 
 # Grub
-echo "GRUB_THEME=/usr/share/grub/themes/rhino/theme.txt" | sudo tee -a /etc/default/grub > /dev/null
+echo "GRUB_THEME=/usr/share/grub/themes/rhino/theme.txt" | sudo tee -a /etc/default/grub >/dev/null
 sudo update-grub
 
-#Calamares
-# Replace Lubuntu Calamares desktop file with ours
-rm /usr/share/applications/calamares.desktop
-rm /usr/share/applications/calamares-launch-oem.desktop
-mkdir -p /home/rhino-live/Desktop
+mkdir -p /home/rhino-live/Desktop/
+
 echo '[Desktop Entry]
 Type=Application
 Version=1.0
@@ -103,90 +98,26 @@ Icon=/etc/calamares/branding/rhino/rhino-calamares.png
 Terminal=false
 StartupNotify=true
 Categories=Qt;System;
-Keywords=installer;calamares;system;' | tee -a /usr/share/applications/calamares.desktop > /dev/null
+Keywords=installer;calamares;system;' | tee -a /usr/share/applications/calamares.desktop >/dev/null
 sudo chmod 755 /usr/share/applications/calamares.desktop
 sudo cp /usr/share/applications/calamares.desktop /home/rhino-live/Desktop/calamares.desktop
 for f in "/usr/share/applications/calamares.desktop" "/home/rhino-live/Desktop/calamares.desktop"; do
-  gio set -t string "${f}" metadata::xfce-exe-checksum "$(sha256sum ${f} | awk '{print $1}')"
+    gio set -t string "${f}" metadata::xfce-exe-checksum "$(sha256sum ${f} | awk '{print $1}')"
 done
 sudo chown "rhino-live" -cR /home/rhino-live/Desktop/calamares.desktop
-sudo rm /usr/share/applications/lubuntu-calamares.desktop
-
-mkdir /home/rhino-live/.config/autostart/
-sudo rm /etc/calamares/modules/after_bootloader_context.conf
-sudo cat > /etc/calamares/modules/after_bootloader_context.conf << __EOF__
----
-dontChroot: false
-timeout: 120
-firmwareType:
-    "*":
-        - "-rm /usr/share/applications/calamares.desktop"
-        - command: "-wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
-        - command: "-mv Microsoft.VisualStudio.Services.VSIXPackage omni-dracula.vsix"
-        - command: "-mkdir /home/\$USER/.config/VSCodium/"
-        - command: "-mkdir /home/\$USER/.config/VSCodium/User/"
-        - command: "-chown -cR \$USER /home/\$USER/.config/VSCodium/"
-        - command: "-HOME=/home/\$USER runuser -m -u \$USER -- sh -c  'codium --install-extension omni-dracula.vsix'"
-        - command: "-rm omni-dracula.vsix"
-        - command: "-chown -cR \$USER /home/\$USER/.config"
-        - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus gsettings set org.gnome.desktop.interface gtk-theme Yaru-purple-dark'"
-        - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Dark'"
-        - command: "-HOME=/home/\$USER runuser -l \$USER -c 'DISPLAY=:0 XAUTHORITY=/home/\$USER/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus xfconf-query -c xsettings -p /Gtk/CursorThemeName -s Quintom_Ink'"
-        - command: "-sudo rm -rf /etc/calamares"
-        - command: "-sudo userdel -rf rhino-live"
-__EOF__
-
-echo '#!/bin/sh
-true' | sudo tee /usr/bin/calamares-logs-helper > /dev/null
-
-( cd /etc/calamares/branding && sudo git clone https://github.com/rhino-linux/calamares rhino )
-sudo sed -i 's/lubuntu/rhino/g' /etc/calamares/settings.conf
-# These modules require Snap
-sudo sed -i 's/\- pkgselectprocess//g' /etc/calamares/settings.conf
-sudo sed -i 's/\- pkgselect//g' /etc/calamares/settings.conf
-
-# The Live image user is not removed when instaalled on disk
-sudo sed -i '/\/bin\/bash/a userdel rhino-live' /usr/libexec/fixconkeys-part2
-
-# In newer Ubuntu versions, the filesystem is split
-sudo rm /etc/calamares/modules/unpackfs.conf
-echo 'unpack:
-    -   source: "/cdrom/casper/filesystem.squashfs"
-        sourcefs: "squashfs"
-        destination: ""
-        condition: true' | sudo tee -a /etc/calamares/modules/unpackfs.conf
 
 if [ $(dpkg --print-architecture) = arm64 ]; then
-GNU="aarch"; 
-else 
-GNU="x86_";
+    GNU="aarch"
+else
+    GNU="x86_"
 fi
-
-if [ $(dpkg --print-architecture) = arm64 ]; then sudo rm /etc/calamares/modules/*386*.conf; fi
-sudo rm /etc/calamares/modules/automirror.conf
-sudo rm /lib/"$GNU"64-linux-gnu/calamares/modules/automirror -r
-cd /lib/"$GNU"64-linux-gnu/calamares/modules/
-sudo git clone https://github.com/oklopfer/automirror/ -b $(dpkg --print-architecture)
-sudo cp /lib/"$GNU"64-linux-gnu/calamares/modules/automirror/automirror.conf /etc/calamares/modules/automirror.conf
-cd ~
 
 #Lightdm
 sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
-( cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png )
-sudo rm /etc/calamares/modules/displaymanager.conf
-sudo cat > /etc/calamares/modules/displaymanager.conf << __EOF__
-displaymanagers:
-  - lightdm
+# TODO: Replace with package.
+(cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/main/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png)
 
-defaultDesktopEnvironment:
-    executable: "unicorn-session"
-    desktopFile: "unicorn"
-
-basicSetup: false
-sysconfigSetup: false
-
-__EOF__
-
+mkdir /home/rhino-live/.config/autostart/
 
 #VSC theme
 wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage && mv Microsoft.VisualStudio.Services.VSIXPackage /home/rhino-live/omni-dracula.vsix
@@ -196,7 +127,7 @@ sudo mkdir /etc/skel/.config/VSCodium/User/
 sudo mkdir /home/rhino-live/.config/VSCodium/
 sudo mkdir /home/rhino-live/.config/VSCodium/User/
 sudo chown -cR rhino-live /home/rhino-live/.config/VSCodium/
-HOME=/home/rhino-live runuser -m -u rhino-live -- sh -c  'codium --install-extension /home/rhino-live/omni-dracula.vsix --user-data-dir /etc/skel/.config/VSCodium/ --no-sandbox'
+HOME=/home/rhino-live runuser -m -u rhino-live -- sh -c 'codium --install-extension /home/rhino-live/omni-dracula.vsix --user-data-dir /etc/skel/.config/VSCodium/ --no-sandbox'
 rm /home/rhino-live/omni-dracula.vsix
 echo '{
     "workbench.colorTheme": "Omni Dracula Theme"
@@ -204,12 +135,11 @@ echo '{
 sudo cp -r /etc/skel/.config/VSCodium/ /home/rhino-live/.config/
 sudo chown -cR rhino-live /home/rhino-live/.config/VSCodium/
 
-
 # The rhino user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
 rm -rf /home/rhino-live/.config/xfce4
 for i in xfce4 Kvantum plank autostart xfce4 ulauncher cortile gtk-3.0 gtk-4.0; do
-mkdir -p /home/rhino-live/.config/${i}
-cp -r /etc/skel/.config/${i}/* /home/rhino-live/.config/${i};
+    mkdir -p /home/rhino-live/.config/${i}
+    cp -r /etc/skel/.config/${i}/* /home/rhino-live/.config/${i}
 done
 echo ".-vala-panel-appmenu-core > * {
   min-width: 100px;
@@ -221,13 +151,13 @@ sudo rm -f /home/rhino-live/.config/autostart/rhino-setup.desktop
 sudo rm -f /home/rhino-live/.config/autostart/hello-rhino.desktop
 # Make sure the user (rhino) has wrx permissions
 chmod -R 777 /home/rhino-live/.config/xfce4
-cat > /home/rhino-live/.config/autostart/gsettings.desktop <<  __EOF__
+cat >/home/rhino-live/.config/autostart/gsettings.desktop <<__EOF__
 [Desktop Entry]
 Encoding=UTF-8
 Version=1.0
 Type=Application
 Name=Gsettings Theme
-Comment=Themeing for Desktop
+Comment=Theming for Desktop
 Exec=bash -c "gsettings set org.gnome.desktop.interface gtk-theme Adw-dark"
 OnlyShowIn=XFCE;
 RunHook=0
@@ -235,7 +165,7 @@ StartupNotify=false
 Terminal=false
 Hidden=false
 __EOF__
-cat > /home/rhino-live/.config/autostart/calamares_icon.desktop <<  __EOF__
+cat >/home/rhino-live/.config/autostart/calamares_icon.desktop <<__EOF__
 [Desktop Entry]
 Encoding=UTF-8
 Version=1.0
@@ -250,7 +180,7 @@ StartupNotify=false
 Terminal=false
 Hidden=false
 __EOF__
-cat > /home/rhino-live/.config/autostart/appmenu.desktop <<  __EOF__
+cat >/home/rhino-live/.config/autostart/appmenu.desktop <<__EOF__
 [Desktop Entry]
 Encoding=UTF-8
 Version=1.0
@@ -266,10 +196,10 @@ Hidden=false
 __EOF__
 sudo chown "rhino-live" -cR /home/rhino-live
 sudo chown "rhino-live" -cR /home/rhino-live/.config
-echo -e "[/home/rhino-live/Desktop/calamares.desktop]\nrow=0\ncol=0\n" >> /home/rhino-live/.config/xfce4/desktop/icons.screen.latest.rc
+echo -e "[/home/rhino-live/Desktop/calamares.desktop]\nrow=0\ncol=0\n" >>/home/rhino-live/.config/xfce4/desktop/icons.screen.latest.rc
 
 echo '[PlankDockItemPreferences]
-Launcher=file:///usr/share/applications/calamares.desktop' | tee -a /home/rhino-live/.config/plank/dock1/08-calamares.dockitem > /dev/null
+Launcher=file:///usr/share/applications/calamares.desktop' | tee -a /home/rhino-live/.config/plank/dock1/08-calamares.dockitem >/dev/null
 echo "[dock1]
 current-workspace-only=false
 dock-items=['00-uniLauncher.dockitem', '01-uniApps.dockitem', '02-uniDesktop.dockitem', '03-firefox.dockitem', '04-FileManager.dockitem', '05-codium.dockitem', '06-xfce4-terminal.dockitem', '07-org.rhinolinux.system.dockitem', '08-calamares.dockitem']
@@ -280,7 +210,16 @@ position='left'
 pressure-reveal=false
 theme='rhinoplank'
 zoom-enabled=true
-zoom-percent=115" | tee -a /home/rhino-live/.config/docks.ini > /dev/null
+zoom-percent=115" | tee -a /home/rhino-live/.config/docks.ini >/dev/null
+
+sudo mkdir /etc/skel/.config/Kvantum/ /root/.config/Kvantum/
+
+echo '[General]
+theme=KvRhinoDark' | tee /root/.config/Kvantum/kvantum.kvconfig /etc/skel/.config/Kvantum/kvantum.kvconfig >/dev/null
+
+# TODO: This should be seperate from this chroot.
+# The Live image user is not removed when instaalled on disk
+sudo sed -i '/\/bin\/bash/a userdel rhino-live' /usr/libexec/fixconkeys-part2
 
 sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
 sudo rm /usr/share/xsessions/xfce.desktop /usr/share/xsessions/xubuntu.desktop
