@@ -24,7 +24,7 @@ apt-get autoremove --purge -f -q -y \
     gparted \
     sudo-rs
 
-apt install coreutils-from-gnu coreutils-from-uutils- --allow-remove-essential
+apt-get install coreutils-from-gnu coreutils-from-uutils- --allow-remove-essential
 
 rm -rf ../ubuntu-seeds ../platform
 
