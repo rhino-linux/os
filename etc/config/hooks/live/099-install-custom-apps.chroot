@@ -19,7 +19,10 @@ sudo chown "rhino-live" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
 sudo apt install --install-recommends lomiri -yq
-sudo apt install mir-graphics-drivers-desktop -yq
+sudo apt install mir-graphics-drivers-desktop alsa-topology-conf at-spi2-core cpdb-backend-cups dns-root-data \
+  dnsmasq-base libdecor-0-plugin-1-gtk libgtk-3-bin libgtk-4-bin libpipewire-0.3-common mesa-vulkan-drivers \
+  pulseaudio qt5-gtk-platformtheme qt6-gtk-platformtheme qt6-qpa-plugins qt6-svg-plugins qt6-translations-l10n \
+  qt6-wayland qtwayland5 rtkit usbmuxd vdpau-driver-all xcvt xserver-xorg-input-wacom xserver-xorg-legacy xserver-xorg-video-all -yq
 SUDO_USER=rhino-live pacstall -QPINs nala-deb linux-kernel-stable rhino-ubxi-core rhino-grub-theme-git rhino-calamares-settings-git
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
