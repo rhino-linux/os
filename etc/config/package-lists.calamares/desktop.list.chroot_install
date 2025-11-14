@@ -29,6 +29,10 @@ libsasl2-modules
 libadwaita-1-0
 libpanel-1-1
 libdbus-glib-1-2
+lomiri
+lomiri-greeter
+lomiri-desktop-session
+mir-graphics-drivers-desktop
 rfkill
 spice-vdagent
 thunar
