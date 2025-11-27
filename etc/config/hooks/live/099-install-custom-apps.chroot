@@ -2,23 +2,23 @@
 # Description: Install custom Pacstall apps and others
 
 # More pacstall specific things
-export SUDO_USER=rhino-live
+export SUDO_USER=phablet
 export DEBIAN_FRONTEND=noninteractive
 export PACSTALL_DOWNLOADER=wget
 export GITHUB_ACTIONS=true
 
 #Pacstall dirs
 sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /tmp/pacstall /var/cache/pacstall /usr/src/pacstall
-sudo chown "rhino-live" -cR "/var/log/pacstall"
+sudo chown "phablet" -cR "/var/log/pacstall"
 sudo chmod -R 777 "/tmp/pacstall"
-sudo chown "rhino-live" -cR "/usr/src/pacstall"
-sudo chown "rhino-live" -cR "/tmp/pacstall"
-sudo chown "rhino-live" -cR "/usr/share/pacstall"
-sudo chown "rhino-live" -cR "/home/rhino-live"
-sudo chown "rhino-live" -cR "/var/cache/pacstall"
+sudo chown "phablet" -cR "/usr/src/pacstall"
+sudo chown "phablet" -cR "/tmp/pacstall"
+sudo chown "phablet" -cR "/usr/share/pacstall"
+sudo chown "phablet" -cR "/home/rhino-live"
+sudo chown "phablet" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
-SUDO_USER=rhino-live pacstall -QPINs nala-deb linux-kernel-stable rhino-ubxi-core rhino-grub-theme-git rhino-calamares-settings-git
+SUDO_USER=phablet pacstall -QPINs nala-deb linux-kernel-stable rhino-ubxi-core rhino-grub-theme-git rhino-calamares-settings-git
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
@@ -29,7 +29,7 @@ sudo cp "/etc/xdg/xdg-unicorn/.bashrc" "/home/rhino-live/.bashrc"
 echo "GRUB_THEME=/usr/share/grub/themes/rhino/theme.txt" | sudo tee -a /etc/default/grub >/dev/null
 sudo update-grub
 
-mkdir -p /home/rhino-live/Desktop/
+mkdir -p /home/phablet/Desktop/
 
 echo '[Desktop Entry]
 Type=Application
@@ -76,20 +76,20 @@ StartupNotify=true
 Categories=Qt;System;
 Keywords=installer;calamares;system;' | tee -a /usr/share/applications/calamares.desktop >/dev/null
 sudo chmod 755 /usr/share/applications/calamares.desktop
-sudo cp /usr/share/applications/calamares.desktop /home/rhino-live/Desktop/calamares.desktop
-for f in "/usr/share/applications/calamares.desktop" "/home/rhino-live/Desktop/calamares.desktop"; do
+sudo cp /usr/share/applications/calamares.desktop /home/phablet/Desktop/calamares.desktop
+for f in "/usr/share/applications/calamares.desktop" "/home/phablet/Desktop/calamares.desktop"; do
     gio set -t string "${f}" metadata::xfce-exe-checksum "$(sha256sum ${f} | awk '{print $1}')"
 done
-sudo chown "rhino-live" -cR /home/rhino-live/Desktop/calamares.desktop
+sudo chown "phablet" -cR /home/phablet/Desktop/calamares.desktop
 
-mkdir /home/rhino-live/.config/autostart/
+mkdir /home/phablet/.config/autostart/
 
-sudo chown "rhino-live" -cR /home/rhino-live
-sudo chown "rhino-live" -cR /home/rhino-live/.config
+sudo chown "phablet" -cR /home/phablet
+sudo chown "phablet" -cR /home/phablet/.config
 
 # TODO: This should be seperate from this chroot.
 # The Live image user is not removed when instaalled on disk
-sudo sed -i '/\/bin\/bash/a userdel rhino-live' /usr/libexec/fixconkeys-part2
+sudo sed -i '/\/bin\/bash/a userdel phablet' /usr/libexec/fixconkeys-part2
 
 sudo apt-get clean
 sudo apt-get remove linux*6.17.0* -yq
