@@ -508,7 +508,6 @@ lomiri-weather-app
 maliit-framework
 mediascanner2.0
 mir-graphics-drivers-desktop
-mir-graphics-drivers-nvidia
 mir-platform-graphics-gbm-kms
 mir-platform-graphics-gbm-kms23
 mir-platform-input-evdev10
@@ -717,3 +716,7 @@ openssl
 sbsigntool
 cryptsetup
 wmctrl
+
+#if ARCHITECTURES amd64
+mir-graphics-drivers-nvidia
+#endif
