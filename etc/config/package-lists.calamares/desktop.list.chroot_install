@@ -35,8 +35,8 @@ lomiri-desktop-session
 mir-graphics-drivers-desktop
 lomiri-download-manager
 lomiri-indicator-transfer
-lomiri-terminal-app
 morph-browser
+xwayland
 rfkill
 spice-vdagent
 thunar
