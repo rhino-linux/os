@@ -18,6 +18,7 @@ sudo chown "phablet" -cR "/home/rhino-live"
 sudo chown "phablet" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
+echo N | SUDO_USER=phablet pacstall -QQaNs ubxi-lomiri-desktop#8238
 SUDO_USER=phablet pacstall -QPINs nala-deb linux-kernel-stable rhino-ubxi-core rhino-grub-theme-git rhino-calamares-settings-git
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
