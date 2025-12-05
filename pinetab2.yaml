@@ -92,7 +92,7 @@ actions:
 
   - action: run
     chroot: true
-    command: systemctl enable /usr/lib/systemd/system-shutdown/u-boot-patch.service && systemctl enable resizefs.service && sudo systemctl start pinetab2-wifi-enable.service
+    command: systemctl enable /usr/lib/systemd/system-shutdown/u-boot-patch.service && systemctl enable resizefs.service
 
   - action: run
     chroot: true
