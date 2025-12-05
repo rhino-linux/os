@@ -63,7 +63,7 @@ actions:
   - action: image-partition
     description: Creating image
     imagename: {{ $image }}
-    imagesize: 7.5GB
+    imagesize: 8GB
     partitiontype: gpt
     mountpoints:
       - mountpoint: /
@@ -92,7 +92,7 @@ actions:
 
   - action: run
     chroot: true
-    command: systemctl enable /usr/lib/systemd/system-shutdown/u-boot-patch.service && systemctl enable resizefs.service
+    command: systemctl enable /usr/lib/systemd/system-shutdown/u-boot-patch.service && systemctl enable resizefs.service && sudo systemctl start pinetab2-wifi-enable.service
 
   - action: run
     chroot: true
