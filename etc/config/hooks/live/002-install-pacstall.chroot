@@ -2,7 +2,7 @@
 # Description: Add/install Pacstall
 
 apt-get update -yq
-apt-get install axel nano gnome-disk-utility iio-sensor-proxy dbus-x11 dconf-editor openssh-server -yq
+apt-get install axel nano pipewire-pulse gnome-disk-utility iio-sensor-proxy dbus-x11 dconf-editor openssh-server -yq
 sudo systemctl enable ssh
 
 # Create user
