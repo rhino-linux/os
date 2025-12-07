@@ -226,6 +226,10 @@ sudo rm /usr/share/xsessions/xfce.desktop /usr/share/xsessions/xubuntu.desktop
 [[ -f /usr/share/backgrounds/xfce/xfce-x.svg ]] && sudo mv /usr/share/backgrounds/xfce/xfce-x.svg /usr/share/backgrounds/xfce/xfce-uglyrat.svg
 sudo ln -sf /usr/share/backgrounds/xfce/rolling-rhino-default.png /usr/share/backgrounds/xfce/xfce-x.svg
 
+# Fix: xubuntu wallpapers overrides ours.
+sudo rm /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
+sudo ln -sf /usr/share/backgrounds/xfce/rolling-rhino-default.png /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
+
 sudo apt-get clean
 sudo apt-get remove linux*6.17.0* -yq
 sudo update-initramfs -u
