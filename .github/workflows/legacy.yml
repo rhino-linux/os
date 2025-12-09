@@ -307,3 +307,155 @@ jobs:
       with:
         name: ${{ env.IMGPTB }}
         path: builds/tab2/${{ env.IMGPTB }}
+
+  build_pine_lomiri_tarball:
+    runs-on: ubuntu-24.04-arm
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: 'pinephone-lomiri'
+
+    - name: Install needed packages
+      run: |
+        sudo rm -rf /etc/apt/sources.list.d/microsoft-prod.list
+        sudo rm -rf /var/lib/apt/lists/*
+        sudo apt-get update && sudo apt-get install debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
+        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
+        sudo dpkg -i debs/live-build_*_all.deb
+        sudo mv /usr/share/debootstrap/functions functions
+        sudo patch -i 0002-remove-WRONGSUITE-error.patch
+        sudo mv functions /usr/share/debootstrap/functions
+        sudo cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
+        sudo cp binary_rootfs /usr/lib/live/build/binary_rootfs
+        
+    - name: Make scripts executable
+      run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
+
+    - name: Build tarball
+      run: sudo ./build.sh etc/terraform.conf
+      
+    - uses: actions/cache@v4
+      with:
+        path: binary/
+        key: tar-pine-lomiri-${{ github.run_id }}
+
+  deploy_pine_lomiri:
+    needs: build_pine_lomiri_tarball
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: 'pinephone-lomiri'
+    
+    - uses: actions/cache@v4
+      with:
+        path: binary/
+        key: tar-pine-lomiri-${{ github.run_id }}
+        
+    - name: Deploy to partition
+      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-pinephone-unified-lomiri.img" -m 10G pinephone-unified.yaml
+      
+    - name: Place output folder
+      run: sudo mkdir -p builds/pine-lomiri
+      
+    - name: Move to output folder and compress
+      run: |
+        sudo mv Rhino*unified-lomiri.img builds/pine-lomiri/
+        sudo xz -v builds/pine-lomiri/Rhino*unified-lomiri.img
+        echo "IMGPPL=$(cd builds/pine-lomiri; ls *.img.xz)" >> $GITHUB_ENV
+
+    - uses: actions/upload-artifact@v4.3.3
+      with:
+        name: ${{ env.IMGPPL }}
+        path: builds/pine-lomiri/${{ env.IMGPPL }}
+
+  build_tab_lomiri_tarball:
+    runs-on: ubuntu-24.04-arm
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: 'pinetab-lomiri'
+
+    - name: Install needed packages
+      run: |
+        sudo rm -rf /etc/apt/sources.list.d/microsoft-prod.list
+        sudo rm -rf /var/lib/apt/lists/*
+        sudo apt-get update && sudo apt-get install debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
+        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
+        sudo dpkg -i debs/live-build_*_all.deb
+        sudo mv /usr/share/debootstrap/functions functions
+        sudo patch -i 0002-remove-WRONGSUITE-error.patch
+        sudo mv functions /usr/share/debootstrap/functions
+        sudo cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
+        sudo cp binary_rootfs /usr/lib/live/build/binary_rootfs
+        
+    - name: Make scripts executable
+      run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
+
+    - name: Build tarball
+      run: sudo ./build.sh etc/terraform.conf
+      
+    - uses: actions/cache@v4
+      with:
+        path: binary/
+        key: tar-tab-lomiri-${{ github.run_id }}
+
+  deploy_tab1_lomiri:
+    needs: build_tab_lomiri_tarball
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: 'pinetab-lomiri'
+    
+    - uses: actions/cache@v4
+      with:
+        path: binary/
+        key: tar-tab-lomiri-${{ github.run_id }}
+        
+    - name: Deploy to partition
+      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-pinetab-lomiri.img" -m 10G pinetab.yaml
+      
+    - name: Place output folder
+      run: sudo mkdir -p builds/tab-lomiri
+      
+    - name: Move to output folder and compress
+      run: |
+        sudo mv Rhino*tab-lomiri.img builds/tab-lomiri/
+        sudo xz -v builds/tab-lomiri/Rhino*tab-lomiri.img
+        echo "IMGPTAL=$(cd builds/tab-lomiri; ls *.img.xz)" >> $GITHUB_ENV
+
+    - uses: actions/upload-artifact@v4.3.3
+      with:
+        name: ${{ env.IMGPTAL }}
+        path: builds/tab-lomiri/${{ env.IMGPTAL }}
+        
+  deploy_tab2_lomiri:
+    needs: build_tab_lomiri_tarball
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: 'pinetab-lomiri'
+    
+    - uses: actions/cache@v4
+      with:
+        path: binary/
+        key: tar-tab-lomiri-${{ github.run_id }}
+        
+    - name: Deploy to partition
+      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-pinetab2-lomiri.img" -m 10G pinetab2.yaml
+      
+    - name: Place output folder
+      run: sudo mkdir -p builds/tab2-lomiri
+      
+    - name: Move to output folder and compress
+      run: |
+        sudo mv Rhino*tab2-lomiri.img builds/tab2-lomiri/
+        sudo xz -v builds/tab2-lomiri/Rhino*tab2-lomiri.img
+        echo "IMGPTBL=$(cd builds/tab2-lomiri; ls *.img.xz)" >> $GITHUB_ENV
+
+    - uses: actions/upload-artifact@v4.3.3
+      with:
+        name: ${{ env.IMGPTBL }}
+        path: builds/tab2-lomiri/${{ env.IMGPTBL }}
