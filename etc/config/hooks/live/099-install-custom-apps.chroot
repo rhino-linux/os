@@ -17,7 +17,7 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
-SUDO_USER=rhino pacstall -QPINs nala-deb firefox-bin vscodium-deb rhino-pine-core timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin hello-rhino-bin
+SUDO_USER=rhino pacstall -QPINs nala-deb firefox-bin rhino-pine-lomiri-core timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin
 
 sudo mkdir -p /home/rhino/.config/autostart
 if ! [[ -f "/home/rhino/.config/autostart/rhino-setup.desktop" ]]; then
@@ -35,75 +35,19 @@ sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 #Hack: rhino landing
 echo 'pref("browser.startup.homepage", "https://rhinolinux.org/landing/", locked);' >> /lib/firefox/defaults/pref/syspref.js
 
-#Bash colors
-sudo cp "/etc/xdg/xdg-unicorn/.bashrc" "/home/rhino/.bashrc"
-
-sudo update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Dot-Transparent/cursor.theme 55
-sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth 100
-sudo update-alternatives --set default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth
-sudo update-alternatives --set x-cursor-theme /usr/share/icons/Dot-Transparent/cursor.theme
-echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment > /dev/null
-mkdir -p /home/rhino/.config/Kvantum
-mkdir -p /etc/skel/.config/Kvantum
-echo "theme=KvRhinoDark" >> /home/rhino/.config/Kvantum/kvantum.kvconfig
-echo "theme=KvRhinoDark" >> /etc/skel/.config/Kvantum/kvantum.kvconfig
-xfconf-query -c xsettings -p /Net/ThemeName --set "Yaru-purple-dark"
-HOME=/home/rhino runuser -l rhino -c 'DISPLAY=:0 XAUTHORITY=/home/rhino/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus gsettings set org.gnome.desktop.interface gtk-theme Yaru-purple'
-HOME=/home/rhino runuser -l rhino -c 'DISPLAY=:0 XAUTHORITY=/home/rhino/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus xfconf-query -c xfwm4 -p /general/theme -s Yaru-dark'
-HOME=/home/rhino runuser -l rhino -c 'DISPLAY=:0 XAUTHORITY=/home/rhino/.Xauthority DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Dark'
-sudo sed -i "s/'Adwaita'/'Yaru-purple-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
-sudo sed -i "s/'default'/'prefer-dark'/g" /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
-cd /usr/share/glib-2.0/schemas
-sudo glib-compile-schemas .
-cd ~
-
-sudo rm /etc/lightdm/lightdm-gtk-greeter.conf
-( cd /etc/lightdm/ && sudo wget https://raw.githubusercontent.com/rhino-linux/lightdm/mobile/lightdm-gtk-greeter.conf && sudo wget https://github.com/rhino-linux/lightdm/raw/main/rhino-blur.png )
-
-wget https://ThiagoLcioBittencourt.gallery.vsassets.io/_apis/public/gallery/publisher/ThiagoLcioBittencourt/extension/omni-dracula-theme/1.0.7/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage && mv Microsoft.VisualStudio.Services.VSIXPackage /home/rhino/omni-dracula.vsix
-sudo chown -cR rhino /home/rhino/omni-dracula.vsix
-sudo mkdir /etc/skel/.config/VSCodium/
-sudo mkdir /etc/skel/.config/VSCodium/User/
-sudo mkdir /home/rhino/.config/VSCodium/
-sudo mkdir /home/rhino/.config/VSCodium/User/
-sudo chown -cR rhino /home/rhino/.config/VSCodium/
-HOME=/home/rhino runuser -m -u rhino -- sh -c  'codium --install-extension /home/rhino/omni-dracula.vsix --user-data-dir /etc/skel/.config/VSCodium/ --no-sandbox'
-rm /home/rhino/omni-dracula.vsix
-echo '{
-    "workbench.colorTheme": "Omni Dracula Theme"
-}' | sudo tee -a /etc/skel/.config/VSCodium/User/settings.json
-sudo cp -r /etc/skel/.config/VSCodium/ /home/rhino/.config/
-sudo chown -cR rhino /home/rhino/.config/VSCodium/
-
-# The rhino user is created before rhino-linux-xfce4-config is installed, so update their xfce4 configuration
-rm -rf /home/rhino/.config/xfce4
-for i in xfce4 Kvantum plank autostart xfce4 ulauncher cortile gtk-3.0 gtk-4.0; do
-mkdir -p /home/rhino/.config/${i}
-cp -r /etc/skel/.config/${i}/* /home/rhino/.config/${i};
-done
-mkdir /home/rhino/.lightpad
-cp /etc/skel/.lightpad/* /home/rhino/.lightpad
-cp /etc/skel/.config/docks.ini /home/rhino/.config/docks.ini
-mkdir -p /home/rhino/.local/share/onboard/
-cp -r /etc/skel/.local/share/onboard/* /home/rhino/.local/share/onboard/
-rm -rf /usr/share/onboard/themes/Droid.theme
-cp -r /etc/skel/.local/share/onboard/themes/Droid.theme /usr/share/onboard/themes/Droid.theme
-ln -s "/home/rhino/.config/xfce4/desktop/icons.screen0-1904x990.rc" "/home/rhino/.config/xfce4/desktop/icons.screen.latest.rc"
-# Make sure the user (rhino) has wrx permissions
-chmod -R 777 /home/rhino/.config/xfce4
+mkdir -p /home/rhino/.config/autostart
+cp -r /etc/skel/.config/autostart/* /home/rhino/.config/autostart
 sudo chown "rhino" -cR /home/rhino
 sudo chown "rhino" -cR /home/rhino/.config
 
 sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
-sudo rm /usr/share/xsessions/xfce.desktop /usr/share/xsessions/xubuntu.desktop
-[[ -f /usr/share/backgrounds/xfce/xfce-x.svg ]] && sudo mv /usr/share/backgrounds/xfce/xfce-x.svg /usr/share/backgrounds/xfce/xfce-uglyrat.svg
-sudo ln -sf /usr/share/backgrounds/xfce/rolling-rhino-default.png /usr/share/backgrounds/xfce/xfce-x.svg
-sudo rm /etc/lightdm/lightdm.conf
-echo '[SeatDefaults]
-allow-guest=false
-autologin-guest=false
-autologin-user=rhino
-autologin-user-timeout=0' | sudo tee -a /etc/lightdm/lightdm.conf
+#sudo rm /etc/lightdm/lightdm.conf
+#echo '[SeatDefaults]
+#allow-guest=false
+#autologin-guest=false
+#autologin-user=rhino
+#autologin-user-timeout=0' | sudo tee -a /etc/lightdm/lightdm.conf
+sudo apt-get purge lightdm-gtk-greeter -yq
 
 sudo apt remove flash-kernel -yq
 echo "" >> /etc/apt/preferences.d/rhino.pref
