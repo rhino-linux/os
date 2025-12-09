@@ -17,8 +17,7 @@ sudo chown "rhino" -cR "/home/rhino"
 sudo chown "rhino" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
-echo N | SUDO_USER=rhino pacstall -QQaNs rhino-pine-lomiri-core#8238
-SUDO_USER=rhino pacstall -QPINs nala-deb firefox-bin timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin
+SUDO_USER=rhino pacstall -QPINs nala-deb firefox-bin rhino-pine-lomiri-core timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin
 
 sudo mkdir -p /home/rhino/.config/autostart
 if ! [[ -f "/home/rhino/.config/autostart/rhino-setup.desktop" ]]; then
