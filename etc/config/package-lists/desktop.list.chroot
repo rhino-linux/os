@@ -75,3 +75,10 @@ ifupdown
 bridge-utils
 command-not-found
 rclone-browser
+libllvm19
+xul-ext-ubufox
+va-driver-all
+mesa-va-drivers
+mesa-libgallium
+libgl1-amber-dri
+libglapi-mesa
