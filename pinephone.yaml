@@ -1,5 +1,5 @@
 {{- $architecture := or .architecture "arm64" -}}
-{{- $image := or .image "Rhino-Linux-pinephone-unified.img" -}}
+{{- $image := or .image "Rhino-Linux-pinephone.img" -}}
 {{- $variant := or .variant "mainline" -}}
 {{- $debug := or .debug "on" -}}
 {{- $additional_apt_repos := or .additional_apt_repos "" -}}
@@ -32,7 +32,7 @@ actions:
   - action: run
     description: Install kernel
     chroot: true
-    command: SUDO_USER=rhino pacstall -QPINs linux-headers-okpine-deb linux-image-okpine-deb
+    command: SUDO_USER=rhino pacstall -QPINs linux-headers-sunxi-deb linux-image-sunxi-deb
     
 #  - action: run
 #    description: pacstall workaround
@@ -87,7 +87,7 @@ actions:
   - action: run
     chroot: true
     description: Make sure EXTLINUX is valid
-    script: scripts/pinepro/zzz-u-boot-pinepro
+    script: scripts/pine64/zzz-u-boot-pine64
 
   - action: overlay
     description: Add post inst script for future kernels
