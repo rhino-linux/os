@@ -42,7 +42,7 @@ actions:
   - action: run
     description: Install kernel
     chroot: true
-    command: SUDO_USER=rhino pacstall -QPINs linux-headers-okpine-deb linux-image-okpine-deb
+    command: SUDO_USER=rhino pacstall -QPINs linux-headers-sunxi-deb linux-image-sunxi-deb
     
 #  - action: run
 #    description: pacstall workaround
