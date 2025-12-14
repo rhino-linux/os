@@ -53,7 +53,7 @@ actions:
   - action: image-partition
     description: Creating image
     imagename: {{ $image }}
-    imagesize: 9GB
+    imagesize: 8.75GB
     partitiontype: gpt
     mountpoints:
       - mountpoint: /
