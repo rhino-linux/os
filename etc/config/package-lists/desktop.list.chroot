@@ -61,8 +61,6 @@ ifupdown
 bridge-utils
 command-not-found
 rclone-browser
-llvm-19
-llvm-21
 xul-ext-ubufox
 va-driver-all
 mesa-va-drivers
