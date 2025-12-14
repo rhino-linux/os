@@ -111,21 +111,51 @@ jobs:
         key: tar-pine-${{ github.run_id }}
         
     - name: Deploy to partition
-      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-pinephone-unified.img" -m 10G pinephone-unified.yaml
+      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-pinephone.img" -m 10G pinephone.yaml
       
     - name: Place output folder
       run: sudo mkdir -p builds/pine
       
     - name: Move to output folder and compress
       run: |
-        sudo mv Rhino*unified.img builds/pine/
-        sudo xz -v builds/pine/Rhino*unified.img
+        sudo mv Rhino*pinephone.img builds/pine/
+        sudo xz -v builds/pine/Rhino*pinephone.img
         echo "IMGPP=$(cd builds/pine; ls *.img.xz)" >> $GITHUB_ENV
 
     - uses: actions/upload-artifact@v4.3.3
       with:
         name: ${{ env.IMGPP }}
         path: builds/pine/${{ env.IMGPP }}
+
+  deploy_pinepro:
+    needs: build_pine_tarball
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: 'pinephone'
+    
+    - uses: actions/cache@v4
+      with:
+        path: binary/
+        key: tar-pine-${{ github.run_id }}
+        
+    - name: Deploy to partition
+      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-pinephonepro.img" -m 10G pinephonepro.yaml
+      
+    - name: Place output folder
+      run: sudo mkdir -p builds/pinepro
+      
+    - name: Move to output folder and compress
+      run: |
+        sudo mv Rhino*pinephonepro.img builds/pinepro/
+        sudo xz -v builds/pinepro/Rhino*pinephonepro.img
+        echo "IMGPPP=$(cd builds/pinepro; ls *.img.xz)" >> $GITHUB_ENV
+
+    - uses: actions/upload-artifact@v4.3.3
+      with:
+        name: ${{ env.IMGPPP }}
+        path: builds/pinepro/${{ env.IMGPPP }}
 
   build_rpi_tarball:
     runs-on: ubuntu-24.04-arm
@@ -353,21 +383,52 @@ jobs:
         key: tar-pine-lomiri-${{ github.run_id }}
         
     - name: Deploy to partition
-      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-pinephone-unified-lomiri.img" -m 10G pinephone-unified.yaml
+      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-pinephone-lomiri.img" -m 10G pinephone.yaml
       
     - name: Place output folder
       run: sudo mkdir -p builds/pine-lomiri
       
     - name: Move to output folder and compress
       run: |
-        sudo mv Rhino*unified-lomiri.img builds/pine-lomiri/
-        sudo xz -v builds/pine-lomiri/Rhino*unified-lomiri.img
+        sudo mv Rhino*pinephone-lomiri.img builds/pine-lomiri/
+        sudo xz -v builds/pine-lomiri/Rhino*pinephone-lomiri.img
         echo "IMGPPL=$(cd builds/pine-lomiri; ls *.img.xz)" >> $GITHUB_ENV
 
     - uses: actions/upload-artifact@v4.3.3
       with:
         name: ${{ env.IMGPPL }}
         path: builds/pine-lomiri/${{ env.IMGPPL }}
+
+
+  deploy_pinepro_lomiri:
+    needs: build_pine_lomiri_tarball
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: 'pinephone-lomiri'
+    
+    - uses: actions/cache@v4
+      with:
+        path: binary/
+        key: tar-pine-lomiri-${{ github.run_id }}
+        
+    - name: Deploy to partition
+      run: source ./etc/terraform.conf && VER="${VERSION}${SUBVER}" && sudo ./debos-docker -t image:"Rhino-Linux-${VER}-pinephonepro-lomiri.img" -m 10G pinephonepro.yaml
+      
+    - name: Place output folder
+      run: sudo mkdir -p builds/pinepro-lomiri
+      
+    - name: Move to output folder and compress
+      run: |
+        sudo mv Rhino*pinephonepro-lomiri.img builds/pinepro-lomiri/
+        sudo xz -v builds/pinepro-lomiri/Rhino*pinephonepro-lomiri.img
+        echo "IMGPPPL=$(cd builds/pinepro-lomiri; ls *.img.xz)" >> $GITHUB_ENV
+
+    - uses: actions/upload-artifact@v4.3.3
+      with:
+        name: ${{ env.IMGPPPL }}
+        path: builds/pinepro-lomiri/${{ env.IMGPPPL }}
 
   build_tab_lomiri_tarball:
     runs-on: ubuntu-24.04-arm
