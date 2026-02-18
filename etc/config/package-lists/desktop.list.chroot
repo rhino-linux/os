@@ -65,9 +65,15 @@ fonts-noto-cjk-extra
 flash-kernel
 u-boot-rpi
 u-boot-tools
+linux-firmware-broadcom-wireless
+linux-firmware-mediatek
+linux-firmware-misc
+linux-firmware-qualcomm-graphics
+linux-firmware-qualcomm-misc
+linux-firmware-qualcomm-wireless
+linux-firmware-realtek
 xfsprogs
 jfsutils
-reiserfsprogs
 shim-signed
 shim
 ntfs-3g
