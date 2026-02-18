@@ -24,6 +24,13 @@ software-properties-common
 thunar
 thunar-volman
 ubuntu-drivers-common
+linux-firmware-broadcom-wireless
+linux-firmware-mediatek
+linux-firmware-misc
+linux-firmware-qualcomm-graphics
+linux-firmware-qualcomm-misc
+linux-firmware-qualcomm-wireless
+linux-firmware-realtek
 unzip
 libiw30t64
 wpasupplicant
