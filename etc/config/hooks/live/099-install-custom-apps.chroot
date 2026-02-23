@@ -231,5 +231,5 @@ sudo rm /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
 sudo ln -sf /usr/share/backgrounds/xfce/rolling-rhino-default.png /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
 
 sudo apt-get clean
-sudo apt-get remove linux*6.17.0* -yq
+sudo apt-get remove linux*6.19.0* -yq
 sudo update-initramfs -u
