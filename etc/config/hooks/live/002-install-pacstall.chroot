@@ -5,13 +5,13 @@ apt-get update -yq
 apt-get install axel nano gnome-disk-utility dbus-x11 -yq
 
 # Create user
-sudo groupadd phablet
-sudo useradd -rm -d /home/phablet -g root -s /bin/bash -u 1001 phablet
-sudo adduser phablet sudo
+sudo groupadd rhino-live
+sudo useradd -rm -d /home/rhino-live -g root -s /bin/bash -u 1001 rhino-live
+sudo adduser rhino-live sudo
 echo '%sudo ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers # Pacstall has issues with sudo despite the user not having a password
 
 # More pacstall specific things
-export SUDO_USER=phablet
+export SUDO_USER=rhino-live
 export DEBIAN_FRONTEND=noninteractive
 export PACSTALL_DOWNLOADER=curl
 export GITHUB_ACTIONS=true
