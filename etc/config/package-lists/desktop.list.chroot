@@ -55,8 +55,8 @@ zip
 xubuntu-default-settings
 systemd
 mousepad
-qt6-style-kvantum
-qt6-style-kvantum-themes
+qt-style-kvantum
+qt-style-kvantum-themes
 mugshot
 fonts-firacode
 mpv
