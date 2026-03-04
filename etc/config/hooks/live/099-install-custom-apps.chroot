@@ -90,9 +90,11 @@ for f in "/usr/share/applications/rhino-calamares.desktop" "/home/rhino-live/Des
 done
 sudo chown "rhino-live" -cR /home/rhino-live/Desktop/rhino-calamares.desktop
 
-mkdir -p /home/rhino-live/.config/autostart/
-mkdir -p /home/rhino-live/.config/lomiri/
+mkdir -p /home/rhino-live/.config/{autostart,gtk-3.0,gtk-4.0,lomiri}
 touch /home/rhino-live/.config/lomiri/wizard-has-run
+for i in gtk-3.0 gtk-4.0; do
+    cp -r /etc/skel/.config/${i}/* /home/rhino-live/.config/${i}
+done
 
 sudo chown "rhino-live" -cR /home/rhino-live
 sudo chown "rhino-live" -cR /home/rhino-live/.config
