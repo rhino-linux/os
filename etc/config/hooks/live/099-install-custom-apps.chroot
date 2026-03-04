@@ -90,13 +90,15 @@ for f in "/usr/share/applications/rhino-calamares.desktop" "/home/rhino-live/Des
 done
 sudo chown "rhino-live" -cR /home/rhino-live/Desktop/rhino-calamares.desktop
 
-mkdir /home/rhino-live/.config/autostart/
+mkdir -p /home/rhino-live/.config/autostart/
+mkdir -p /home/rhino-live/.config/lomiri/
+touch /home/rhino-live/.config/lomiri/wizard-has-run
 
 sudo chown "rhino-live" -cR /home/rhino-live
 sudo chown "rhino-live" -cR /home/rhino-live/.config
 
 # TODO: This should be seperate from this chroot.
-# The Live image user is not removed when instaalled on disk
+# The Live image user is not removed when installed on disk
 sudo sed -i '/\/bin\/bash/a userdel rhino-live' /usr/libexec/fixconkeys-part2
 
 sudo apt-get clean
