@@ -25,6 +25,13 @@ sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 #Bash colors
 sudo cp "/etc/xdg/xdg-unicorn/.bashrc" "/home/rhino-live/.bashrc"
 
+#Kvantum
+echo "export QT_STYLE_OVERRIDE=kvantum" | sudo tee -a /etc/environment >/dev/null
+mkdir -p /home/rhino-live/.config/Kvantum
+mkdir -p /etc/skel/.config/Kvantum
+echo "theme=KvRhinoDark" >>/home/rhino-live/.config/Kvantum/kvantum.kvconfig
+echo "theme=KvRhinoDark" >>/etc/skel/.config/Kvantum/kvantum.kvconfig
+
 # Grub
 echo "GRUB_THEME=/usr/share/grub/themes/rhino/theme.txt" | sudo tee -a /etc/default/grub >/dev/null
 sudo update-grub
