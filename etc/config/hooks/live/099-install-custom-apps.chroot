@@ -22,6 +22,9 @@ SUDO_USER=rhino-live pacstall -QPINs nala-deb linux-kernel-stable rhino-ubxi-cor
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
+sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth 100
+sudo update-alternatives --set default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth
+
 #Bash colors
 sudo cp "/etc/xdg/xdg-unicorn/.bashrc" "/home/rhino-live/.bashrc"
 
