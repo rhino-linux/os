@@ -19,6 +19,9 @@ git config --global --add safe.directory '*'
 
 SUDO_USER=rhino pacstall -QPINs nala-deb firefox-bin rhino-pine-lomiri-core timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin
 
+sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth 100
+sudo update-alternatives --set default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth
+
 sudo mkdir -p /home/rhino/.config/autostart
 if ! [[ -f "/home/rhino/.config/autostart/rhino-setup.desktop" ]]; then
   sudo ln -sf "/usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop" "/home/rhino/.config/autostart/rhino-setup.desktop"
