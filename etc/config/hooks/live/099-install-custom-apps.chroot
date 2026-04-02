@@ -107,6 +107,6 @@ sudo chown "rhino-live" -cR /home/rhino-live/.config
 sudo sed -i '/\/bin\/bash/a userdel rhino-live' /usr/libexec/fixconkeys-part2
 
 sudo apt-get clean
-sudo apt-get remove linux*6.19.0* -yq
+sudo apt-get remove linux*7.0.0* -yq
 sudo apt-get purge lightdm-gtk-greeter -yq
 sudo update-initramfs -u
