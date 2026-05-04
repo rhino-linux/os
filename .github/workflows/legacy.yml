@@ -66,6 +66,70 @@ jobs:
         name: ${{ env.ISOA64 }}
         path: builds/arm64/${{ env.ISOA64 }}
 
+  build_amd64_lomiri:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        ref: 'main-lomiri'
+
+    - name: Install needed packages
+      run: |
+        sudo rm -rf /var/lib/apt/lists/*
+        sudo apt-get update && sudo apt-get install --reinstall debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
+        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
+        sudo dpkg -i debs/live-build_*_all.deb
+        sudo mv /usr/share/debootstrap/functions functions
+        sudo patch -i 0002-remove-WRONGSUITE-error.patch
+        sudo mv functions /usr/share/debootstrap/functions
+        sudo cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
+
+    - name: Make scripts executable
+      run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
+
+    - name: Build ISO
+      run: |
+        sudo ./build.sh etc/terraform.conf
+        echo "ISOX64L=$(cd builds/amd64; ls *.iso)"  >> $GITHUB_ENV
+
+    - uses: actions/upload-artifact@v4.3.3
+      with:
+        name: ${{ env.ISOX64L }}
+        path: builds/amd64/${{ env.ISOX64L }}
+        
+  build_arm64_lomiri:
+    runs-on: ubuntu-24.04-arm
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        ref: 'main-lomiri'
+
+    - name: Install needed packages
+      run: |
+        sudo rm -rf /var/lib/apt/lists/*
+        sudo apt-get update && sudo apt-get install --reinstall debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev -y
+        sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble
+        sudo dpkg -i debs/live-build_*_all.deb
+        sudo mv /usr/share/debootstrap/functions functions
+        sudo patch -i 0002-remove-WRONGSUITE-error.patch
+        sudo mv functions /usr/share/debootstrap/functions
+        sudo cp binary_grub-efi /usr/lib/live/build/binary_grub-efi
+        
+    - name: Make scripts executable
+      run: chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/
+
+    - name: Build ISO
+      run: |
+        sudo ./build.sh etc/terraform.conf
+        echo "ISOA64L=$(cd builds/arm64; ls *.iso)" >> $GITHUB_ENV
+
+    - uses: actions/upload-artifact@v4.3.3
+      with:
+        name: ${{ env.ISOA64L }}
+        path: builds/arm64/${{ env.ISOA64L }}
+
   build_pine_tarball:
     runs-on: ubuntu-24.04-arm
     steps:
