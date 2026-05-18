@@ -18,7 +18,7 @@ sudo chown "rhino-live" -cR "/home/rhino-live"
 sudo chown "rhino-live" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
-SUDO_USER=rhino-live pacstall -QPINs nala-deb linux-kernel-stable rhino-ubxi-core rhino-grub-theme-git rhino-calamares-settings-git ubxi-lomiri-desktop
+SUDO_USER=rhino-live pacstall -QPINs nala-deb linux-kernel-stable rhino-ubxi-core rhino-grub-theme-git rhino-calamares-settings-git ubxi-lomiri-desktop timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin hello-rhino-bin
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
@@ -98,6 +98,8 @@ touch /home/rhino-live/.config/lomiri/wizard-has-run
 for i in gtk-3.0 gtk-4.0 lomiri-ui-toolkit; do
     cp -r /etc/skel/.config/${i}/* /home/rhino-live/.config/${i}
 done
+sudo rm -f /home/rhino-live/.config/autostart/rhino-setup.desktop
+sudo rm -f /home/rhino-live/.config/autostart/hello-rhino.desktop
 
 sudo chown "rhino-live" -cR /home/rhino-live
 sudo chown "rhino-live" -cR /home/rhino-live/.config
