@@ -18,7 +18,7 @@ sudo chown "rhino-live" -cR "/home/rhino-live"
 sudo chown "rhino-live" -cR "/var/cache/pacstall"
 git config --global --add safe.directory '*'
 
-SUDO_USER=rhino-live pacstall -QPINs nala-deb linux-kernel-stable rhino-ubxi-core rhino-grub-theme-git rhino-calamares-settings-git ubxi-lomiri-desktop timeshift fake-ubuntu-advantage-tools-deb
+SUDO_USER=rhino-live pacstall -QPINs nala-deb linux-kernel-stable rhino-ubxi-core rhino-grub-theme-git rhino-calamares-settings-lomiri-git ubxi-lomiri-desktop timeshift fake-ubuntu-advantage-tools-deb
 
 sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
 
