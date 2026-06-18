@@ -1,0 +1,4 @@
+#!/bin/sh
+
+yes | apt modernize-sources
+rm -f /etc/apt/sources.list.bak /etc/apt/sources.list
