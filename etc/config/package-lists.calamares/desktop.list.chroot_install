@@ -55,7 +55,6 @@ xkb-data
 xorg
 x11-common
 zip
-xubuntu-default-settings
 systemd
 software-properties-common
 mousepad

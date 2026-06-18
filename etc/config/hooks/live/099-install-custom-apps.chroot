@@ -221,13 +221,10 @@ theme=KvRhinoDark' | tee /root/.config/Kvantum/kvantum.kvconfig /etc/skel/.confi
 # The Live image user is not removed when instaalled on disk
 sudo sed -i '/\/bin\/bash/a userdel rhino-live' /usr/libexec/fixconkeys-part2
 
-sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
-sudo rm /usr/share/xsessions/xfce.desktop /usr/share/xsessions/xubuntu.desktop
 [[ -f /usr/share/backgrounds/xfce/xfce-x.svg ]] && sudo mv /usr/share/backgrounds/xfce/xfce-x.svg /usr/share/backgrounds/xfce/xfce-uglyrat.svg
 sudo ln -sf /usr/share/backgrounds/xfce/rolling-rhino-default.png /usr/share/backgrounds/xfce/xfce-x.svg
 
 # Fix: xubuntu wallpapers overrides ours.
-sudo rm /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
 sudo ln -sf /usr/share/backgrounds/xfce/rolling-rhino-default.png /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
 
 sudo apt-get clean
