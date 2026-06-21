@@ -50,6 +50,7 @@ ofono
 ofono-scripts
 parted
 plymouth
+plymouth-label
 rclone-browser
 rfkill
 rsync
