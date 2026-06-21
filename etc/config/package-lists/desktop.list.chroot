@@ -61,6 +61,7 @@ parted
 pipewire
 pipewire-pulse
 plymouth
+plymouth-label
 qt-style-kvantum
 qt-style-kvantum-themes
 rclone-browser
@@ -97,6 +98,5 @@ xfsprogs
 xfwm4
 xkb-data
 xorg
-xubuntu-default-settings
 zip
 zram-config
