@@ -78,6 +78,7 @@ pipewire
 pipewire-pulse
 pkexec
 plymouth
+plymouth-label
 policykit-1-gnome
 polkitd
 qt-style-kvantum
