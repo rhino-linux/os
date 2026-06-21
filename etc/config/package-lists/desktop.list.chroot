@@ -50,6 +50,7 @@ ofono
 ofono-scripts
 parted
 plymouth
+plymouth-label
 qt-style-kvantum
 qt-style-kvantum-themes
 rclone-browser
@@ -81,6 +82,5 @@ xfdesktop4
 xfwm4
 xkb-data
 xorg
-xubuntu-default-settings
 zip
 zram-config
