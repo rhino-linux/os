@@ -2,7 +2,6 @@ alsa-base
 alsa-utils
 bash-completion
 bc
-blueman
 bridge-utils
 btrfs-progs
 ca-certificates
@@ -26,7 +25,6 @@ gnupg2
 gnupg2
 gparted
 gpg
-gtk2-engines-pixbuf
 gvfs-backends
 gvfs-fuse
 ifupdown
@@ -39,8 +37,6 @@ libasound2-plugins
 libglib2.0-bin
 libiw30t64
 libsasl2-modules
-lightdm
-lightdm-gtk-greeter
 linux-firmware-broadcom-wireless
 linux-firmware-mediatek
 linux-firmware-misc
@@ -51,9 +47,7 @@ linux-firmware-realtek
 lvm2
 mate-polkit
 mokutil
-mousepad
 mpv
-mugshot
 net-tools
 network-manager-gnome
 ntfs-3g
@@ -62,8 +56,6 @@ pipewire
 pipewire-pulse
 plymouth
 plymouth-label
-qt-style-kvantum
-qt-style-kvantum-themes
 rclone-browser
 rfkill
 rsync
@@ -86,16 +78,7 @@ x11-common
 xdg-user-dirs
 xdg-user-dirs-gtk
 xdg-utils
-xfce4-appfinder
-xfce4-goodies
-xfce4-notifyd
-xfce4-panel
-xfce4-session
-xfce4-settings
-xfce4-terminal
-xfdesktop4
 xfsprogs
-xfwm4
 xkb-data
 xorg
 zip
