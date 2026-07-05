@@ -3,7 +3,6 @@ alsa-ucm-conf
 alsa-utils
 bash-completion
 bc
-blueman
 bluez
 bluez-tools
 bridge-utils
@@ -29,7 +28,6 @@ fwupdate
 ghostscript-x
 gnupg2
 gpg
-gtk2-engines-pixbuf
 gvfs-backends
 gvfs-fuse
 ifupdown
@@ -38,15 +36,11 @@ jfsutils
 language-pack-en
 language-pack-ko
 language-selector-common
-libadwaita-1-0
 libasound2-plugins
 libdbus-glib-1-2
 libglib2.0-bin
 libiw30t64
-libpanel-1-1
 libsasl2-modules
-lightdm
-lightdm-gtk-greeter
 linux-firmware
 linux-firmware-amd-graphics
 linux-firmware-broadcom-wireless
@@ -68,10 +62,8 @@ linux-firmware-realtek
 lvm2
 mate-polkit
 mokutil
-mousepad
 mpv
 mtools
-mugshot
 net-tools
 network-manager-gnome
 ntfs-3g
@@ -83,8 +75,6 @@ plymouth
 plymouth-label
 policykit-1-gnome
 polkitd
-qt-style-kvantum
-qt-style-kvantum-themes
 rclone-browser
 rfkill
 rsync
@@ -95,8 +85,6 @@ shim-signed
 software-properties-common
 spice-vdagent
 systemd
-thunar
-thunar-volman
 ubuntu-drivers-common
 unzip
 user-setup
@@ -108,16 +96,7 @@ x11-common
 xdg-user-dirs
 xdg-user-dirs-gtk
 xdg-utils
-xfce4-appfinder
-xfce4-goodies
-xfce4-notifyd
-xfce4-panel
-xfce4-session
-xfce4-settings
-xfce4-terminal
-xfdesktop4
 xfsprogs
-xfwm4
 xkb-data
 xorg
 zip
