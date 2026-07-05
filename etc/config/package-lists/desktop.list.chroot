@@ -49,6 +49,7 @@ ofono-scripts
 parted
 plymouth
 plymouth-label
+python3-requests
 rclone-browser
 rfkill
 rsync
