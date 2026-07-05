@@ -81,6 +81,7 @@ plymouth
 plymouth-label
 policykit-1-gnome
 polkitd
+python3-requests
 qt-style-kvantum
 qt-style-kvantum-themes
 rfkill
