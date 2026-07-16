@@ -25,7 +25,6 @@ lb config noauto \
     --keyring-packages ubuntu-keyring \
     --apt-options "--option Acquire::Retries=2 --option Acquire::http::Timeout=45 --yes" \
     --cache-packages false \
-    --cache-stages false \
     --uefi-secure-boot enable \
     --system normal \
     --binary-image tar \
@@ -44,7 +43,6 @@ lb config noauto \
     --bootstrap-qemu-arch "$QEMU_ARCH" \
     --bootstrap-qemu-static "$QEMU_STATIC" \
     "${@}"
-
 
 # replace channel and suite
 # sed -i "s/@CHANNEL/$CHANNEL/" config/archives/*.list*
