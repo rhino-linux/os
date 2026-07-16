@@ -28,7 +28,6 @@ lb config noauto \
     --apt-options "--option Acquire::Retries=2 --option Acquire::http::Timeout=45 --yes" \
     --apt-recommends false \
     --cache-packages false \
-    --cache-stages false \
     --uefi-secure-boot enable \
     --binary-image iso-hybrid \
     --iso-application "$NAME" \
@@ -48,7 +47,6 @@ lb config noauto \
     --checksums md5 \
     --bootloaders "$BOOTLOADERS" \
     "${@}"
-
 
 # replace channel and suite
 # sed -i "s/@CHANNEL/$CHANNEL/" config/archives/*.list*
