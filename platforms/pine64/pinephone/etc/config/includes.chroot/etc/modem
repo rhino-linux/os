@@ -1,0 +1,14 @@
+#!/lib/init/init-d-script
+### BEGIN INIT INFO
+# Provides:          modem
+# Required-Start:
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Turn the modem on / off
+# Description:       Turn the modem on / off
+### END INIT INFO
+
+DAEMON=/usr/bin/eg25-manager
+PIDFILE=/var/run/eg25-manager.pid
+START_ARGS="--background -m"

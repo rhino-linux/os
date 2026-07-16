@@ -1,0 +1,11 @@
+#!/bin/bash
+set -ex
+
+kern=$(dpkg -l | grep -E linux-image-.*-raspi | tail -n2 | awk '{print $2}')
+kver=${kern/linux-image-/}
+
+cp -rf /lib/linux-firmware-raspi/* /system-boot
+cp -rf /usr/lib/firmware/$kver/device-tree/broadcom/* /system-boot
+cp -rf /usr/lib/firmware/$kver/device-tree/overlays/ /system-boot
+cp /boot/initrd.img-* /system-boot/initrd.img
+cp /boot/vmlinuz-* /system-boot/vmlinuz

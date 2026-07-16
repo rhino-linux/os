@@ -1,0 +1,17 @@
+#!/bin/bash
+set -e
+
+kern="$DPKG_MAINTSCRIPT_PACKAGE"
+kver=${kern/linux-image-/}
+if [[ -z "$kver" ]]; then
+  kern=$(dpkg -l | grep -E linux-image-.*-raspi | tail -n1 | awk '{print $2}')
+  kver=${kern/linux-image-/};
+fi
+echo "Updating /system-boot for kernel version $kver"
+cp -rf /usr/lib/firmware/$kver /system-boot/$kver & echo "copying /usr/lib/firmware/$kver"
+cp -rf /lib/linux-firmware-raspi/* /system-boot & echo "copying /lib/linux-firmware-raspi/"
+cp -rf /usr/lib/firmware/$kver/device-tree/broadcom/* /system-boot & echo "copying /usr/lib/firmware/$kver/device-tree/broadcom/*"
+cp -rf /usr/lib/firmware/$kver/device-tree/overlays/ /system-boot & echo "copying /usr/lib/firmware/$kver/device-tree/overlays/"
+cp /boot/initrd.img-$kver /system-boot/initrd.img & echo "copying /boot/initrd.img-$kver"
+cp /boot/vmlinuz-$kver /system-boot/vmlinuz & echo "copying /boot/vmlinuz-$kver"
+echo "Updated /system-boot to kernel version $kver, reboot for changes to take effect"

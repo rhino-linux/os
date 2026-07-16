@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo "P: Begin executing set-disk-info binary hook in ${PWD}"
+
+cp -rf ../config/includes.binary/.disk .
+#cp -rf ../chroot/boot/dtb* boot/
+#cp -rf ../chroot/boot/extlinux boot/

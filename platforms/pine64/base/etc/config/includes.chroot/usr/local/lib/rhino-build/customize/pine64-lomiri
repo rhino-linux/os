@@ -1,0 +1,40 @@
+#!/bin/bash
+sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth 100
+sudo update-alternatives --set default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth
+
+sudo mkdir -p /home/rhino/.config/autostart
+if ! [[ -f "/home/rhino/.config/autostart/rhino-setup.desktop" ]]; then
+  sudo ln -sf "/usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop" "/home/rhino/.config/autostart/rhino-setup.desktop"
+fi
+
+echo "" >> /etc/apt/preferences.d/rhino.pref
+echo "Package: u-boot-menu" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref
+
+#Hack: rhino landing
+echo 'pref("browser.startup.homepage", "https://rhinolinux.org/landing/", locked);' >> /lib/firefox/defaults/pref/syspref.js
+
+mkdir -p /home/rhino/.config/autostart
+cp -r /etc/skel/.config/autostart/* /home/rhino/.config/autostart
+sudo chown "rhino" -cR /home/rhino
+sudo chown "rhino" -cR /home/rhino/.config
+
+sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
+#sudo rm /etc/lightdm/lightdm.conf
+#echo '[SeatDefaults]
+#allow-guest=false
+#autologin-guest=false
+#autologin-user=rhino
+#autologin-user-timeout=0' | sudo tee -a /etc/lightdm/lightdm.conf
+sudo apt-get purge lightdm-gtk-greeter -yq
+
+sudo apt remove flash-kernel -yq
+echo "" >> /etc/apt/preferences.d/rhino.pref
+echo "Package: flash-kernel" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref
+sudo apt-get clean
+sudo update-initramfs -u

@@ -1,0 +1,70 @@
+#!/bin/sh
+
+set -e
+
+. ./terraform.conf
+
+lb config noauto \
+    --architectures "$ARCH" \
+    --mode debian \
+    --initramfs none \
+    --initsystem systemd \
+    --system normal \
+    --distribution "./$BASECODENAME" \
+    --parent-distribution "./$BASECODENAME" \
+    --archive-areas "main restricted universe multiverse" \
+    --parent-archive-areas "main restricted universe multiverse" \
+    --linux-packages "linux linux-tools linux-firmware" \
+    --linux-flavours "raspi" \
+    --mirror-bootstrap "$MIRROR_URL" \
+    --parent-mirror-bootstrap "$MIRROR_URL" \
+    --mirror-chroot-security "$SECURITY_URL" \
+    --parent-mirror-chroot-security "$SECURITY_URL" \
+    --mirror-binary-security "$SECURITY_URL" \
+    --parent-mirror-binary-security "$SECURITY_URL" \
+    --mirror-binary "$MIRROR_URL" \
+    --parent-mirror-binary "$MIRROR_URL" \
+    --keyring-packages ubuntu-keyring \
+    --apt-options "--option Acquire::Retries=2 --option Acquire::http::Timeout=45 --yes" \
+    --cache-packages false \
+    --cache-stages false \
+    --uefi-secure-boot enable \
+    --binary-image tar \
+    --iso-application "$NAME" \
+    --iso-volume "$NAME" \
+    --image-name "$FNAME" \
+    --firmware-binary false \
+    --firmware-chroot false \
+    --binary-filesystem ext4 \
+    --chroot-filesystem none \
+    --hdd-label "RHINO_LINUX" \
+    --zsync false \
+    --security true \
+    --updates true \
+    --debootstrap-options "--exclude=pinephone-tweaks,mobile-tweaks-common,librem5-tweaks,pinetab-tweaks" \
+    --interactive false \
+    --debconf-frontend noninteractive \
+    --checksums md5 \
+    --bootloaders "$BOOTLOADERS" \
+    --bootstrap-qemu-arch "$QEMU_ARCH" \
+    --bootstrap-qemu-static "$QEMU_STATIC" \
+    "${@}"
+
+
+# replace channel and suite
+# sed -i "s/@CHANNEL/$CHANNEL/" config/archives/*.list*
+# sed -i "s/@BASECODENAME/$BASECODENAME/" config/archives/*.list*
+
+DATE=$(date +%Y%m%d)
+sed -i "s/@CHANNEL/$CHANNEL/" config/includes.binary/.disk/info
+sed -i "s/@CODENAME/$CODENAME/" config/includes.binary/.disk/info
+sed -i "s/@ARCH/$ARCH/" config/includes.binary/.disk/info
+sed -i "s/@DISTRO_NAME/$NAME/" config/includes.binary/.disk/info
+sed -i "s/@VERSION/$VERSION/" config/includes.binary/.disk/info
+sed -i "s/@DATE/$DATE/" config/includes.binary/.disk/info
+
+sed -i "s/@DISTRO_NAME/$NAME/" config/hooks/live/004-set-os-info.chroot
+sed -i "s/@VERSION/$VERSION/" config/hooks/live/004-set-os-info.chroot
+sed -i "s/@CHANNEL/$CHANNEL/" config/hooks/live/004-set-os-info.chroot
+sed -i "s/@CODENAME/$CODENAME/" config/hooks/live/004-set-os-info.chroot
+sed -i "s/@BASECODENAME/$BASECODENAME/" config/hooks/live/004-set-os-info.chroot

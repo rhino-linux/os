@@ -1,0 +1,76 @@
+#!/bin/sh
+
+set -e
+
+for profile in /etc/rhino-build/profile.d/*.conf; do
+    [ -f "$profile" ] && . "$profile"
+done
+
+read_packages() {
+    package_type="$1"
+    installer="$2"
+    set --
+    for package_file in "/etc/rhino-build/packages/$package_type.d"/*; do
+        [ -f "$package_file" ] || continue
+        while IFS= read -r package; do
+            case "$package" in
+                ""|\#*) continue ;;
+            esac
+            set -- "$@" "$package"
+        done < "$package_file"
+    done
+
+    [ "$#" -eq 0 ] || "$installer" "$@"
+}
+
+install_apt_packages() {
+    apt-get install -yq "$@"
+}
+
+install_pacstall_packages() {
+    SUDO_USER="$RHINO_BUILD_USER" pacstall -QPINs "$@"
+}
+
+case "$1" in
+    apt)
+        apt-get update -yq
+        read_packages apt install_apt_packages
+
+        groupadd "$RHINO_BUILD_USER"
+        if [ -n "${RHINO_BUILD_PASSWORD:-}" ]; then
+            password="$(openssl passwd -1 "$RHINO_BUILD_PASSWORD")"
+            useradd -rm -d "$RHINO_BUILD_HOME" -g root -s /bin/bash -p "$password" -u 1001 "$RHINO_BUILD_USER"
+        else
+            useradd -rm -d "$RHINO_BUILD_HOME" -g root -s /bin/bash -u 1001 "$RHINO_BUILD_USER"
+        fi
+        adduser "$RHINO_BUILD_USER" sudo
+        echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+        [ "${RHINO_BUILD_ENABLE_SSH:-false}" = true ] && systemctl enable ssh
+
+        export SUDO_USER="$RHINO_BUILD_USER"
+        export DEBIAN_FRONTEND=noninteractive
+        export PACSTALL_DOWNLOADER=curl
+        export GITHUB_ACTIONS=true
+        echo N | sudo bash -c "$(curl -fsSL https://git.io/JsADh || wget -q https://git.io/JsADh -O -)"
+        ;;
+    pacstall)
+        export SUDO_USER="$RHINO_BUILD_USER"
+        export DEBIAN_FRONTEND=noninteractive
+        export PACSTALL_DOWNLOADER=wget
+        export GITHUB_ACTIONS=true
+
+        mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /tmp/pacstall /var/cache/pacstall /usr/src/pacstall
+        chown "$RHINO_BUILD_USER" -cR /var/log/pacstall /usr/src/pacstall /tmp/pacstall /usr/share/pacstall "$RHINO_BUILD_HOME" /var/cache/pacstall
+        chmod -R 777 /tmp/pacstall
+        git config --global --add safe.directory '*'
+
+        read_packages pacstall install_pacstall_packages
+        sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
+        "$RHINO_BUILD_CUSTOMIZE"
+        ;;
+    *)
+        echo "Usage: $0 {apt|pacstall}" >&2
+        exit 2
+        ;;
+esac
