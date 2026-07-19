@@ -1,0 +1,1 @@
+KERNEL=="mali*" OWNER="root" GROUP="mali" MODE="0666"

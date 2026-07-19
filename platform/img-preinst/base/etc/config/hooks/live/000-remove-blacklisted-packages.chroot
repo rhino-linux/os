@@ -1,0 +1,32 @@
+#!/bin/sh
+# Description: Remove seed branches and remove blacklisted packages
+
+echo "Fixing snapd not being able to remove itself"
+
+sed -i 's/^set -e//g' /var/lib/dpkg/info/snapd.prerm # For minimal as snapd fails at some point
+sed -i 's/^set -e//g' /var/lib/dpkg/info/snapd.postrm
+echo 'rm -rf /snap' >> /var/lib/dpkg/info/snapd.postrm
+echo 'rm -rf ~/snap' >> /var/lib/dpkg/info/snapd.postrm
+echo 'rm -rf /root/snap' >> /var/lib/dpkg/info/snapd.postrm
+
+echo "P: Begin executing remove-blacklisted-packages chroot hook..."
+
+apt-get autoremove --purge -f -q -y \
+    ubuntu-desktop \
+    ubuntu-session \
+    apport \
+    snapd \
+    update-manager \
+    update-notifier \
+    gparted
+
+rm -rf ../ubuntu-seeds ../platform
+
+# Fake desktop entries to prevent some applications from displaying
+mkdir -p "/etc/skel/.local/share/applications" "/root"
+touch /etc/skel/.local/share/applications/software-properties-drivers.desktop
+touch /etc/skel/.local/share/applications/gnome-session-properties.desktop
+touch /etc/skel/.local/share/applications/nm-connection-editor.desktop
+touch /etc/skel/.local/share/applications/gnome-language-selector.desktop
+touch /etc/skel/.local/share/applications/gnome-printers-panel.desktop
+touch /etc/skel/.local/share/applications/calamares.desktop

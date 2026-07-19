@@ -1,0 +1,23 @@
+#!/bin/sh
+# Description: Add/install Pacstall
+
+apt-get update -yq
+apt-get install axel nano pipewire-pulse pipewire-alsa bluez-firmware bluez-alsa-utils gnome-disk-utility iio-sensor-proxy dbus-x11 dconf-editor openssh-server -yq
+sudo systemctl enable ssh
+
+# Create user
+sudo groupadd rhino
+sudo useradd -rm -d /home/rhino -g root -s /bin/bash -p $(openssl passwd -1 1234) -u 1001 rhino
+sudo adduser rhino sudo
+echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers # Pacstall has issues with sudo despite the user not having a password
+
+# More pacstall specific things
+export SUDO_USER=rhino
+export DEBIAN_FRONTEND=noninteractive
+export PACSTALL_DOWNLOADER=curl
+export GITHUB_ACTIONS=true
+
+# Install pacstall
+echo N | sudo bash -c "$(curl -fsSL https://git.io/JsADh || wget -q https://git.io/JsADh -O -)"
+
+# sed -i 's/ cdrom/ [trusted=yes] cdrom/g' /etc/apt/sources.list

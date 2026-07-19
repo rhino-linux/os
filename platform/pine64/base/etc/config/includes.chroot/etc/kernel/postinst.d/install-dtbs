@@ -1,0 +1,12 @@
+#!/bin/bash
+set -ex
+
+kern="$DPKG_MAINTSCRIPT_PACKAGE"
+kver=${kern/linux-image-/}
+
+libdir="/usr/lib/$DPKG_MAINTSCRIPT_PACKAGE/"
+[ -d "$libdir" ] || exit 0
+
+cd "$libdir"
+mkdir -p /boot/dtb-$kver/
+find -iname '*.dtb' -exec cp --parents {} /boot/dtb-$kver/ \;

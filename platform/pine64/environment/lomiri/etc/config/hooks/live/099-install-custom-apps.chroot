@@ -1,0 +1,62 @@
+#!/bin/bash
+# Description: Install custom Pacstall apps and others
+
+# More pacstall specific things
+export SUDO_USER=rhino
+export DEBIAN_FRONTEND=noninteractive
+export PACSTALL_DOWNLOADER=wget
+export GITHUB_ACTIONS=true
+
+sudo mkdir -p /var/log/pacstall/metadata /var/log/pacstall/error_log /tmp/pacstall /var/cache/pacstall /usr/src/pacstall
+sudo chown "rhino" -cR "/var/log/pacstall"
+sudo chmod -R 777 "/tmp/pacstall"
+sudo chown "rhino" -cR "/usr/src/pacstall"
+sudo chown "rhino" -cR "/tmp/pacstall"
+sudo chown "rhino" -cR "/usr/share/pacstall"
+sudo chown "rhino" -cR "/home/rhino"
+sudo chown "rhino" -cR "/var/cache/pacstall"
+git config --global --add safe.directory '*'
+
+SUDO_USER=rhino pacstall -QPINs nala-deb firefox-bin rhino-pine-lomiri-core timeshift fake-ubuntu-advantage-tools-deb rhino-setup-bin
+
+sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth 100
+sudo update-alternatives --set default.plymouth /usr/share/plymouth/themes/rhino-spinner/rhino-spinner.plymouth
+
+sudo mkdir -p /home/rhino/.config/autostart
+if ! [[ -f "/home/rhino/.config/autostart/rhino-setup.desktop" ]]; then
+  sudo ln -sf "/usr/local/share/applications/org.rhinolinux.RhinoSetup.desktop" "/home/rhino/.config/autostart/rhino-setup.desktop"
+fi
+
+echo "" >> /etc/apt/preferences.d/rhino.pref
+echo "Package: u-boot-menu" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref
+
+sudo sed -i 's/%sudo ALL=(ALL) NOPASSWD:ALL//' /etc/sudoers
+
+#Hack: rhino landing
+echo 'pref("browser.startup.homepage", "https://rhinolinux.org/landing/", locked);' >> /lib/firefox/defaults/pref/syspref.js
+
+mkdir -p /home/rhino/.config/autostart
+cp -r /etc/skel/.config/autostart/* /home/rhino/.config/autostart
+sudo chown "rhino" -cR /home/rhino
+sudo chown "rhino" -cR /home/rhino/.config
+
+sudo rm /usr/share/lightdm/lightdm.conf.d/60-xubuntu.conf
+#sudo rm /etc/lightdm/lightdm.conf
+#echo '[SeatDefaults]
+#allow-guest=false
+#autologin-guest=false
+#autologin-user=rhino
+#autologin-user-timeout=0' | sudo tee -a /etc/lightdm/lightdm.conf
+sudo apt-get purge lightdm-gtk-greeter -yq
+
+sudo apt remove flash-kernel -yq
+echo "" >> /etc/apt/preferences.d/rhino.pref
+echo "Package: flash-kernel" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin: origin ports.ubuntu.com/ubuntu-ports" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
+echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref
+sudo apt-get clean
+sudo update-initramfs -u

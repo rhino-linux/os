@@ -1,0 +1,2 @@
+deb http://ports.ubuntu.com/ubuntu-ports/ ./devel-proposed main restricted universe multiverse
+#deb-src http://ports.ubuntu.com/ubuntu-ports/ ./devel-proposed main restricted universe multiverse
