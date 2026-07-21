@@ -1,0 +1,113 @@
+#!/bin/bash
+
+set -e
+
+source ./terraform.conf
+
+base_conf=(
+  --image-name "$FNAME"
+  --architectures "$ARCH"
+  --mode debian
+  --initsystem systemd
+  --distribution "./$BASECODENAME"
+  --parent-distribution "./$BASECODENAME"
+  --archive-areas "main restricted universe multiverse"
+  --parent-archive-areas "main restricted universe multiverse"
+  --mirror-bootstrap "$MIRROR_URL"
+  --parent-mirror-bootstrap "$MIRROR_URL"
+  --mirror-chroot-security "$SECURITY_URL"
+  --parent-mirror-chroot-security "$SECURITY_URL"
+  --mirror-binary-security "$SECURITY_URL"
+  --parent-mirror-binary-security "$SECURITY_URL"
+  --mirror-binary "$MIRROR_URL"
+  --parent-mirror-binary "$MIRROR_URL"
+  --keyring-packages ubuntu-keyring
+  --apt-options "--option Acquire::Retries=2 --option Acquire::http::Timeout=45 --yes"
+  --cache-packages false
+  --cache-stages false
+  --uefi-secure-boot enable
+  --firmware-binary false
+  --firmware-chroot false
+  --zsync false
+  --security true
+  --updates true
+  --interactive false
+  --debconf-frontend noninteractive
+  --checksums md5
+  --bootstrap-qemu-arch "$QEMU_ARCH"
+  --bootstrap-qemu-static "$QEMU_STATIC"
+)
+
+rpi_conf=(
+  --linux-packages "linux linux-tools linux-firmware"
+  --linux-flavours "raspi"
+)
+
+pine_conf=(
+  --debootstrap-options "--include=mobile-tweaks-common"
+)
+
+iso_conf=(
+  --initramfs live-boot
+  --linux-packages "linux-image"
+  --linux-flavours "generic"
+  --bootappend-live "boot=casper quiet splash"
+  --apt-recommends false
+  --binary-image iso-hybrid
+  --chroot-squashfs-compression-type "xz -Xdict-size 1M -b 1M"
+  --swap-file-path /swapfile
+  --swap-file-size 256
+  --compression xz
+)
+
+pine_iso_conf=(
+  --linux-flavours "generic"
+)
+
+rpi_pine_conf=(
+  --system normal
+  --initramfs none
+  --binary-image tar
+  --binary-filesystem ext4
+  --chroot-filesystem none
+  --hdd-label "RHINO_LINUX"
+)
+
+rpi_iso_conf=(
+  --iso-application "$NAME"
+  --iso-volume "$NAME"
+  --debootstrap-options "--exclude=pinephone-tweaks,mobile-tweaks-common,librem5-tweaks,pinetab-tweaks"
+  --bootloaders "$BOOTLOADERS"
+)
+
+case "${BUILD_PLATFORM}" in
+  iso)
+    configs=("${base_conf[@]}" "${iso_conf[@]}" "${pine_iso_conf[@]}" "${rpi_iso_conf[@]}")
+  ;;
+  rpi)
+    configs=("${base_conf[@]}" "${rpi_conf[@]}" "${rpi_pine_conf[@]}" "${rpi_iso_conf[@]}")
+  ;;
+  pine64)
+    configs=("${base_conf[@]}" "${pine_conf[@]}" "${rpi_pine_conf[@]}" "${pine_iso_conf[@]}")
+  ;;
+esac
+
+lb config noauto "${configs[@]}" "${@}"
+
+# replace channel and suite
+# sed -i "s/@CHANNEL/$CHANNEL/" config/archives/*.list*
+# sed -i "s/@BASECODENAME/$BASECODENAME/" config/archives/*.list*
+
+DATE=$(date +%Y%m%d)
+sed -i "s/@CHANNEL/$CHANNEL/" config/includes.binary/.disk/info
+sed -i "s/@CODENAME/$CODENAME/" config/includes.binary/.disk/info
+sed -i "s/@ARCH/$ARCH/" config/includes.binary/.disk/info
+sed -i "s/@DISTRO_NAME/$DISTRO_NAME/" config/includes.binary/.disk/info
+sed -i "s/@VERSION/$VERSION/" config/includes.binary/.disk/info
+sed -i "s/@DATE/$DATE/" config/includes.binary/.disk/info
+
+sed -i "s/@DISTRO_NAME/$DISTRO_NAME/" config/hooks/live/004-set-os-info.chroot
+sed -i "s/@VERSION/$VERSION/" config/hooks/live/004-set-os-info.chroot
+sed -i "s/@CHANNEL/$CHANNEL/" config/hooks/live/004-set-os-info.chroot
+sed -i "s/@CODENAME/$CODENAME/" config/hooks/live/004-set-os-info.chroot
+sed -i "s/@BASECODENAME/$BASECODENAME/" config/hooks/live/004-set-os-info.chroot
