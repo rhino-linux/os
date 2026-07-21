@@ -1,0 +1,55 @@
+name: Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: "Platform path to build"
+        required: true
+        type: choice
+        options:
+          - generic/amd64
+          - generic/arm64
+          - pine64/pinephone
+          - pine64/pinephone-pro
+          - pine64/pinetab
+          - pine64/pinetab2
+          - raspi
+      environment:
+        description: "Desktop type"
+        required: false
+        type: choice
+        options:
+          - server
+          - lomiri
+          - unicorn
+      upload_artifact:
+        description: "Upload the built image as a workflow artifact"
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  build:
+    name: 
+      build
+      (${{ inputs.platform }}${{ inputs.environment != '' && format(', {0}', inputs.environment) || 'server' }})
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run build script
+        run: |
+          ./build-scripts/build.sh \
+            --platform "${{ inputs.platform }}" \
+            --desktop "${{ inputs.environment }}"
+
+      - name: Upload build artifact
+        if: ${{ inputs.upload_artifact }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.artifact-name.outputs.name }}
+          path: out/**
+          if-no-files-found: error
+          retention-days: 7
