@@ -28,5 +28,5 @@ case ${platform} in
 esac
 
 mkdir -p "${builddir}"
-echo "Overlaying: cp -r ${overlays[@]} -t ${builddir}"
+echo "Overlaying: cp -r ${overlays[*]} -t ${builddir}"
 cp -r ${overlays[@]} -t ${builddir}
