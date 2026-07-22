@@ -43,6 +43,8 @@ lomiri
 server
 ```
 
+These inputs are supplied by `build-scripts/live-build.sh`, which normalizes the platform and environment arguments and exports `terra_platform` and `terra_envir` so the assembled `terraform.conf` can read them.
+
 The build wrapper accepts additional platform aliases and normalizes them before exporting these variables.
 
 CI/CD should select the platform and environment and pass them to the build entry point. It should not modify or generate separate copies of `terraform.conf`.
@@ -107,7 +109,13 @@ It must be run from the repository root because its source paths are relative to
 
 ### live-build
 
-The live-build wrapper accepts a platform and environment, normalizes them, and exports `terra_platform` and `terra_envir`.
+The live-build wrapper currently accepts two inputs:
+
+```text
+build-scripts/live-build.sh <platform> <environment>
+```
+
+It normalizes them and exports `terra_platform` and `terra_envir`, which the assembled `terraform.conf` reads.
 
 Its intended configuration path inside an assembled build directory is:
 
