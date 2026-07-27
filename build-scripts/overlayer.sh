@@ -28,7 +28,7 @@ case ${platform} in
 esac
 
 mkdir -p "${builddir}"
-echo -e "Overlaying:\n  Sources: ${overlays[*]}\n  Output: ${builddir}"
+echo -e "Overlaying:\n  Source: ${overlays[*]}\n  Output: ${builddir}"
 for i in "${overlays[@]}"; do
   if [[ -d ${i} ]]; then
     cp -r "${i}"/* -t "${builddir}"
