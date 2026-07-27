@@ -109,10 +109,10 @@ It must be run from the repository root because its source paths are relative to
 
 ### live-build
 
-The live-build wrapper currently accepts three inputs:
+The live-build wrapper currently accepts four inputs:
 
 ```text
-build-scripts/live-build.sh <platform> <environment> <terraform>
+build-scripts/live-build.sh <platform> <environment> <build-directory> <terraform>
 ```
 
 It normalizes them and exports `terra_platform` and `terra_envir`, which the assembled `terraform.conf` reads. The `<terraform>` input is optional, and will auto-resolve to `etc/terraform.conf` if nothing is provided.
