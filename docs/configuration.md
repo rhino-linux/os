@@ -109,13 +109,13 @@ It must be run from the repository root because its source paths are relative to
 
 ### live-build
 
-The live-build wrapper currently accepts two inputs:
+The live-build wrapper currently accepts three inputs:
 
 ```text
-build-scripts/live-build.sh <platform> <environment>
+build-scripts/live-build.sh <platform> <environment> <terraform>
 ```
 
-It normalizes them and exports `terra_platform` and `terra_envir`, which the assembled `terraform.conf` reads.
+It normalizes them and exports `terra_platform` and `terra_envir`, which the assembled `terraform.conf` reads. The `<terraform>` input is optional, and will auto-resolve to `etc/terraform.conf` if nothing is provided.
 
 Its intended configuration path inside an assembled build directory is:
 
@@ -123,10 +123,6 @@ Its intended configuration path inside an assembled build directory is:
 etc/terraform.conf
 ```
 
-The wrapper currently has a bug that assigns its first argument to both the platform and configuration path.
-
-- TODO: Make `etc/terraform.conf` the fixed default configuration path.
-- TODO: Add a distinct optional configuration-path argument only if one is required.
 - TODO: Connect overlay assembly and live-build through one supported command.
 
 ### Device Image Generation
