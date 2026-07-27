@@ -30,10 +30,6 @@ platform/
     base/
     environment/<environment>/
 
-  rpi/
-    base/
-    environment/<environment>/
-
   pine64/
     base/
     environment/<environment>/
@@ -43,6 +39,10 @@ platform/
     tab/
       base/
       environment/<environment>/
+
+  rpi/
+    base/
+    environment/<environment>/
 ```
 
 ## Overlay Precedence
@@ -60,28 +60,9 @@ platform/iso-generic/base/
 platform/iso-generic/environment/<environment>/
 ```
 
-### Raspberry Pi Server
+### PINE64
 
-The server build does not include an environment layer:
-
-```text
-base/base/
-platform/img-preinst/base/
-platform/rpi/base/
-```
-
-### Raspberry Pi Desktop
-
-```text
-base/base/
-base/environment/<environment>/
-platform/img-preinst/base/
-platform/img-preinst/environment/<environment>/
-platform/rpi/base/
-platform/rpi/environment/<environment>/
-```
-
-### PinePhone
+#### PinePhone
 
 ```text
 base/base/
@@ -94,7 +75,7 @@ platform/pine64/phone/base/
 platform/pine64/phone/environment/<environment>/
 ```
 
-### PineTab
+#### PineTab
 
 ```text
 base/base/
@@ -107,16 +88,39 @@ platform/pine64/tab/base/
 platform/pine64/tab/environment/<environment>/
 ```
 
+### Raspberry Pi
+
+#### Server
+
+The server build does not include an environment layer:
+
+```text
+base/base/
+platform/img-preinst/base/
+platform/rpi/base/
+```
+
+#### Desktop
+
+```text
+base/base/
+base/environment/<environment>/
+platform/img-preinst/base/
+platform/img-preinst/environment/<environment>/
+platform/rpi/base/
+platform/rpi/environment/<environment>/
+```
+
 ## File Placement
 
 Keep each file at the highest layer where it is valid:
 
 - Use `base/base/` for files shared by every image.
-- Use `base/environment/` for environment files shared by multiple platforms.
-- Use a platform `base/` for files shared by that platform family.
-- Use a platform `environment/` for environment-specific platform files.
-- Use `phone/base/` or `tab/base/` for target-family files.
-- Use target environment directories for files specific to both a target family and an environment.
+- Use `base/environment/` for files shared by every image using a specific environment.
+- Use `platform/<platform>/base/` for files shared by every image using a specific platform. (Note: `img-preinst/` is a higher level than `pine64/` and `rpi/`)
+- Use `platform/<platform>/environment/` for files using a specific environment on a specific platform.
+- Use `platform/pine64/phone/base/` or `platform/pine64/tab/base/` for files shared by every image on a specific PINE64 target family.
+- Use target environment directories for files using a specific environment on a specific target family.
 
 Do not duplicate a shared file in several more-specific layers.
 
