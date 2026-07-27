@@ -130,7 +130,7 @@ Do not duplicate a shared file in several more-specific layers.
 
 Generic targets produce bootable ISO images through live-build.
 
-Raspberry Pi and Pine64 targets first produce an ext4 root filesystem archive through live-build. Debos recipes then partition and customize device images from that archive.
+Raspberry Pi and Pine64 targets first produce a root filesystem tarball through live-build. Debos recipes then partition and customize device images from that tarball.
 
 Shared preinstalled-image resources, including the Debos wrapper and common polishing recipe, live under:
 
@@ -150,6 +150,6 @@ The generic GRUB theme is a Git submodule at:
 platform/iso-generic/base/etc/config/includes.binary/grub
 ```
 
-Initialize submodules before building an ISO.
+Initialize submodules before building an ISO. These are not used by the preinstalled images.
 
 `base/base/rebuild-list` is historical metadata and is not required by the current build scripts.
