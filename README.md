@@ -17,7 +17,7 @@ base/
 
 platform/
   iso-generic/          Generic amd64 and arm64 ISO files
-  img-preinst/          Shared preinstalled-image files
+  img-preinst/          Shared preinstalled-image files (PINE64 + RPi)
   pine64/               PinePhone and PineTab files
   rpi/                  Raspberry Pi files
 
