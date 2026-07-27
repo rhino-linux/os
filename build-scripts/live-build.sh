@@ -4,6 +4,7 @@ set -e
 
 platform=${1:?Platform required}
 envir=${2:?Environment required}
+terra=${3}
 
 # check for root permissions
 if [[ "$(id -u)" != 0 ]]; then
@@ -33,8 +34,8 @@ case ${platform} in
 esac
 export terra_platform terra_envir
 
-if [[ -n "${1}" ]]; then
-  CONFIG_FILE="${1}"
+if [[ -n "${terra}" ]]; then
+  CONFIG_FILE="${terra}"
 else
   CONFIG_FILE="etc/terraform.conf"
 fi
