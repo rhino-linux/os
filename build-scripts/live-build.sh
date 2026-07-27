@@ -4,7 +4,8 @@ set -e
 
 platform=${1:?Platform required}
 envir=${2:?Environment required}
-terra=${3}
+builddir=${3:?Build directory required}
+terra=${4}
 
 # check for root permissions
 if [[ "$(id -u)" != 0 ]]; then
@@ -39,7 +40,7 @@ if [[ -n "${terra}" ]]; then
 else
   CONFIG_FILE="etc/terraform.conf"
 fi
-BASE_DIR="${PWD}"
+BASE_DIR="${builddir}"
 source "${BASE_DIR}/${CONFIG_FILE}"
 
 #VanillaOS patch to yeet ia32
