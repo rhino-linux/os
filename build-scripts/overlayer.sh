@@ -30,5 +30,7 @@ esac
 mkdir -p "${builddir}"
 echo "Overlaying: cp -r ${overlays[*]} -t ${builddir}"
 for i in "${overlays[@]}"; do
-  cp -r "${i}"/* -t "${builddir}"
+  if [[ -d ${i} ]]; then
+    cp -r "${i}"/* -t "${builddir}"
+  fi
 done
