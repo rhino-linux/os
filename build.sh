@@ -21,9 +21,19 @@ apt-get update
 apt-get install -y \
   patch gnupg2 binutils zstd ubuntu-keyring \
   libglib2.0-dev libmysqlclient-dev apt-utils \
-  debootstrap mtools dosfstools qemu-user-static binfmt-support dpkg-dev
+  debootstrap mtools dosfstools qemu-user-binfmt binfmt-support dpkg-dev
 
-ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/devel
+cat > /usr/share/debootstrap/scripts/devel << 'DEVEL'
+case $ARCH in
+  amd64|i386) default_mirror http://archive.ubuntu.com/ubuntu ;;
+  *)          default_mirror http://ports.ubuntu.com/ubuntu-ports ;;
+esac
+keyring /usr/share/keyrings/ubuntu-archive-keyring.gpg
+mirror_style release
+download_style apt
+finddebs_style from-indices
+variants - buildd fakechroot minbase
+DEVEL
 
 dpkg -i "$REPO_ROOT/base/base/debs/live-build_20220505_all.deb"
 
