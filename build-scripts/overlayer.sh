@@ -30,5 +30,9 @@ case ${platform} in
 esac
 
 mkdir -p "${builddir}"
-echo "Overlaying: cp -r ${overlays[*]} -t ${builddir}"
-cp -r ${overlays[@]} -t ${builddir}
+echo -e "Overlaying:\n  Source: ${overlays[*]}\n  Output: ${builddir}"
+for i in "${overlays[@]}"; do
+  if [[ -d ${i} ]]; then
+    cp -r "${i}"/* -t "${builddir}"
+  fi
+done

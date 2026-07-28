@@ -24,7 +24,6 @@ base_conf=(
   --keyring-packages ubuntu-keyring
   --apt-options "--option Acquire::Retries=2 --option Acquire::http::Timeout=45 --yes"
   --cache-packages false
-  --cache-stages false
   --uefi-secure-boot enable
   --firmware-binary false
   --firmware-chroot false

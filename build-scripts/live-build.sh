@@ -4,6 +4,8 @@ set -e
 
 platform=${1:?Platform required}
 envir=${2:?Environment required}
+builddir=${3:?Build directory required}
+terra=${4}
 
 # check for root permissions
 if [[ "$(id -u)" != 0 ]]; then
