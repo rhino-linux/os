@@ -33,11 +33,7 @@ case ${platform} in
 esac
 export terra_platform terra_envir
 
-if [[ -n "${1}" ]]; then
-  CONFIG_FILE="${1}"
-else
-  CONFIG_FILE="etc/terraform.conf"
-fi
+CONFIG_FILE="etc/terraform.conf"
 BASE_DIR="${PWD}"
 source "${BASE_DIR}/${CONFIG_FILE}"
 
