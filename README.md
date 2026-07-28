@@ -1,83 +1,103 @@
 # Rhino Linux Image Builder
 
-Originally forked from [Vanilla-OS's ISO builder](https://github.com/Vanilla-OS/live-iso).
+This repository contains the shared source layers used to build Rhino Linux ISO and device images.
 
-This is an overlay-based build system for producing Rhino Linux images.
-A single checkout can build images for all supported platforms by composing
-overlays from `base/` and `platform/` directories.
+Originally forked from the Vanilla OS, Ubuntu Cinnamon, and elementary OS image builders.
 
-## Platforms
+## Issue Tracker
 
-| Platform arg | Output | Arch | Environment |
-|---|---|---|---|
-| `amd64` | `.iso` | amd64 | `unicorn`, `lomiri` |
-| `arm64` | `.iso` | arm64 | `unicorn`, `lomiri` |
-| `pinephone` / `pp` | `.img.xz` | arm64 | `unicorn`, `lomiri` |
-| `pinephonepro` / `ppp` | `.img.xz` | arm64 | `unicorn`, `lomiri` |
-| `pinetab` / `pt` | `.img.xz` | arm64 | `unicorn`, `lomiri` |
-| `pinetab2` / `pt2` | `.img.xz` | arm64 | `unicorn`, `lomiri` |
-| `rpi` / `raspi` / `raspberrypi` | `.img.xz` | arm64 | `desktop`, `server` |
+Report bugs and propose features through the [Rhino Linux tracker](https://github.com/rhino-linux/tracker).
 
-## Building Locally
+## Repository Layout
 
-You need:
-- Root access (for live-build / debootstrap)
-- Docker (for the debos stage on ARM platforms only)
+```text
+base/
+  base/                 Files shared by every image
+  environment/          Files shared by an environment
 
-### Stage 1: Root filesystem (all platforms)
+platform/
+  iso-generic/          Generic amd64 and arm64 ISO files
+  img-preinst/          Shared preinstalled-image files (PINE64 + RPi)
+  pine64/               PinePhone and PineTab files
+  rpi/                  Raspberry Pi files
 
-`build.sh` handles dependency installation, submodule init, overlay assembly
-(via `build-scripts/overlayer.sh`), and the live-build cycle (via
-`build-scripts/live-build.sh`).
+build-scripts/
+  overlayer.sh          Assembles source layers
+  live-build.sh         Runs live-build
 
-```sh
-# ISO — for x86_64 or ARM64 PCs
-sudo ./build.sh amd64 unicorn /tmp/rl-build
-sudo ./build.sh arm64 lomiri /tmp/rl-build
-
-# Tarball — for PinePhone, PineTab, or Raspberry Pi
-sudo ./build.sh pinephone unicorn /tmp/rl-build
-sudo ./build.sh rpi desktop /tmp/rl-build
+docs/                   Architecture and configuration documentation
 ```
 
-Outputs:
-- ISO: `builds/<arch>/Rhino-Linux-<version>-<platform>.iso`
-- Tarball: `binary/Rhino-Linux-<version>-<platform>.tar`
+Source directories are overlays. Files are copied from the broadest layer to the most specific layer, with later files replacing earlier files at the same relative path.
 
-### Stage 2: Disk image from tarball (Pine64, RPi only)
+See [the architecture documentation](docs/architecture.md) for the complete layer order.
 
-The overlay system copies everything needed (YAML recipes, scripts, Dockerfile,
-polish.yaml) into the build directory. Run from there:
+## Configuration
 
-```sh
-cd /tmp/rl-build
+The shared image configuration is:
 
-# Verify the tarball is ready
-ls -lh binary/*.tar
-
-# Build the disk image (requires Docker, kvm group membership)
-./debos-docker --privileged \
-  -t image:"Rhino-Linux-2025.1-pinephone.img" \
-  -m 10G \
-  pinephone.yaml
-
-# Compress
-xz -v Rhino-Linux-*-pinephone.img
+```text
+base/base/etc/terraform.conf
 ```
 
-The `.img` lands in the current directory. Move + compress as needed.
+This is the highest overlay level used by every image. Once the layers have been assembled, it appears at:
 
-**YAML recipe files** (already in the build directory after stage 1):
+```text
+<build-directory>/etc/terraform.conf
+```
 
-| Platform | Recipe |
-|---|---|
-| PinePhone | `pinephone.yaml` |
-| PinePhone Pro | `pinephonepro.yaml` |
-| PineTab | `pinetab.yaml` |
-| PineTab2 | `pinetab2.yaml` |
-| RPi desktop | `raspberrypi-desktop.yaml` |
-| RPi server | `raspberrypi-server.yaml` |
+Platform and environment selection are inputs rather than separate configuration files. The configuration expects:
 
-## Issues
+```text
+terra_platform
+terra_envir
+```
 
-Report issues at [github.com/rhino-linux/tracker](https://github.com/rhino-linux/tracker).
+`build-scripts/live-build.sh` derives these values from its platform and environment arguments.
+
+See [the configuration documentation](docs/configuration.md) for the supported values and derived settings.
+
+## Build Process
+
+The implemented build process has three stages:
+
+1. `build-scripts/overlayer.sh` assembles the required source layers.
+2. `build-scripts/live-build.sh` produces an ISO or root filesystem archive.
+3. Preinstalled images use a Debos recipe to turn the root filesystem archive into a device image.
+
+Generic ISO output is written under:
+
+```text
+builds/<architecture>/
+```
+
+Preinstalled root filesystem archives are written under:
+
+```text
+binary/
+```
+
+### Migration Status
+
+The consolidated build system is not yet complete.
+
+- TODO: Add an end-to-end build entry point that assembles the overlays and invokes the correct build stages.
+- TODO: Fix `live-build.sh` so its platform argument is not also interpreted as the configuration path.
+- TODO: Update CI/CD to use `build-scripts/`, assemble overlays, and pass the platform and environment inputs.
+- TODO: Update publishing workflows to read configuration from the consolidated layout.
+- TODO: Make missing optional overlay directories safe to skip.
+
+The existing GitHub Actions workflows still use the previous flat repository layout and should not be treated as examples for the consolidated build system.
+
+## Supported Images
+
+The source tree currently contains layers for:
+
+- Generic amd64 ISO
+- Generic arm64 ISO
+- Raspberry Pi desktop and server images
+- PinePhone and PinePhone Pro images
+- PineTab and PineTab 2 images
+- Unicorn and Lomiri environments where corresponding overlays exist
+
+Full image builds require a Linux build host with root privileges and the live-build, debootstrap, QEMU, Docker, and Debos dependencies required by the selected target.
