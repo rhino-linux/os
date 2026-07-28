@@ -15,7 +15,7 @@ This is the new Rhino Linux (RL) ISO builder (replaces the formerly known [RRR-b
 - `sudo mv /usr/share/debootstrap/functions functions`
 - `sudo patch -i 0002-remove-WRONGSUITE-error.patch`
 - `sudo mv functions /usr/share/debootstrap/functions`
-- `sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/lunar`
+- `sudo ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/devel`
 - `sudo dpkg -i debs/live-build_*_all.deb`
 - `sudo cp binary_grub-efi /usr/lib/live/build/binary_grub-efi`
 - `sudo chmod -R +x build.sh etc/auto/config etc/terraform.conf etc/`
