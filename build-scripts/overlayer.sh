@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-shopt -s nullglob
-
 platform=${1:?Platform required}
 envir=${2:?Environment required}
 builddir=${3:?Build directory required}
