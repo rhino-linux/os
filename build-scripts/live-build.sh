@@ -35,8 +35,12 @@ case ${platform} in
 esac
 export terra_platform terra_envir
 
-CONFIG_FILE="etc/terraform.conf"
-BASE_DIR="${PWD}"
+if [[ -n "${terra}" ]]; then
+  CONFIG_FILE="${terra}"
+else
+  CONFIG_FILE="etc/terraform.conf"
+fi
+BASE_DIR="${builddir}"
 source "${BASE_DIR}/${CONFIG_FILE}"
 
 #VanillaOS patch to yeet ia32
