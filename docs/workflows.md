@@ -1,26 +1,21 @@
 # Workflows
 
-GitHub Actions automation lives in `.github/workflows/`. This page describes what
-each workflow does, how to run it, and where to find its output.
+GitHub Actions automation lives in `.github/workflows/`. Image builds are split
+by product family so a run stays focused and its artifacts are easy to find.
 
-## Build ISOs
+| Workflow | File | Output |
+| --- | --- | --- |
+| Build ISOs | `.github/workflows/build-iso.yaml` | Generic amd64 and arm64 ISOs |
+| Build PINE64 Images | `.github/workflows/build-pine64.yaml` | Phone and tablet images |
+| Build Raspberry Pi Images | `.github/workflows/build-rpi.yaml` | Desktop and server images |
 
-The workflow in `.github/workflows/build-iso.yaml` builds the generic Rhino Linux
-ISOs. It is manually triggered, so pushing a commit does not start a build.
+All three workflows use `workflow_dispatch`. Pushing a commit does not start an
+image build. To run one, open the repository's **Actions** page, select the
+workflow, choose **Run workflow**, and pick the branch to build.
 
-### Starting a Build
+## Generic ISOs
 
-Open the repository's **Actions** page, choose **Build ISOs**, and select
-**Run workflow**. Choose the branch you want to build before starting the run.
-
-The same thing can be done with the GitHub CLI:
-
-```bash
-gh workflow run build-iso.yaml --ref <branch>
-```
-
-One run covers every supported desktop and architecture combination. The matrix
-expands into these four jobs:
+One **Build ISOs** run expands into four independent jobs:
 
 | Architecture | Desktop | Runner |
 | --- | --- | --- |
@@ -29,13 +24,9 @@ expands into these four jobs:
 | `arm64` | `unicorn` | `ubuntu-24.04-arm` |
 | `arm64` | `lomiri` | `ubuntu-24.04-arm` |
 
-GitHub starts the jobs independently when runners are available. Because
-`fail-fast` is disabled, a failure in one job does not cancel the other three.
-
-### What a Job Does
-
-Each job checks out the repository and its submodules, refreshes APT's package
-lists, and calls the main build script with values from the matrix:
+Each job calls `build.sh` with its matrix values and uploads the resulting ISO.
+There is no separate deploy stage because live-build produces the final ISO
+directly.
 
 ```bash
 sudo ./build.sh \
@@ -44,58 +35,103 @@ sudo ./build.sh \
   "build_<architecture>_<environment>"
 ```
 
-`build.sh` passes those values to `build-scripts/overlayer.sh`. For a generic ISO,
-the overlayer assembles the shared files and the selected desktop in this order:
+The final artifacts are named
+`rhino-linux-<architecture>-<environment>`. Matrix jobs use unique build
+directories and artifact names, so they do not share state.
+
+## Device Images
+
+PINE64 and Raspberry Pi builds have two stages because their final images need
+two different hosts:
+
+1. An ARM64 runner uses `build.sh` and live-build to create a root filesystem
+   tarball.
+2. The tarball is uploaded as an intermediate workflow artifact.
+3. An amd64 runner downloads it into the original build directory's `binary/`
+   folder.
+4. `deploy.sh` reconstructs the rest of that build directory and runs Debos to
+   create the partitioned device image.
+
+Only `binary/` crosses between jobs.
+
+GitHub documents [workflow artifacts](https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts)
+as a way to pass data between jobs, while [dependency caches](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows)
+reuse dependencies across jobs or runs. The tarball is a required output of one
+job and an input to another, so an artifact fits this handoff. Documenting as changing to using artifacts from builder v2 onwards.
+
+### deploy.sh
+
+`deploy.sh` begins the second stage:
 
 ```text
-base/base/
-base/environment/<environment>/
-platform/iso-generic/base/
-platform/iso-generic/environment/<environment>/
+deploy.sh <platform> <environment> <build-directory>
 ```
 
-The assembled `terraform.conf` selects an ISO build for `amd64` or `arm64`, and
-the live-build wrapper places the result here:
+It must run as root from the repository root. The build directory must already
+contain exactly one rootfs tarball under `binary/`.
+
+Supported calls are:
+
+| Platform | Environment | Images produced |
+| --- | --- | --- |
+| `pinephone` | `unicorn`, `lomiri` | PinePhone and PinePhone Pro |
+| `pinetab` | `unicorn`, `lomiri` | PineTab and PineTab 2 |
+| `rpi` | `unicorn` | Raspberry Pi desktop |
+| `rpi` | `server` | Raspberry Pi server |
+
+The script uses `overlayer.sh` to rebuild the missing files around `binary/`,
+then sources the assembled `terraform.conf` for version information. A platform
+case selects the recipes associated with that family. For example, `pinephone`
+runs both the PinePhone and PinePhone Pro recipes.
+
+Each Debos recipe removes the tarball after unpacking it. `deploy.sh` creates a
+temporary hard link before running Debos and restores the expected name between
+recipes. A hard link avoids copying the large tarball. The exit trap restores
+the original path and removes the temporary link even when deployment fails.
+
+Raw images and their `.bmap` files are placed under:
 
 ```text
-build_<architecture>_<environment>/builds/<architecture>/
+<build-directory>/builds/<platform>/
 ```
 
-See [Architecture](architecture.md) for the full overlay order and
-[Configuration](configuration.md) for the values derived by `terraform.conf`.
+The raw `.img` is compressed with `xz`; workflows upload the resulting `.img.xz`
+and `.bmap` files as the final artifacts.
 
-### Runners and Permissions
+## PINE64
 
-The workflow only requests read access to repository contents. The build command
-uses `sudo` because it installs packages and temporarily patches live-build and
-debootstrap files on the runner.
+The **Build PINE64 Images** workflow uses this matrix:
 
-### Artifacts
+| Family | Desktop |
+| --- | --- |
+| `pinephone` | `unicorn` |
+| `pinephone` | `lomiri` |
+| `pinetab` | `unicorn` |
+| `pinetab` | `lomiri` |
 
-Every successful job uploads its ISO with a name in this form:
+Each family/desktop combination gets its own rootfs. The matching deploy job
+turns that rootfs into both models in the family, so one PinePhone deploy creates
+PinePhone and PinePhone Pro images, while one PineTab deploy creates PineTab and
+PineTab 2 images.
 
-```text
-rhino-linux-<architecture>-<environment>
-```
+Final artifacts are named `rhino-linux-<family>-<environment>`.
 
-Uploads use `actions/upload-artifact@v7`. A missing ISO fails the job, and
-compression is disabled because compressing an ISO again usually adds time
-without saving meaningful space.
+## Raspberry Pi
 
-To find a run and download its artifacts with the GitHub CLI:
+The **Build Raspberry Pi Images** workflow builds two variants:
 
-```bash
-gh run list --workflow build-iso.yaml
-gh run download <run-id>
-```
+| Environment | Image |
+| --- | --- |
+| `unicorn` | Raspberry Pi desktop |
+| `server` | Raspberry Pi server |
 
-### Changing the Matrix
+Each variant has its own rootfs and deploy job. Final artifacts are named
+`rhino-linux-rpi-<environment>`.
 
-Architectures and desktops are defined as separate matrix axes in
-`.github/workflows/build-iso.yaml`. Runner mappings live under `matrix.include`.
-Artifact names and build directories include both matrix values, which keeps the
-four jobs from writing to the same place.
+## Failure Behavior
 
-Before adding a value, make sure `overlayer.sh`, `terraform.conf`, and the matching
-overlay directories all support it. When another workflow is added to the
-repository, document it as a new section on this page.
+Matrices use `fail-fast: false`, so one failed combination does not cancel the
+others. Device deploy jobs use `if: !cancelled()` after the build matrix. This
+lets deploy jobs for successful rootfs artifacts continue even if another matrix
+combination failed; the deploy corresponding to a missing rootfs fails at its
+download step.

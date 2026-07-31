@@ -143,7 +143,10 @@ Preinstalled targets produce a root filesystem archive under:
 binary/
 ```
 
-A device-specific Debos recipe consumes that archive and creates an image. Common image finishing steps are defined in:
+A device-specific Debos recipe consumes that archive and creates an image. The
+`deploy.sh` entry point reconstructs the assembled build directory, selects the
+recipe, runs Debos, and compresses the resulting image. Common image finishing
+steps are defined in:
 
 ```text
 platform/img-preinst/base/polish.yaml
@@ -169,7 +172,8 @@ Debos recipes produce `.img` files and the common polishing recipe produces a co
 
 ## CI/CD Status
 
-The generic ISO workflow uses the consolidated interface and builds its architecture and environment combinations through a GitHub Actions matrix.
+Generic ISO, PINE64, and Raspberry Pi workflows use the consolidated `build.sh`
+and `deploy.sh` interfaces. Device workflows pass rootfs tarballs between ARM64
+build jobs and amd64 deploy jobs as workflow artifacts.
 
-- TODO: Update artifact deployment to use recipes from the assembled build directory.
 - TODO: Update publishing workflows to obtain version information from the shared configuration without requiring unrelated build selectors.

@@ -1,0 +1,85 @@
+name: Build PINE64 Images
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build ${{ matrix.platform }} ${{ matrix.environment }} rootfs
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - pinephone
+          - pinetab
+        environment:
+          - unicorn
+          - lomiri
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build rootfs
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list
+          sudo rm -rf /var/lib/apt/lists/*
+          sudo ./build.sh \
+            "${{ matrix.platform }}" \
+            "${{ matrix.environment }}" \
+            "build_${{ matrix.platform }}_${{ matrix.environment }}"
+
+      - name: Upload rootfs
+        uses: actions/upload-artifact@v7
+        with:
+          name: rootfs-${{ matrix.platform }}-${{ matrix.environment }}
+          path: build_${{ matrix.platform }}_${{ matrix.environment }}/binary/*.tar
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
+  deploy:
+    name: Deploy ${{ matrix.platform }} ${{ matrix.environment }} images
+    needs: build
+    if: ${{ !cancelled() }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - pinephone
+          - pinetab
+        environment:
+          - unicorn
+          - lomiri
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Download rootfs
+        uses: actions/download-artifact@v8
+        with:
+          name: rootfs-${{ matrix.platform }}-${{ matrix.environment }}
+          path: build_${{ matrix.platform }}_${{ matrix.environment }}/binary
+
+      - name: Deploy images
+        run: |
+          sudo ./deploy.sh \
+            "${{ matrix.platform }}" \
+            "${{ matrix.environment }}" \
+            "build_${{ matrix.platform }}_${{ matrix.environment }}"
+
+      - name: Upload images
+        uses: actions/upload-artifact@v7
+        with:
+          name: rhino-linux-${{ matrix.platform }}-${{ matrix.environment }}
+          path: |
+            build_${{ matrix.platform }}_${{ matrix.environment }}/builds/${{ matrix.platform }}/*.img.xz
+            build_${{ matrix.platform }}_${{ matrix.environment }}/builds/${{ matrix.platform }}/*.bmap
+          if-no-files-found: error
+          compression-level: 0

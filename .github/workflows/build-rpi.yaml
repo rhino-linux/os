@@ -1,0 +1,79 @@
+name: Build Raspberry Pi Images
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build ${{ matrix.environment }} rootfs
+    strategy:
+      fail-fast: false
+      matrix:
+        environment:
+          - unicorn
+          - server
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build rootfs
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list
+          sudo rm -rf /var/lib/apt/lists/*
+          sudo ./build.sh \
+            rpi \
+            "${{ matrix.environment }}" \
+            "build_rpi_${{ matrix.environment }}"
+
+      - name: Upload rootfs
+        uses: actions/upload-artifact@v7
+        with:
+          name: rootfs-rpi-${{ matrix.environment }}
+          path: build_rpi_${{ matrix.environment }}/binary/*.tar
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
+  deploy:
+    name: Deploy ${{ matrix.environment }} image
+    needs: build
+    if: ${{ !cancelled() }}
+    strategy:
+      fail-fast: false
+      matrix:
+        environment:
+          - unicorn
+          - server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Download rootfs
+        uses: actions/download-artifact@v8
+        with:
+          name: rootfs-rpi-${{ matrix.environment }}
+          path: build_rpi_${{ matrix.environment }}/binary
+
+      - name: Deploy image
+        run: |
+          sudo ./deploy.sh \
+            rpi \
+            "${{ matrix.environment }}" \
+            "build_rpi_${{ matrix.environment }}"
+
+      - name: Upload image
+        uses: actions/upload-artifact@v7
+        with:
+          name: rhino-linux-rpi-${{ matrix.environment }}
+          path: |
+            build_rpi_${{ matrix.environment }}/builds/rpi/*.img.xz
+            build_rpi_${{ matrix.environment }}/builds/rpi/*.bmap
+          if-no-files-found: error
+          compression-level: 0

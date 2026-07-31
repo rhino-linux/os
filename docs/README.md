@@ -6,5 +6,6 @@
 
 ## Migration Status
 
-- The generic ISO build workflow uses the consolidated build entry point.
-- Publishing and preinstalled-image workflows still need to be migrated.
+- Generic ISO and preinstalled-image workflows use the consolidated build and
+	deploy entry points.
+- Publishing automation still needs to be migrated.
