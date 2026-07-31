@@ -38,7 +38,7 @@ jobs:
             "build_${{ matrix.architecture }}_${{ matrix.environment }}"
 
       - name: Upload ISO
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: rhino-linux-${{ matrix.architecture }}-${{ matrix.environment }}
           path: build_${{ matrix.architecture }}_${{ matrix.environment }}/builds/${{ matrix.architecture }}/*.iso

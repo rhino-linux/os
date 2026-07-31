@@ -49,7 +49,7 @@ These inputs are supplied by the build entry point, which passes its arguments t
 
 CI/CD should select the platform and environment and pass them to the build entry point. It should not modify or generate separate copies of `terraform.conf`.
 
-The existing workflows have not yet been migrated to this model.
+The generic ISO workflow passes its architecture and environment matrix values to this entry point. See [Workflows](workflows.md).
 
 ## Derived Values
 
@@ -169,9 +169,7 @@ Debos recipes produce `.img` files and the common polishing recipe produces a co
 
 ## CI/CD Status
 
-The checked-in workflows still expect the previous flat layout and invoke the old interface (`./build.sh etc/terraform.conf`), which does not match the consolidated entry point. They should not be treated as examples.
+The generic ISO workflow uses the consolidated interface and builds its architecture and environment combinations through a GitHub Actions matrix.
 
-- TODO: Invoke the consolidated `build.sh` with platform and environment selections in CI.
-- TODO: Replace old `build.sh` invocations.
 - TODO: Update artifact deployment to use recipes from the assembled build directory.
 - TODO: Update publishing workflows to obtain version information from the shared configuration without requiring unrelated build selectors.

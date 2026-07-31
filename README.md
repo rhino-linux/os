@@ -91,10 +91,10 @@ binary/
 
 Remaining work:
 
-- TODO: Update CI/CD to use `build.sh`, assemble overlays, and pass the platform and environment inputs.
 - TODO: Update publishing workflows to read configuration from the consolidated layout.
+- TODO: Migrate preinstalled-image workflows to the consolidated build entry point.
 
-The existing GitHub Actions workflows still use the previous flat repository layout and should not be treated as examples for the consolidated build system.
+The generic ISO workflow uses the consolidated build entry point and builds the supported architecture and environment combinations as a matrix. See [the workflow documentation](docs/workflows.md).
 
 ## Supported Images
 
