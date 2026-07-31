@@ -2,57 +2,113 @@
 
 set -e
 
-platform=${1:?Usage: build.sh <platform> <environment> <build-directory>}
-envir=${2:?Usage: build.sh <platform> <environment> <build-directory>}
-builddir=${3:?Usage: build.sh <platform> <environment> <build-directory>}
+platform="${1}"
+envir="${2}"
+builddir="${3}"
+REPO_ROOT="${PWD}"
 
-REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
-
-if [[ "$(id -u)" != 0 ]]; then
-  echo "E: Requires root permissions" >&2
+# fail out if platform, envir, and builddir are not all provided
+if ! [[ -n ${platform} && -n ${envir} && -n ${builddir} ]]; then
+  echo "Usage: ${0} <platform> <environment> <build-directory>"
   exit 1
 fi
 
-echo "# Initializing submodules..."
-(cd "$REPO_ROOT" && git submodule update --init --recursive)
+# check for root permissions
+if [[ "$(id -u)" != 0 ]]; then
+  echo "E: Requires root permissions" > /dev/stderr
+  exit 1
+fi
 
-echo "# Installing build dependencies..."
+# cleanup function to trap EXIT & INT
+function cleanup() {
+  local catch=$?
+  echo "
+#-----------------#
+# RESTORE BACKUPS #
+#-----------------#
+"
+  # restore any patched files to their original state
+  for i in "binary_grub-efi" "binary_rootfs"; do
+    if [[ -f "${builddir}/${i}.bak" ]]; then
+      cp "${builddir}/${i}.bak" "/usr/lib/live/build/${i}"
+    fi
+  done
+  if [[ -f "${builddir}/functions.bak" ]]; then
+    cp "${builddir}/functions.bak" /usr/share/debootstrap/functions
+  fi
+  # exit with caught code
+  return "${catch}"
+}
+
+echo "
+#-----------------#
+# INIT SUBMODULES #
+#-----------------#
+"
+git submodule update --init --recursive
+
+echo "
+#----------------------#
+# INSTALL DEPENDENCIES #
+#----------------------#
+"
 apt-get update
 apt-get install -y \
   patch gnupg2 binutils zstd ubuntu-keyring \
   libglib2.0-dev libmysqlclient-dev apt-utils \
   debootstrap mtools dosfstools qemu-user-binfmt binfmt-support dpkg-dev
+dpkg -i "base/base/debs/live-build_20220505_all.deb"
 
-cat > /usr/share/debootstrap/scripts/devel << 'DEVEL'
-case $ARCH in
-  amd64|i386) default_mirror http://archive.ubuntu.com/ubuntu ;;
-  *)          default_mirror http://ports.ubuntu.com/ubuntu-ports ;;
-esac
-keyring /usr/share/keyrings/ubuntu-archive-keyring.gpg
-mirror_style release
-download_style apt
-finddebs_style from-indices
-variants - buildd fakechroot minbase
-DEVEL
+echo "
+#----------------------#
+# SOURCE BUILD SCRIPTS #
+#----------------------#
+"
+# imports `overlayer` function
+source "build-scripts/overlayer.sh"
+# imports `lb_build` and `lb_run` functions; `lb_build` calls `lb_run`
+source "build-scripts/live-build.sh"
 
-dpkg -i "$REPO_ROOT/base/base/debs/live-build_20220505_all.deb"
+echo "
+#------------------------#
+# CREATE BUILD DIRECTORY #
+#------------------------#
+"
+overlayer "${platform}" "${envir}" "${builddir}"
 
-cp "$REPO_ROOT/base/base/binary_grub-efi" /usr/lib/live/build/binary_grub-efi
-if [[ -f "$REPO_ROOT/platform/pine64/base/binary_rootfs" ]]; then
-  cp "$REPO_ROOT/platform/pine64/base/binary_rootfs" /usr/lib/live/build/binary_rootfs
-fi
+# init trap after builddir created
+trap "cleanup" EXIT INT
 
-echo "# Patching debootstrap..."
-TMPDIR="$(mktemp -d)"
-cp /usr/share/debootstrap/functions "$TMPDIR/functions"
-(cd "$TMPDIR" && patch -i "$REPO_ROOT/base/base/0002-remove-WRONGSUITE-error.patch")
-cp "$TMPDIR/functions" /usr/share/debootstrap/functions
-rm -rf "$TMPDIR"
+echo "
+#-------------------#
+# PATCH BUILD TOOLS #
+#-------------------#
+"
+# patch live-build functions
+for i in "binary_grub-efi" "binary_rootfs"; do
+  if [[ -f "${builddir}/${i}" ]]; then
+    if [[ -f "/usr/lib/live/build/${i}" ]]; then
+      # copy backups if files present
+      cp "/usr/lib/live/build/${i}" "${builddir}/${i}.bak"
+    fi
+    cp "${builddir}/${i}" "/usr/lib/live/build/${i}"
+  fi
+done
 
-echo "# Assembling overlays..."
-"$REPO_ROOT/build-scripts/overlayer.sh" "$platform" "$envir" "$builddir"
+# allow devel deboostrapping
+ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/devel
 
-chmod -R +x "$builddir"/etc/auto/config "$builddir"/etc/terraform.conf "$builddir"/etc/
+# patch out debootstrap error
+cp /usr/share/debootstrap/functions "${builddir}/functions.bak"
+cp "${builddir}/functions.bak" functions
+patch -i "${builddir}/0002-remove-WRONGSUITE-error.patch"
+cp functions /usr/share/debootstrap/functions
 
-echo "# Starting live-build..."
-(cd "$builddir" && exec "$REPO_ROOT/build-scripts/live-build.sh" "$platform" "$envir")
+echo "
+#------------------#
+# START LIVE-BUILD #
+#------------------#
+"
+lb_build "${platform}" "${envir}" "${builddir}" "etc/terraform.conf"
+cd "${REPO_ROOT}"
+exit 0

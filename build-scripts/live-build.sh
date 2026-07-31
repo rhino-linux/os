@@ -1,63 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -e
-
-platform=${1:?Platform required}
-envir=${2:?Environment required}
-builddir=${3:?Build directory required}
-terra=${4}
-
-# check for root permissions
-if [[ "$(id -u)" != 0 ]]; then
-  echo "E: Requires root permissions" > /dev/stderr
-  exit 1
-fi
-
-# get config
-terra_envir="${envir}"
-case ${platform} in
-  amd64|arm64)
-    terra_platform="${platform}"
-  ;;
-  raspberrypi|raspi|rpi)
-    terra_platform="rpi"
-  ;;
-  pinephone|pp|ppog|pinephonepro|ppp)
-    terra_platform="pinephone"
-  ;;
-  pinetab|pt|ptog|pt1|pinetab2|pt2)
-    terra_platform="pinetab"
-  ;;
-  *)
-    echo "Unknown platform, exiting"
-    exit 1
-  ;;
-esac
-export terra_platform terra_envir
-
-if [[ -n "${terra}" ]]; then
-  CONFIG_FILE="${terra}"
-else
-  CONFIG_FILE="etc/terraform.conf"
-fi
-BASE_DIR="${builddir}"
-source "${BASE_DIR}/${CONFIG_FILE}"
-
-#VanillaOS patch to yeet ia32
-#sudo sed -i '/Check_package chroot \/usr\/lib\/grub\/i386-efi\/configfile.mod grub-efi-ia32-bin/d' /usr/lib/live/build/binary_grub-efi
-
-echo -e "
-#----------------------#
-# INSTALL DEPENDENCIES #
-#----------------------#
-"
-
-apt-get update
-apt-get install -y patch gnupg2 binutils zstd ubuntu-keyring libglib2.0-dev libmysqlclient-dev apt-utils
-ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/devel
-
-build() {
-  BUILD_ARCH="${1}"
+function lb_run() {
+  local BUILD_ARCH="${1}" \
+    BASE_DIR="${2}" \
+    CONFIG_FILE="${3}" \
+    OUTPUT_DIR INPUT_FILE OUTPUT_FILE
 
   mkdir -p "${BASE_DIR}/tmp/${BUILD_ARCH}"
   cd "${BASE_DIR}/tmp/${BUILD_ARCH}" || exit
@@ -127,8 +74,50 @@ build() {
   cd "${BASE_DIR}"
 }
 
-if [[ ${ARCH} == "all" ]]; then
-  build amd64
-else
-  build "${ARCH}"
-fi
+function lb_build() {
+  local lb_platform="${1:?Platform required}" \
+    lb_envir="${2:?Environment required}" \
+    lb_builddir="${3:?Build directory required}" \
+    lb_terra="${4}" SBASE_DIR SCONFIG_FILE
+
+  # get config
+  terra_envir="${lb_envir}"
+  case "${lb_platform}" in
+    amd64|arm64)
+      terra_platform="${lb_platform}"
+    ;;
+    raspberrypi|raspi|rpi)
+      terra_platform="rpi"
+    ;;
+    pinephone|pp|ppog|pinephonepro|ppp)
+      terra_platform="pinephone"
+    ;;
+    pinetab|pt|ptog|pt1|pinetab2|pt2)
+      terra_platform="pinetab"
+    ;;
+    *)
+      echo "Unknown platform, exiting"
+      exit 1
+    ;;
+  esac
+  export terra_platform terra_envir
+
+  if [[ -n ${lb_terra} ]]; then
+    SCONFIG_FILE="${lb_terra}"
+  else
+    SCONFIG_FILE="etc/terraform.conf"
+  fi
+  SBASE_DIR="${lb_builddir}"
+  source "${SBASE_DIR}/${SCONFIG_FILE}"
+
+  #VanillaOS patch to yeet ia32
+  #sudo sed -i '/Check_package chroot \/usr\/lib\/grub\/i386-efi\/configfile.mod grub-efi-ia32-bin/d' /usr/lib/live/build/binary_grub-efi
+  if [[ -z ${ARCH} ]]; then
+    echo "ARCH not found, exiting" > /dev/stderr
+    exit 1
+  elif [[ ${ARCH} == "all" ]]; then
+    lb_run amd64 "${SBASE_DIR}" "${SCONFIG_FILE}"
+  else
+    lb_run "${ARCH}" "${SBASE_DIR}" "${SCONFIG_FILE}"
+  fi
+}
