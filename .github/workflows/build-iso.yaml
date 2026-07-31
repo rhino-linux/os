@@ -1,0 +1,46 @@
+name: Build ISOs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.environment }} (${{ matrix.architecture }})
+    strategy:
+      fail-fast: false
+      matrix:
+        architecture:
+          - amd64
+          - arm64
+        environment:
+          - unicorn
+          - lomiri
+        include:
+          - architecture: amd64
+            runner: ubuntu-latest
+          - architecture: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build ISO
+        run: |
+          sudo rm -rf /var/lib/apt/lists/*
+          sudo ./build.sh \
+            "${{ matrix.architecture }}" \
+            "${{ matrix.environment }}" \
+            "build_${{ matrix.architecture }}_${{ matrix.environment }}"
+
+      - name: Upload ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: rhino-linux-${{ matrix.architecture }}-${{ matrix.environment }}
+          path: build_${{ matrix.architecture }}_${{ matrix.environment }}/builds/${{ matrix.architecture }}/*.iso
+          if-no-files-found: error
+          compression-level: 0
