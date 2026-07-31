@@ -43,9 +43,9 @@ lomiri
 server
 ```
 
-These inputs are supplied by `build-scripts/live-build.sh`, which normalizes the platform and environment arguments and exports `terra_platform` and `terra_envir` so the assembled `terraform.conf` can read them.
+These inputs are supplied by the build entry point, which passes its arguments to the overlay and live-build stages. `build-scripts/live-build.sh` normalizes the platform and environment arguments and exports `terra_platform` and `terra_envir` so the assembled `terraform.conf` can read them.
 
-The build wrapper accepts additional platform aliases and normalizes them before exporting these variables.
+`build.sh` passes the platform and environment arguments through, and the live-build stage accepts additional platform aliases and normalizes them before exporting these variables.
 
 CI/CD should select the platform and environment and pass them to the build entry point. It should not modify or generate separate copies of `terraform.conf`.
 
@@ -97,33 +97,43 @@ Package selection and image customization are currently implemented through live
 
 ## Build Stages
 
-### Overlay Assembly
+### Build Entry Point
 
-The overlay script accepts:
+`build.sh` is the supported entry point. It must be run as root from the repository root:
 
 ```text
-build-scripts/overlayer.sh <platform> <environment> <build-directory>
+build.sh <platform> <environment> <build-directory>
 ```
 
-It must be run from the repository root because its source paths are relative to the current working directory.
+It initializes submodules, installs the build dependencies (including the vendored live-build package under `base/base/debs/`), sources both build scripts, assembles the overlays, patches the host's live-build and debootstrap files, and starts live-build.
+
+### Overlay Assembly
+
+`build-scripts/overlayer.sh` defines the `overlayer` function. It is sourced by `build.sh`, not executed directly:
+
+```text
+source build-scripts/overlayer.sh
+overlayer <platform> <environment> <build-directory>
+```
+
+It must be invoked from the repository root because its source paths are relative to the current working directory. Missing optional overlay directories are skipped.
 
 ### live-build
 
-The live-build wrapper currently accepts four inputs:
+`build-scripts/live-build.sh` defines the `lb_build` and `lb_run` functions. It is sourced by `build.sh`, not executed directly:
 
 ```text
-build-scripts/live-build.sh <platform> <environment> <build-directory> <terraform>
+source build-scripts/live-build.sh
+lb_build <platform> <environment> <build-directory> <terraform>
 ```
 
-It normalizes them and exports `terra_platform` and `terra_envir`, which the assembled `terraform.conf` reads. The `<terraform>` input is optional, and will auto-resolve to `etc/terraform.conf` if nothing is provided.
+`lb_build` normalizes the platform and exports `terra_platform` and `terra_envir`, which the assembled `terraform.conf` reads. The `<terraform>` input is optional, and will auto-resolve to `etc/terraform.conf` if nothing is provided.
 
 Its intended configuration path inside an assembled build directory is:
 
 ```text
 etc/terraform.conf
 ```
-
-- TODO: Connect overlay assembly and live-build through one supported command.
 
 ### Device Image Generation
 
@@ -159,10 +169,9 @@ Debos recipes produce `.img` files and the common polishing recipe produces a co
 
 ## CI/CD Status
 
-The checked-in workflows still expect the previous flat layout, including root-level `build.sh`, `etc/`, `debs/`, and image recipes.
+The checked-in workflows still expect the previous flat layout and invoke the old interface (`./build.sh etc/terraform.conf`), which does not match the consolidated entry point. They should not be treated as examples.
 
-- TODO: Assemble the selected overlays in CI.
-- TODO: Pass platform and environment selections to the consolidated build wrapper.
+- TODO: Invoke the consolidated `build.sh` with platform and environment selections in CI.
 - TODO: Replace old `build.sh` invocations.
 - TODO: Update artifact deployment to use recipes from the assembled build directory.
 - TODO: Update publishing workflows to obtain version information from the shared configuration without requiring unrelated build selectors.

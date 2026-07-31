@@ -11,6 +11,8 @@ Report bugs and propose features through the [Rhino Linux tracker](https://githu
 ## Repository Layout
 
 ```text
+build.sh                 build entry point
+
 base/
   base/                 Files shared by every image
   environment/          Files shared by an environment
@@ -22,8 +24,8 @@ platform/
   rpi/                  Raspberry Pi files
 
 build-scripts/
-  overlayer.sh          Assembles source layers
-  live-build.sh         Runs live-build
+  overlayer.sh          assembles source layers
+  live-build.sh         runs live-build
 
 docs/                   Architecture and configuration documentation
 ```
@@ -53,16 +55,24 @@ terra_platform
 terra_envir
 ```
 
-`build-scripts/live-build.sh` derives these values from its platform and environment arguments.
+The build entry point derives these values from its platform and environment arguments.
 
 See [the configuration documentation](docs/configuration.md) for the supported values and derived settings.
 
 ## Build Process
 
-The implemented build process has three stages:
+The end-to-end build entry point is `build.sh`, run as root from the repository root:
 
-1. `build-scripts/overlayer.sh` assembles the required source layers.
-2. `build-scripts/live-build.sh` produces an ISO or root filesystem archive.
+```text
+build.sh <platform> <environment> <build-directory>
+```
+
+It initializes the submodules, installs the build dependencies (including the vendored live-build package under `base/base/debs/`), sources the build scripts, assembles the overlays into the build directory, patches the host's live-build and debootstrap files, and starts the live-build stage.
+
+The build scripts are sourced libraries rather than standalone executables:
+
+1. `build-scripts/overlayer.sh` defines the `overlayer` function, which assembles the required source layers.
+2. `build-scripts/live-build.sh` defines the `lb_build` and `lb_run` functions, which produce an ISO or root filesystem archive.
 3. Preinstalled images use a Debos recipe to turn the root filesystem archive into a device image.
 
 Generic ISO output is written under:
@@ -79,13 +89,10 @@ binary/
 
 ### Migration Status
 
-The consolidated build system is not yet complete.
+Remaining work:
 
-- TODO: Add an end-to-end build entry point that assembles the overlays and invokes the correct build stages.
-- TODO: Fix `live-build.sh` so its platform argument is not also interpreted as the configuration path.
-- TODO: Update CI/CD to use `build-scripts/`, assemble overlays, and pass the platform and environment inputs.
+- TODO: Update CI/CD to use `build.sh`, assemble overlays, and pass the platform and environment inputs.
 - TODO: Update publishing workflows to read configuration from the consolidated layout.
-- TODO: Make missing optional overlay directories safe to skip.
 
 The existing GitHub Actions workflows still use the previous flat repository layout and should not be treated as examples for the consolidated build system.
 
