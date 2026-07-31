@@ -95,7 +95,7 @@ for i in "binary_grub-efi" "binary_rootfs"; do
   fi
 done
 
-# allow devel deboostrapping
+# allow devel debootstrapping
 ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/devel
 
 # patch out debootstrap error
