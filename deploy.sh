@@ -81,33 +81,16 @@ echo "
 #------------------------#
 "
 overlayer "${platform}" "${envir}" "${builddir}"
-builddir="$(readlink -f "${builddir}")"
 
 # check for root filesystem tarball
 shopt -s nullglob
 tarballs=("${builddir}"/binary/*.tar)
-if [[ ${#tarballs[@]} -ne 1 ]]; then
+if [[ ((${#tarballs[@]}!=1)) ]]; then
   echo "Expected one root filesystem tarball in ${builddir}/binary, found ${#tarballs[@]}"
   exit 1
 fi
 
 tarball="${tarballs[0]}"
-tarball_backup="${tarball}.deploy"
-ln -f "${tarball}" "${tarball_backup}"
-
-# cleanup function to restore root filesystem tarball
-function cleanup() {
-  local catch=$?
-  if [[ -f ${tarball_backup} && ! -f ${tarball} ]]; then
-    ln "${tarball_backup}" "${tarball}"
-  fi
-  rm -f "${tarball_backup}"
-  cd "${REPO_ROOT}"
-  return "${catch}"
-}
-
-# init trap after tarball backup created
-trap "cleanup" EXIT INT
 
 terra_envir="${envir}"
 export terra_platform terra_envir
@@ -123,10 +106,6 @@ echo "
 "
 cd "${builddir}"
 for target in "${targets[@]}"; do
-  if [[ ! -f ${tarball} ]]; then
-    ln "${tarball_backup}" "${tarball}"
-  fi
-
   case "${target}" in
     rpi-desktop)
       recipe="raspberrypi-desktop.yaml"
