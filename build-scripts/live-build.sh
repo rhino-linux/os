@@ -47,7 +47,7 @@ function lb_run() {
 
   case "${BUILD_TYPE}" in
     iso)
-      OUTPUT_DIR="${BASE_DIR}/builds/${BUILD_ARCH}"
+      OUTPUT_DIR="${BASE_DIR}/builds"
       INPUT_FILE="${BASE_DIR}/tmp/${BUILD_ARCH}/${FNAME}-${BUILD_ARCH}.hybrid.iso"
       OUTPUT_FILE="${FNAME}.iso"
     ;;
@@ -96,7 +96,7 @@ function lb_build() {
       terra_platform="pinetab"
     ;;
     *)
-      echo "Unknown platform, exiting"
+      echo "E: Unknown platform, exiting..." > /dev/stderr
       exit 1
     ;;
   esac
@@ -113,7 +113,7 @@ function lb_build() {
   #VanillaOS patch to yeet ia32
   #sudo sed -i '/Check_package chroot \/usr\/lib\/grub\/i386-efi\/configfile.mod grub-efi-ia32-bin/d' /usr/lib/live/build/binary_grub-efi
   if [[ -z ${ARCH} ]]; then
-    echo "ARCH not found, exiting" > /dev/stderr
+    echo "E: ARCH not found, exiting..." > /dev/stderr
     exit 1
   elif [[ ${ARCH} == "all" ]]; then
     lb_run amd64 "${SBASE_DIR}" "${SCONFIG_FILE}"
