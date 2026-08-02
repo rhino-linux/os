@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   build:
-    name: ${{ matrix.environment }} (${{ matrix.architecture }})
+    name: Build ${{ matrix.architecture }} ${{ matrix.environment }} ISO
     strategy:
       fail-fast: false
       matrix:
@@ -35,12 +35,13 @@ jobs:
           sudo ./build.sh \
             "${{ matrix.architecture }}" \
             "${{ matrix.environment }}" \
-            "build_${{ matrix.architecture }}_${{ matrix.environment }}"
+            "build_${{ matrix.architecture }}"
+          echo "IMGNAME=$(cd "build_${{ matrix.platform }}/builds"; ls *.img.xz)" >> $GITHUB_ENV
 
       - name: Upload ISO
         uses: actions/upload-artifact@v7
         with:
-          name: rhino-linux-${{ matrix.architecture }}-${{ matrix.environment }}
-          path: build_${{ matrix.architecture }}_${{ matrix.environment }}/builds/${{ matrix.architecture }}/*.iso
+          name: ${{ env.IMGNAME }}
+          path: build_${{ matrix.architecture }}/builds/${{ env.IMGNAME }}
           if-no-files-found: error
           compression-level: 0

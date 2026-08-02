@@ -21,8 +21,6 @@ jobs:
     runs-on: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Build rootfs
         run: |
@@ -37,13 +35,13 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: rootfs-${{ matrix.platform }}-${{ matrix.environment }}
-          path: build_${{ matrix.platform }}_${{ matrix.environment }}/binary/*.tar
+          path: build_${{ matrix.platform }}_${{ matrix.environment }}/binary
           if-no-files-found: error
           retention-days: 1
           compression-level: 0
 
   deploy:
-    name: Deploy ${{ matrix.platform }} ${{ matrix.environment }} images
+    name: Deploy ${{ matrix.platform }} ${{ matrix.environment }} image
     needs: build
     if: ${{ !cancelled() }}
     strategy:
@@ -51,15 +49,15 @@ jobs:
       matrix:
         platform:
           - pinephone
+          - pinephonepro
           - pinetab
+          - pinetab2
         environment:
           - unicorn
           - lomiri
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Download rootfs
         uses: actions/download-artifact@v8
@@ -67,19 +65,22 @@ jobs:
           name: rootfs-${{ matrix.platform }}-${{ matrix.environment }}
           path: build_${{ matrix.platform }}_${{ matrix.environment }}/binary
 
-      - name: Deploy images
+      - name: Deploy image
         run: |
           sudo ./deploy.sh \
             "${{ matrix.platform }}" \
             "${{ matrix.environment }}" \
-            "build_${{ matrix.platform }}_${{ matrix.environment }}"
+            "build_${{ matrix.platform }}"
 
-      - name: Upload images
+      - name: Compress image
+        run: |
+          xz -T0 -v "build_${{ matrix.platform }}/builds/Rhino"*.img
+          echo "IMGNAME=$(cd "build_${{ matrix.platform }}/builds"; ls *.img.xz)" >> $GITHUB_ENV
+
+      - name: Upload image
         uses: actions/upload-artifact@v7
         with:
-          name: rhino-linux-${{ matrix.platform }}-${{ matrix.environment }}
-          path: |
-            build_${{ matrix.platform }}_${{ matrix.environment }}/builds/${{ matrix.platform }}/*.img.xz
-            build_${{ matrix.platform }}_${{ matrix.environment }}/builds/${{ matrix.platform }}/*.bmap
+          name: ${{ env.IMGNAME }}
+          path: build_${{ matrix.platform }}/builds/${{ env.IMGNAME }}
           if-no-files-found: error
           compression-level: 0

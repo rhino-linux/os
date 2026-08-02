@@ -11,30 +11,21 @@ jobs:
     name: Build ${{ matrix.environment }} rootfs
     strategy:
       fail-fast: false
-      matrix:
-        environment:
-          - unicorn
-          - server
     runs-on: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Build rootfs
         run: |
           sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list
           sudo rm -rf /var/lib/apt/lists/*
-          sudo ./build.sh \
-            rpi \
-            "${{ matrix.environment }}" \
-            "build_rpi_${{ matrix.environment }}"
+          sudo ./build.sh rpi unicorn build_rpi
 
       - name: Upload rootfs
         uses: actions/upload-artifact@v7
         with:
-          name: rootfs-rpi-${{ matrix.environment }}
-          path: build_rpi_${{ matrix.environment }}/binary/*.tar
+          name: rootfs-rpi
+          path: build_rpi/binary
           if-no-files-found: error
           retention-days: 1
           compression-level: 0
@@ -52,28 +43,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Download rootfs
         uses: actions/download-artifact@v8
         with:
-          name: rootfs-rpi-${{ matrix.environment }}
-          path: build_rpi_${{ matrix.environment }}/binary
+          name: rootfs-rpi
+          path: build_rpi/binary
 
       - name: Deploy image
         run: |
-          sudo ./deploy.sh \
-            rpi \
-            "${{ matrix.environment }}" \
-            "build_rpi_${{ matrix.environment }}"
+          sudo ./deploy.sh rpi "${{ matrix.environment }}" build_rpi
+
+      - name: Compress image
+        run: |
+          xz -T0 -v "build_rpi/builds/"*.img
+          echo "IMGNAME=$(cd "build_rpi/builds"; ls *.img.xz)" >> $GITHUB_ENV
 
       - name: Upload image
         uses: actions/upload-artifact@v7
         with:
-          name: rhino-linux-rpi-${{ matrix.environment }}
-          path: |
-            build_rpi_${{ matrix.environment }}/builds/rpi/*.img.xz
-            build_rpi_${{ matrix.environment }}/builds/rpi/*.bmap
+          name: ${{ env.IMGNAME }}
+          path: build_rpi/builds/${{ env.IMGNAME }}
           if-no-files-found: error
           compression-level: 0
