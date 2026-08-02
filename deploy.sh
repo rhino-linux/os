@@ -88,9 +88,11 @@ overlayer "${platform}" "${envir}" "${builddir}"
 source "${builddir}/etc/terraform.conf"
 
 # check for root filesystem tarball
-tarball="${builddir}/binary/${FNAME}.tar"
-if ! [[ -f ${tarball} ]]; then
-  echo "E: Root tarball not found, please run build.sh first and ensure output is placed in ${builddir}/binary. Exiting..."  > /dev/stderr
+shopt -s nullglob
+tarballs=("${builddir}"/binary/Rhino*.tar)
+shopt -u nullglob
+if (( ${#tarballs[@]} != 1 )); then
+  echo "E: Expected one root tarball in ${builddir}/binary. Exiting..." > /dev/stderr
   exit 1
 fi
 

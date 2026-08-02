@@ -29,32 +29,37 @@ jobs:
           sudo ./build.sh \
             "${{ matrix.platform }}" \
             "${{ matrix.environment }}" \
-            "build_${{ matrix.platform }}_${{ matrix.environment }}"
+            "build_${{ matrix.platform }}"
 
       - name: Upload rootfs
         uses: actions/upload-artifact@v7
         with:
           name: rootfs-${{ matrix.platform }}-${{ matrix.environment }}
-          path: build_${{ matrix.platform }}_${{ matrix.environment }}/binary
+          path: build_${{ matrix.platform }}/binary
           if-no-files-found: error
           retention-days: 1
           compression-level: 0
 
   deploy:
-    name: Deploy ${{ matrix.platform }} ${{ matrix.environment }} image
+    name: Deploy ${{ matrix.target.rootfs }} ${{ matrix.environment }} image
     needs: build
     if: ${{ !cancelled() }}
     strategy:
       fail-fast: false
       matrix:
-        platform:
-          - pinephone
-          - pinephonepro
-          - pinetab
-          - pinetab2
+        target:
+          - platform: pinephone
+            rootfs: pinephone
+          - platform: pinephonepro
+            rootfs: pinephone
+          - platform: pinetab
+            rootfs: pinetab
+          - platform: pinetab2
+            rootfs: pinetab
         environment:
           - unicorn
           - lomiri
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,25 +67,25 @@ jobs:
       - name: Download rootfs
         uses: actions/download-artifact@v8
         with:
-          name: rootfs-${{ matrix.platform }}-${{ matrix.environment }}
-          path: build_${{ matrix.platform }}_${{ matrix.environment }}/binary
+          name: rootfs-${{ matrix.target.rootfs }}-${{ matrix.environment }}
+          path: build_${{ matrix.target.rootfs }}/binary
 
       - name: Deploy image
         run: |
           sudo ./deploy.sh \
-            "${{ matrix.platform }}" \
+            "${{ matrix.target.platform }}" \
             "${{ matrix.environment }}" \
-            "build_${{ matrix.platform }}"
+            "build_${{ matrix.target.rootfs }}"
 
       - name: Compress image
         run: |
-          xz -T0 -v "build_${{ matrix.platform }}/builds/Rhino"*.img
-          echo "IMGNAME=$(cd "build_${{ matrix.platform }}/builds"; ls *.img.xz)" >> $GITHUB_ENV
+          xz -T0 -v "build_${{ matrix.target.rootfs }}/builds/Rhino"*.img
+          echo "IMGNAME=$(cd "build_${{ matrix.target.rootfs }}/builds"; ls *.img.xz)" >> $GITHUB_ENV
 
       - name: Upload image
         uses: actions/upload-artifact@v7
         with:
           name: ${{ env.IMGNAME }}
-          path: build_${{ matrix.platform }}/builds/${{ env.IMGNAME }}
+          path: build_${{ matrix.target.rootfs }}/builds/${{ env.IMGNAME }}
           if-no-files-found: error
           compression-level: 0
