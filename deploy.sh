@@ -23,7 +23,7 @@ fi
 terra_envir="${envir}"
 case "${platform}" in
   raspberrypi|raspi|rpi)
-    terra_platform="rpi"
+    platform="rpi"
   ;;
   pinephone|pp|ppog)
     platform="pinephone"
