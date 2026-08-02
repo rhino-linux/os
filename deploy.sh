@@ -85,7 +85,7 @@ overlayer "${platform}" "${envir}" "${builddir}"
 # check for root filesystem tarball
 shopt -s nullglob
 tarballs=("${builddir}"/binary/*.tar)
-if [[ ((${#tarballs[@]}!=1)) ]]; then
+if ((${#tarballs[@]}!=1)); then
   echo "Expected one root filesystem tarball in ${builddir}/binary, found ${#tarballs[@]}"
   exit 1
 fi
