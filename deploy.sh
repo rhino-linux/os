@@ -51,7 +51,7 @@ valid_images=(
   rpi:{unicorn,server}
 )
 
-if ! [[ "${platform}:${envir}" =~ "${valid_images[@]}" ]]; then
+if ! [[ "${valid_images[@]}" =~ "${platform}:${envir}" ]]; then
   echo "E: Invalid platform+environment combination, exiting..." > /dev/stderr
   exit 1
 fi
