@@ -36,7 +36,7 @@ jobs:
             "${{ matrix.architecture }}" \
             "${{ matrix.environment }}" \
             "build_${{ matrix.architecture }}"
-          echo "IMGNAME=$(cd "build_${{ matrix.platform }}/builds"; ls *.img.xz)" >> $GITHUB_ENV
+          echo "IMGNAME=$(cd "build_${{ matrix.architecture }}/builds"; ls *.iso)" >> $GITHUB_ENV
 
       - name: Upload ISO
         uses: actions/upload-artifact@v7
