@@ -53,6 +53,7 @@ fi
 # cleanup function to trap EXIT & INT
 function cleanup() {
   local catch=$?
+  cd "${REPO_ROOT}"
   echo "
 #-----------------#
 # RESTORE BACKUPS #
@@ -132,8 +133,10 @@ ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/deve
 # patch out debootstrap error
 cp /usr/share/debootstrap/functions "${builddir}/functions.bak"
 cp "${builddir}/functions.bak" functions
-patch -i "${builddir}/0002-remove-WRONGSUITE-error.patch"
+cd "${builddir}"
+patch -i "0002-remove-WRONGSUITE-error.patch"
 cp functions /usr/share/debootstrap/functions
+cd "${REPO_ROOT}"
 
 echo "
 #------------------#
