@@ -11,7 +11,7 @@ function lb_run() {
 
   # remove old configs and copy over new
   rm -rf config auto
-  cp -r "${BASE_DIR}"/etc/* .
+  cp -r "${BASE_DIR}/etc/"* .
   # Make sure conffile specified as arg has correct name
   cp -f "${BASE_DIR}/${CONFIG_FILE}" terraform.conf
 
