@@ -4,7 +4,7 @@ set -e
 
 platform="${1}"
 envir="${2}"
-builddir="${3}"
+builddir="$(realpath ${3})"
 REPO_ROOT="${PWD}"
 
 # fail out if platform, envir, and builddir are not all provided
