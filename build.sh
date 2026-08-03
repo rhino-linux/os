@@ -19,6 +19,37 @@ if [[ "$(id -u)" != 0 ]]; then
   exit 1
 fi
 
+# normalize platforms
+case "${platform}" in
+  amd64|arm64)
+    continue
+  ;;
+  raspberrypi|raspi|rpi)
+    platform="rpi"
+  ;;
+  pinephone|pp|ppog|pinephonepro|ppp)
+    platform="pinephone"
+  ;;
+  pinetab|pt|ptog|pt1|pinetab2|pt2)
+    platform="pinetab"
+  ;;
+  *)
+    echo "E: Unknown platform, exiting..." > /dev/stderr
+    exit 1
+  ;;
+esac
+
+# check validity of input
+valid_images=(
+  {amd64,arm64,pinephone,pinetab}:{unicorn,lomiri}
+  rpi:{unicorn,server}
+)
+
+if ! [[ "${platform}:${envir}" =~ "${valid_images[@]}" ]]; then
+  echo "E: Invalid platform+environment combination, exiting..." > /dev/stderr
+  exit 1
+fi
+
 # cleanup function to trap EXIT & INT
 function cleanup() {
   local catch=$?

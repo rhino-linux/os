@@ -1,0 +1,68 @@
+name: Build Raspberry Pi Images
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build ${{ matrix.environment }} rootfs
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build rootfs
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list
+          sudo rm -rf /var/lib/apt/lists/*
+          sudo ./build.sh rpi unicorn build_rpi
+
+      - name: Upload rootfs
+        uses: actions/upload-artifact@v7
+        with:
+          name: rootfs-rpi
+          path: build_rpi/binary
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
+  deploy:
+    name: Deploy ${{ matrix.environment }} image
+    needs: build
+    if: ${{ !cancelled() }}
+    strategy:
+      fail-fast: false
+      matrix:
+        environment:
+          - unicorn
+          - server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download rootfs
+        uses: actions/download-artifact@v8
+        with:
+          name: rootfs-rpi
+          path: build_rpi/binary
+
+      - name: Deploy image
+        run: |
+          sudo ./deploy.sh rpi "${{ matrix.environment }}" build_rpi
+
+      - name: Compress image
+        run: |
+          xz -T0 -v "build_rpi/builds/"*.img
+          echo "IMGNAME=$(cd "build_rpi/builds"; ls *.img.xz)" >> $GITHUB_ENV
+
+      - name: Upload image
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.IMGNAME }}
+          path: build_rpi/builds/${{ env.IMGNAME }}
+          if-no-files-found: error
+          compression-level: 0

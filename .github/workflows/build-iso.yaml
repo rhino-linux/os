@@ -1,0 +1,47 @@
+name: Build ISOs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build ${{ matrix.architecture }} ${{ matrix.environment }} ISO
+    strategy:
+      fail-fast: false
+      matrix:
+        architecture:
+          - amd64
+          - arm64
+        environment:
+          - unicorn
+          - lomiri
+        include:
+          - architecture: amd64
+            runner: ubuntu-latest
+          - architecture: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build ISO
+        run: |
+          sudo rm -rf /var/lib/apt/lists/*
+          sudo ./build.sh \
+            "${{ matrix.architecture }}" \
+            "${{ matrix.environment }}" \
+            "build_${{ matrix.architecture }}"
+          echo "IMGNAME=$(cd "build_${{ matrix.platform }}/builds"; ls *.img.xz)" >> $GITHUB_ENV
+
+      - name: Upload ISO
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.IMGNAME }}
+          path: build_${{ matrix.architecture }}/builds/${{ env.IMGNAME }}
+          if-no-files-found: error
+          compression-level: 0

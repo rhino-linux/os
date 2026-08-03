@@ -69,6 +69,17 @@ build.sh <platform> <environment> <build-directory>
 
 It initializes the submodules, installs the build dependencies (including the vendored live-build package under `base/base/debs/`), sources the build scripts, assembles the overlays into the build directory, patches the host's live-build and debootstrap files, and starts the live-build stage.
 
+Preinstalled images have a separate deploy entry point, also run as root from the
+repository root:
+
+```text
+deploy.sh <platform> <environment> <build-directory>
+```
+
+After `build.sh` creates a rootfs tarball, `deploy.sh` reconstructs the assembled
+build directory, runs the appropriate Debos recipes, and writes compressed device
+images under `builds/<platform>/`.
+
 The build scripts are sourced libraries rather than standalone executables:
 
 1. `build-scripts/overlayer.sh` defines the `overlayer` function, which assembles the required source layers.
@@ -91,10 +102,10 @@ binary/
 
 Remaining work:
 
-- TODO: Update CI/CD to use `build.sh`, assemble overlays, and pass the platform and environment inputs.
 - TODO: Update publishing workflows to read configuration from the consolidated layout.
 
-The existing GitHub Actions workflows still use the previous flat repository layout and should not be treated as examples for the consolidated build system.
+The generic ISO, PINE64, and Raspberry Pi workflows use the consolidated entry
+points. See [the workflow documentation](docs/workflows.md).
 
 ## Supported Images
 
