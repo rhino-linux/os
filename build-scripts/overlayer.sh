@@ -31,7 +31,7 @@ function overlayer() {
   esac
 
   mkdir -p "${o_builddir}"
-  fancy_message info "Overlaying"
+  fancy_message info "Overlaying to build directory"
   fancy_message sub "Source: ${overlay_arr[*]}"
   fancy_message sub "Output: ${o_builddir}"
   for overlay in "${overlay_arr[@]}"; do
