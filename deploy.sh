@@ -108,6 +108,7 @@ function create_builddir() {
 
 function init_config() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
+  fancy_message info "Initializing config"
   source "${builddir}/etc/terraform.conf"
 
   # check for root filesystem tarball
