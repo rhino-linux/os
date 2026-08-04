@@ -35,7 +35,7 @@ trap cleanup EXIT INT
 function verify() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   # check for root permissions
-  if [[ "$(id -u)" != 0 ]]; then
+  if ((EUID != 0)); then
     fancy_message error "Requires root permissions"
     return 1
   fi
