@@ -14,11 +14,14 @@ function set_colors() {
   export CYAN='\033[0;36m'
   export WHITE='\033[0;37m'
 
+  export BBlack='\033[1;30m'
   export BRed='\033[1;31m'
   export BGreen='\033[1;32m'
   export BYellow='\033[1;33m'
-  export PACCYAN='\e[38;5;30m'
-  export PACYELLOW='\e[38;5;214m'
+  export BBlue='\033[1;34m'
+  export BPurple='\033[1;35m'
+  export BCyan='\033[1;36m'
+  export BWhite='\033[1;37m'
 }
 
 function fancy_message() {
