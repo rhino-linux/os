@@ -80,7 +80,7 @@ deploy.sh <platform> <environment> <build-directory>
 
 After `build.sh` creates a rootfs tarball, `deploy.sh` reconstructs the assembled
 build directory, runs the appropriate Debos recipes, and writes compressed device
-images under `builds/<platform>/`.
+images under `<build-directory>/builds/`.
 
 The build scripts are sourced libraries rather than standalone executables:
 
