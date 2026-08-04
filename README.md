@@ -91,13 +91,13 @@ The build scripts are sourced libraries rather than standalone executables:
 Generic ISO output is written under:
 
 ```text
-builds/<architecture>/
+<build-directory>/builds/
 ```
 
 Preinstalled root filesystem archives are written under:
 
 ```text
-binary/
+<build-directory>/binary/
 ```
 
 ### Migration Status
