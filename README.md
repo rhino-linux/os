@@ -11,7 +11,8 @@ Report bugs and propose features through the [Rhino Linux tracker](https://githu
 ## Repository Layout
 
 ```text
-build.sh                 build entry point
+build.sh                build entry point
+deploy.sh               runs debos for preinstalled images
 
 base/
   base/                 Files shared by every image
@@ -26,6 +27,7 @@ platform/
 build-scripts/
   overlayer.sh          assembles source layers
   live-build.sh         runs live-build
+  stacktrace.sh         common functions for script debugging
 
 docs/                   Architecture and configuration documentation
 ```
