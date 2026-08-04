@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
 function lb_run() {
+  { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   local BUILD_ARCH="${1}" \
     BASE_DIR="${2}" \
     CONFIG_FILE="${3}" \
     OUTPUT_DIR INPUT_FILE OUTPUT_FILE
 
   mkdir -p "${BASE_DIR}/tmp/${BUILD_ARCH}"
-  cd "${BASE_DIR}/tmp/${BUILD_ARCH}" || exit
+  cd "${BASE_DIR}/tmp/${BUILD_ARCH}" || return 1
 
   # remove old configs and copy over new
   rm -rf config auto
@@ -18,33 +19,16 @@ function lb_run() {
   # Symlink chosen package lists to where live-build will find them
   ln -s "package-lists.${PACKAGE_LISTS_SUFFIX}" "config/package-lists"
 
-  echo -e "
-#------------------#
-# LIVE-BUILD CLEAN #
-#------------------#
-"
+  fancy_message info "Running live-build clean"
   lb clean
 
-  echo -e "
-#-------------------#
-# LIVE-BUILD CONFIG #
-#-------------------#
-"
+  fancy_message info "Running live-build config"
   lb config
 
-  echo -e "
-#------------------#
-# LIVE-BUILD BUILD #
-#------------------#
-"
+  fancy_message info "Running live-build build"
   lb --force build
 
-  echo -e "
-#---------------------------#
-# MOVE OUTPUT TO BUILDS DIR #
-#---------------------------#
-"
-
+  fancy_message info "Moving build to output directory"
   case "${BUILD_TYPE}" in
     iso)
       OUTPUT_DIR="${BASE_DIR}/builds"
@@ -57,8 +41,8 @@ function lb_run() {
       OUTPUT_FILE="${FNAME}.tar"
     ;;
     *)
-      echo "Invalid build type. Exiting..."
-      exit 1
+      fancy_message error "Invalid build type"
+      return 1
     ;;
   esac
 
@@ -68,6 +52,7 @@ function lb_run() {
   # cd into output so {FNAME}.sha256.txt only
   # includes the filename and not the path to
   # our file.
+  fancy_message info "Generating hashes"
   cd "${OUTPUT_DIR}"
   sha512sum "${OUTPUT_FILE}" > "${FNAME}.sha512"
   sha256sum "${OUTPUT_FILE}" > "${FNAME}.sha256"
@@ -75,6 +60,7 @@ function lb_run() {
 }
 
 function lb_build() {
+  { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   local lb_platform="${1:?Platform required}" \
     lb_envir="${2:?Environment required}" \
     lb_builddir="${3:?Build directory required}" \
@@ -96,8 +82,8 @@ function lb_build() {
       terra_platform="pinetab"
     ;;
     *)
-      echo "E: Unknown platform, exiting..." > /dev/stderr
-      exit 1
+      fancy_message error "Unknown platform"
+      return 1
     ;;
   esac
   export terra_platform terra_envir
@@ -113,8 +99,8 @@ function lb_build() {
   #VanillaOS patch to yeet ia32
   #sudo sed -i '/Check_package chroot \/usr\/lib\/grub\/i386-efi\/configfile.mod grub-efi-ia32-bin/d' /usr/lib/live/build/binary_grub-efi
   if [[ -z ${ARCH} ]]; then
-    echo "E: ARCH not found, exiting..." > /dev/stderr
-    exit 1
+    fancy_message error "ARCH not found"
+    return 1
   elif [[ ${ARCH} == "all" ]]; then
     lb_run amd64 "${SBASE_DIR}" "${SCONFIG_FILE}"
   else
