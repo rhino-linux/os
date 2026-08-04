@@ -115,7 +115,7 @@ function init_config() {
   tarball="${builddir}/binary/${FNAME}.tar"
   if ! [[ -f ${tarball} ]]; then
     fancy_message error "Root tarball not found, please run build.sh first and ensure output is placed in ${builddir}/binary"
-    exit 1
+    return 1
   fi
 }
 
