@@ -66,6 +66,7 @@ function lb_build() {
     lb_builddir="${3:?Build directory required}" \
     lb_terra="${4}" SBASE_DIR SCONFIG_FILE
 
+  fancy_message info "Initializing config"
   # get config
   terra_envir="${lb_envir}"
   case "${lb_platform}" in
