@@ -111,7 +111,6 @@ function init_config() {
   source "${builddir}/etc/terraform.conf"
 
   # check for root filesystem tarball
-  shopt -s nullglob
   tarball="${builddir}/binary/${FNAME}.tar"
   if ! [[ -f ${tarball} ]]; then
     fancy_message error "Root tarball not found, please run build.sh first and ensure output is placed in ${builddir}/binary"
