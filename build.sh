@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 set -e
+# declare verbose debug output
+declare -gx PS4=$'\E[0;10m\E[1m\033[1;31m\033[1;37m[\033[1;35m${BASH_SOURCE[0]##*/}:\033[1;34m${FUNCNAME[0]:-NOFUNC}():\033[1;33m${LINENO}\033[1;37m] - \033[1;33mDEBUG: \E[0;10m'
 
 platform="${1}"
 envir="${2}"
@@ -13,136 +15,147 @@ if ! [[ -n ${platform} && -n ${envir} && -n ${builddir} ]]; then
   exit 1
 fi
 
-# check for root permissions
-if [[ "$(id -u)" != 0 ]]; then
-  echo "E: Requires root permissions" > /dev/stderr
-  exit 1
-fi
-
-# normalize platforms
-case "${platform}" in
-  amd64|arm64)
-    # already normalized
-  ;;
-  raspberrypi|raspi|rpi)
-    platform="rpi"
-  ;;
-  pinephone|pp|ppog|pinephonepro|ppp)
-    platform="pinephone"
-  ;;
-  pinetab|pt|ptog|pt1|pinetab2|pt2)
-    platform="pinetab"
-  ;;
-  *)
-    echo "E: Unknown platform, exiting..." > /dev/stderr
-    exit 1
-  ;;
-esac
-
-# check validity of input
-valid_images=(
-  {amd64,arm64,pinephone,pinetab}:{unicorn,lomiri}
-  rpi:{unicorn,server}
-)
-
-if ! [[ "${valid_images[@]}" =~ "${platform}:${envir}" ]]; then
-  echo "E: Invalid platform+environment combination, exiting..." > /dev/stderr
-  exit 1
-fi
+#init sequences
+source "build-scripts/stacktrace.sh"
+set_colors
 
 # cleanup function to trap EXIT & INT
+export cleaned=false
 function cleanup() {
-  local catch=$?
   cd "${REPO_ROOT}"
-  echo "
-#-----------------#
-# RESTORE BACKUPS #
-#-----------------#
-"
-  # restore any patched files to their original state
-  for i in "binary_grub-efi" "binary_rootfs"; do
-    if [[ -f "${builddir}/${i}.bak" ]]; then
-      cp "${builddir}/${i}.bak" "/usr/lib/live/build/${i}"
+  if ! ${cleaned}; then
+    fancy_message info "Restoring backups"
+    # restore any patched files to their original state
+    for i in "binary_grub-efi" "binary_rootfs"; do
+      if [[ -f "${builddir}/${i}.bak" ]]; then
+        cp "${builddir}/${i}.bak" "/usr/lib/live/build/${i}"
+      fi
+    done
+    if [[ -f "${builddir}/functions.bak" ]]; then
+      cp "${builddir}/functions.bak" /usr/share/debootstrap/functions
     fi
-  done
-  if [[ -f "${builddir}/functions.bak" ]]; then
-    cp "${builddir}/functions.bak" /usr/share/debootstrap/functions
+    export cleaned=true
   fi
-  # exit with caught code
-  return "${catch}"
+}
+trap cleanup EXIT INT
+
+{ export ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
+
+function verify() {
+  { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
+  # check for root permissions
+  if ((EUID != 0)); then
+    fancy_message error "Requires root permissions"
+    return 1
+  fi
+
+  # normalize platforms
+  case "${platform}" in
+    amd64|arm64)
+      # already normalized
+    ;;
+    raspberrypi|raspi|rpi)
+      platform="rpi"
+    ;;
+    pinephone|pp|ppog|pinephonepro|ppp)
+      platform="pinephone"
+    ;;
+    pinetab|pt|ptog|pt1|pinetab2|pt2)
+      platform="pinetab"
+    ;;
+    *)
+      fancy_message error "Unknown platform"
+      return 1
+    ;;
+  esac
+
+  # check validity of input
+  valid_images=(
+    {amd64,arm64,pinephone,pinetab}:{unicorn,lomiri}
+    rpi:{unicorn,server}
+  )
+
+  if ! [[ "${valid_images[@]}" =~ "${platform}:${envir}" ]]; then
+    fancy_message error "Invalid platform+environment combination"
+    return 1
+  fi
 }
 
-echo "
-#-----------------#
-# INIT SUBMODULES #
-#-----------------#
-"
-git submodule update --init --recursive
+function init_submodules() {
+  { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
+  fancy_message info "Initializing submodules"
+  git submodule update --init --recursive
+}
 
-echo "
-#----------------------#
-# INSTALL DEPENDENCIES #
-#----------------------#
-"
-apt-get update
-apt-get install -y \
-  patch gnupg2 binutils zstd ubuntu-keyring \
-  libglib2.0-dev libmysqlclient-dev apt-utils \
-  debootstrap mtools dosfstools qemu-user-binfmt binfmt-support dpkg-dev
-dpkg -i "base/base/debs/live-build_20220505_all.deb"
+function install_deps() {
+  { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
+  fancy_message info "Installing dependencies"
+  apt-get update || return 1
+  apt-get install -y \
+    patch gnupg2 binutils zstd ubuntu-keyring \
+    libglib2.0-dev libmysqlclient-dev apt-utils \
+    debootstrap mtools dosfstools qemu-user-binfmt binfmt-support dpkg-dev || return 1
+  dpkg -i "base/base/debs/live-build_20220505_all.deb" || return 1
+}
 
-echo "
-#----------------------#
-# SOURCE BUILD SCRIPTS #
-#----------------------#
-"
-# imports `overlayer` function
-source "build-scripts/overlayer.sh"
-# imports `lb_build` and `lb_run` functions; `lb_build` calls `lb_run`
-source "build-scripts/live-build.sh"
+function source_scripts() {
+  { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
+  fancy_message info "Sourcing build scripts"
+  # imports `overlayer` function
+  source "build-scripts/overlayer.sh"
+  # imports `lb_build` and `lb_run` functions; `lb_build` calls `lb_run`
+  source "build-scripts/live-build.sh"
+}
 
-echo "
-#------------------------#
-# CREATE BUILD DIRECTORY #
-#------------------------#
-"
-overlayer "${platform}" "${envir}" "${builddir}"
+function create_builddir() {
+  { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
+  fancy_message info "Creating build directory"
+  overlayer "${platform}" "${envir}" "${builddir}"
+}
 
-# init trap after builddir created
-trap "cleanup" EXIT INT
-
-echo "
-#-------------------#
-# PATCH BUILD TOOLS #
-#-------------------#
-"
-# patch live-build functions
-for i in "binary_grub-efi" "binary_rootfs"; do
-  if [[ -f "${builddir}/${i}" ]]; then
-    if [[ -f "/usr/lib/live/build/${i}" ]]; then
-      # copy backups if files present
-      cp "/usr/lib/live/build/${i}" "${builddir}/${i}.bak"
+function patch_tools() {
+  { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
+  fancy_message info "Patching build tools"
+  # patch live-build functions
+  for i in "binary_grub-efi" "binary_rootfs"; do
+    if [[ -f "${builddir}/${i}" ]]; then
+      if [[ -f "/usr/lib/live/build/${i}" ]]; then
+        # copy backups if files present
+        cp "/usr/lib/live/build/${i}" "${builddir}/${i}.bak"
+      fi
+      cp "${builddir}/${i}" "/usr/lib/live/build/${i}"
     fi
-    cp "${builddir}/${i}" "/usr/lib/live/build/${i}"
-  fi
-done
+  done
 
-# allow devel debootstrapping
-ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/devel
+  # allow devel debootstrapping
+  ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/devel
 
-# patch out debootstrap error
-cp /usr/share/debootstrap/functions "${builddir}/functions.bak"
-cp "${builddir}/functions.bak" functions
-cd "${builddir}"
-patch -i "0002-remove-WRONGSUITE-error.patch"
-cp functions /usr/share/debootstrap/functions
-cd "${REPO_ROOT}"
+  # patch out debootstrap error
+  cp /usr/share/debootstrap/functions "${builddir}/functions.bak"
+  cp "${builddir}/functions.bak" functions
+  cd "${builddir}"
+  patch -i "0002-remove-WRONGSUITE-error.patch"
+  cp functions /usr/share/debootstrap/functions
+  cd "${REPO_ROOT}"
+}
 
-echo "
-#------------------#
-# START LIVE-BUILD #
-#------------------#
-"
-lb_build "${platform}" "${envir}" "${builddir}" "etc/terraform.conf"
-cd "${REPO_ROOT}"
+function start_livebuild() {
+  { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
+  fancy_message info "Starting live-build"
+  lb_build "${platform}" "${envir}" "${builddir}" "etc/terraform.conf"
+  cd "${REPO_ROOT}"
+}
+
+function build_steps() {
+  { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
+  verify || return 1
+  init_submodules || return 1
+  install_deps || return 1
+  source_scripts || return 1
+  create_builddir || return 1
+  patch_tools || return 1
+  start_livebuild || return 1
+}
+
+build_steps
 exit 0

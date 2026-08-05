@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 function overlayer() {
+  { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   local o_platform="${1:?Platform required}" \
     o_envir="${2:?Environment required}" \
     o_builddir="${3:?Build directory required}" \
@@ -24,13 +25,15 @@ function overlayer() {
       overlay_arr=({base,platform/{img-preinst,pine64{,/tab}}}/{base,environment/${o_envir}})
     ;;
     *)
-      echo "Unknown platform, exiting"
-      exit 1
+      fancy_message error "Unknown platform"
+      return 1
     ;;
   esac
 
   mkdir -p "${o_builddir}"
-  echo -e "Overlaying:\n  Source: ${overlay_arr[*]}\n  Output: ${o_builddir}"
+  fancy_message info "Overlaying to build directory"
+  fancy_message sub "Source: ${overlay_arr[*]}"
+  fancy_message sub "Output: ${o_builddir}"
   for overlay in "${overlay_arr[@]}"; do
     if [[ -d ${overlay} ]]; then
       cp -r "${overlay}"/* -t "${o_builddir}"

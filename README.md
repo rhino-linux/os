@@ -11,7 +11,8 @@ Report bugs and propose features through the [Rhino Linux tracker](https://githu
 ## Repository Layout
 
 ```text
-build.sh                 build entry point
+build.sh                build entry point
+deploy.sh               runs debos for preinstalled images
 
 base/
   base/                 Files shared by every image
@@ -26,6 +27,7 @@ platform/
 build-scripts/
   overlayer.sh          assembles source layers
   live-build.sh         runs live-build
+  stacktrace.sh         common functions for script debugging
 
 docs/                   Architecture and configuration documentation
 ```
@@ -78,7 +80,7 @@ deploy.sh <platform> <environment> <build-directory>
 
 After `build.sh` creates a rootfs tarball, `deploy.sh` reconstructs the assembled
 build directory, runs the appropriate Debos recipes, and writes compressed device
-images under `builds/<platform>/`.
+images under `<build-directory>/builds/`.
 
 The build scripts are sourced libraries rather than standalone executables:
 
@@ -89,13 +91,13 @@ The build scripts are sourced libraries rather than standalone executables:
 Generic ISO output is written under:
 
 ```text
-builds/<architecture>/
+<build-directory>/builds/
 ```
 
 Preinstalled root filesystem archives are written under:
 
 ```text
-binary/
+<build-directory>/binary/
 ```
 
 ### Migration Status
