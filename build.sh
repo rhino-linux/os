@@ -110,7 +110,7 @@ function source_scripts() {
 function create_builddir() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   fancy_message info "Creating build directory"
-  overlayer "${platform}" "${envir}" "${builddir}"
+  overlayer "${platform}" "${envir}" "${builddir}" || return 1
 }
 
 function patch_tools() {
@@ -134,7 +134,7 @@ function patch_tools() {
   cp /usr/share/debootstrap/functions "${builddir}/functions.bak"
   cp "${builddir}/functions.bak" "${builddir}/functions"
   cd "${builddir}"
-  patch -i "0002-remove-WRONGSUITE-error.patch"
+  patch -i "0002-remove-WRONGSUITE-error.patch" || return 1
   cp "${builddir}/functions" /usr/share/debootstrap/functions
   cd "${REPO_ROOT}"
 }
@@ -142,7 +142,7 @@ function patch_tools() {
 function start_livebuild() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   fancy_message info "Starting live-build"
-  lb_build "${platform}" "${envir}" "${builddir}" "etc/terraform.conf"
+  lb_build "${platform}" "${envir}" "${builddir}" "etc/terraform.conf" || return 1
   cd "${REPO_ROOT}"
 }
 
