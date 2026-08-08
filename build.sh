@@ -16,7 +16,7 @@ if ! [[ -n ${platform} && -n ${envir} && -n ${builddir} ]]; then
 fi
 
 #init sequences
-source "build-scripts/stacktrace.sh"
+source "${REPO_ROOT}/build-scripts/stacktrace.sh"
 set_colors
 
 # cleanup function to trap EXIT & INT
@@ -91,20 +91,20 @@ function install_deps() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   fancy_message info "Installing dependencies"
   apt-get update || return 1
+  #TODO: perform install dep check to avoid repeat running
   apt-get install -y \
     patch gnupg2 binutils zstd ubuntu-keyring \
     libglib2.0-dev libmysqlclient-dev apt-utils \
-    debootstrap mtools dosfstools qemu-user-binfmt binfmt-support dpkg-dev || return 1
-  dpkg -i "base/base/debs/live-build_20220505_all.deb" || return 1
+    debootstrap mtools dosfstools qemu-user-binfmt binfmt-support dpkg-dev "${REPO_ROOT}/base/base/debs/live-build_20220505_all.deb" || return 1
 }
 
 function source_scripts() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   fancy_message info "Sourcing build scripts"
   # imports `overlayer` function
-  source "build-scripts/overlayer.sh"
+  source "${REPO_ROOT}/build-scripts/overlayer.sh"
   # imports `lb_build` and `lb_run` functions; `lb_build` calls `lb_run`
-  source "build-scripts/live-build.sh"
+  source "${REPO_ROOT}/build-scripts/live-build.sh"
 }
 
 function create_builddir() {

@@ -16,7 +16,7 @@ if ! [[ -n ${platform} && -n ${envir} && -n ${builddir} ]]; then
 fi
 
 #init sequences
-source "build-scripts/stacktrace.sh"
+source "${REPO_ROOT}/build-scripts/stacktrace.sh"
 set_colors
 
 # cleanup function to trap EXIT & INT
@@ -56,7 +56,7 @@ function verify() {
       platform="pinetab"
     ;;
     pinetab2|pt2)
-      platform="pinetab2"  
+      platform="pinetab2"
     ;;
     *)
       fancy_message error "Unknown platform"
@@ -97,7 +97,7 @@ function verify() {
 function source_scripts() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   fancy_message info "Sourcing build scripts"
-  source "build-scripts/overlayer.sh"
+  source "${REPO_ROOT}/build-scripts/overlayer.sh"
 }
 
 function create_builddir() {
