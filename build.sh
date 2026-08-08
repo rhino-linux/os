@@ -132,10 +132,10 @@ function patch_tools() {
 
   # patch out debootstrap error
   cp /usr/share/debootstrap/functions "${builddir}/functions.bak"
-  cp "${builddir}/functions.bak" functions
+  cp "${builddir}/functions.bak" "${builddir}/functions"
   cd "${builddir}"
   patch -i "0002-remove-WRONGSUITE-error.patch"
-  cp functions /usr/share/debootstrap/functions
+  cp "${builddir}/functions" /usr/share/debootstrap/functions
   cd "${REPO_ROOT}"
 }
 
