@@ -41,6 +41,7 @@ function fancy_message() {
     esac
 }
 
+#TODO/FIXME: running as ./build.sh rather than as an absolute path results in read errors when cd'd elsewhere
 function stacktrace() {
   local catch=$?
   if ((catch!=0)) && ! ${ignore_stack}; then
