@@ -4,8 +4,7 @@ function lb_run() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   local BUILD_ARCH="${1}" \
     BASE_DIR="${2}" \
-    CONFIG_FILE="${3}" \
-    OUTPUT_DIR INPUT_FILE OUTPUT_FILE
+    CONFIG_FILE="${3}"
 
   mkdir -p "${BASE_DIR}/tmp/${BUILD_ARCH}"
   cd "${BASE_DIR}/tmp/${BUILD_ARCH}" || return 1
@@ -27,6 +26,13 @@ function lb_run() {
 
   fancy_message info "Running live-build build"
   lb --force build
+}
+
+function lb_finish() {
+  { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
+  local BUILD_ARCH="${1}" \
+    BASE_DIR="${2}" \
+    OUTPUT_DIR INPUT_FILE OUTPUT_FILE
 
   fancy_message info "Moving build to output directory"
   case "${BUILD_TYPE}" in
@@ -103,8 +109,10 @@ function lb_build() {
     fancy_message error "ARCH not found"
     return 1
   elif [[ ${ARCH} == "all" ]]; then
-    lb_run amd64 "${SBASE_DIR}" "${SCONFIG_FILE}"
+    lb_run amd64 "${SBASE_DIR}" "${SCONFIG_FILE}" || return 1
+    lb_finish amd64 "${SBASE_DIR}" || return 1
   else
-    lb_run "${ARCH}" "${SBASE_DIR}" "${SCONFIG_FILE}"
+    lb_run "${ARCH}" "${SBASE_DIR}" "${SCONFIG_FILE}" || return 1
+    lb_finish "${ARCH}" "${SBASE_DIR}" || return 1
   fi
 }
