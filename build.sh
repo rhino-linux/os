@@ -156,13 +156,16 @@ function patch_tools() {
   # allow devel debootstrapping
   ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/devel
 
-  # patch out debootstrap error
-  cp /usr/share/debootstrap/functions "${builddir}/functions.bak"
-  cp "${builddir}/functions.bak" "${builddir}/functions"
-  cd "${builddir}"
-  patch -i "0002-remove-WRONGSUITE-error.patch" || return 1
-  cp "${builddir}/functions" /usr/share/debootstrap/functions
-  cd "${REPO_ROOT}"
+  # check if patch needed
+  if grep -q "error 1 WRONGSUITE" /usr/share/debootstrap/functions; then
+    # patch out debootstrap error
+    cp /usr/share/debootstrap/functions "${builddir}/functions.bak"
+    cp "${builddir}/functions.bak" "${builddir}/functions"
+    cd "${builddir}"
+    patch -i "0002-remove-WRONGSUITE-error.patch" || return 1
+    cp "${builddir}/functions" /usr/share/debootstrap/functions
+    cd "${REPO_ROOT}"
+  fi
 }
 
 function start_livebuild() {
