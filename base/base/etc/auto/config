@@ -22,7 +22,6 @@ base_conf=(
   --mirror-binary "$MIRROR_URL"
   --parent-mirror-binary "$MIRROR_URL"
   --keyring-packages ubuntu-keyring
-  --debootstrap-options "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg"
   --apt-options "--option Acquire::Retries=2 --option Acquire::http::Timeout=45 --yes"
   --cache-packages false
   --uefi-secure-boot enable
