@@ -6,7 +6,7 @@ declare -gx PS4=$'\E[0;10m\E[1m\033[1;31m\033[1;37m[\033[1;35m${BASH_SOURCE[0]##
 
 platform="${1}"
 envir="${2}"
-builddir="$(realpath ${3})"
+builddir="${3}"
 REPO_ROOT="${PWD}"
 
 # fail out if platform, envir, and builddir are not all provided
@@ -14,6 +14,9 @@ if ! [[ -n ${platform} && -n ${envir} && -n ${builddir} ]]; then
   echo "Usage: ${0} <platform> <environment> <build-directory>"
   exit 1
 fi
+
+# set full path
+builddir="$(realpath ${builddir})"
 
 #init sequences
 source "${REPO_ROOT}/build-scripts/stacktrace.sh"
