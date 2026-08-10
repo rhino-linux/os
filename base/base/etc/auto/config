@@ -22,6 +22,7 @@ base_conf=(
   --mirror-binary "$MIRROR_URL"
   --parent-mirror-binary "$MIRROR_URL"
   --keyring-packages ubuntu-keyring
+  --debootstrap-options "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg"
   --apt-options "--option Acquire::Retries=2 --option Acquire::http::Timeout=45 --yes"
   --cache-packages false
   --uefi-secure-boot enable
@@ -43,7 +44,7 @@ rpi_conf=(
 )
 
 pine_conf=(
-  --debootstrap-options "--include=mobile-tweaks-common"
+  --debootstrap-options "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg --include=mobile-tweaks-common"
 )
 
 iso_conf=(
@@ -75,7 +76,7 @@ rpi_pine_conf=(
 rpi_iso_conf=(
   --iso-application "$NAME"
   --iso-volume "$NAME"
-  --debootstrap-options "--exclude=pinephone-tweaks,mobile-tweaks-common,librem5-tweaks,pinetab-tweaks"
+  --debootstrap-options "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg --exclude=pinephone-tweaks,mobile-tweaks-common,librem5-tweaks,pinetab-tweaks"
   --bootloaders "$BOOTLOADERS"
 )
 
