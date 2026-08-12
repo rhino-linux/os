@@ -96,7 +96,7 @@ function verify() {
     rpi:{unicorn,server}
   )
 
-  if ! [[ "${valid_images[@]}" =~ "${platform}:${envir}" ]]; then
+  if ! contains valid_images "${platform}:${envir}"; then
     fancy_message error "Invalid platform+environment combination"
     return 1
   fi
