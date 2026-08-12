@@ -1,13 +1,9 @@
 #!/usr/bin/env bash
 
-set -e
-# declare verbose debug output
-declare -gx PS4=$'\E[0;10m\E[1m\033[1;31m\033[1;37m[\033[1;35m${BASH_SOURCE[0]##*/}:\033[1;34m${FUNCNAME[0]:-NOFUNC}():\033[1;33m${LINENO}\033[1;37m] - \033[1;33mDEBUG: \E[0;10m'
-
-function help_message() {
+function help_deploy() {
   echo -e "Usage: $0 PLATFORM ENVIRONMENT BUILDDIR
 
-Build a Rhino Linux ISO.
+Deploy a Rhino Linux IMG with debos.
 
 PLATFORM:
     - raspberrypi|raspi|rpi
@@ -19,42 +15,6 @@ ENVIRONMENT:
     - lomiri (excludes rpi)
     - server (rpi only)"
 }
-
-if [[ ${1} == "-h" ]] || [[ ${1} == "--help" ]]; then
-  help_message
-  exit 0
-fi
-
-platform="${1}"
-envir="${2}"
-builddir="${3}"
-REPO_ROOT="${PWD}"
-
-# fail out if platform, envir, and builddir are not all provided
-if ! [[ -n ${platform} && -n ${envir} && -n ${builddir} ]]; then
-  help_message
-  exit 1
-fi
-
-# set full path
-builddir="$(realpath ${builddir})"
-
-#init sequences
-source "${REPO_ROOT}/build-scripts/stacktrace.sh"
-set_colors
-
-# cleanup function to trap EXIT & INT
-export cleaned=false
-function cleanup() {
-  cd "${REPO_ROOT}"
-  if ! ${cleaned}; then
-    # put any cleanup steps here if/as needed
-    export cleaned=true
-  fi
-}
-trap cleanup EXIT INT
-
-{ export ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
 
 function verify() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
@@ -181,6 +141,3 @@ function deploy_steps() {
   init_config || return 1
   start_deploy || return 1
 }
-
-deploy_steps
-exit 0
