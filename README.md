@@ -13,6 +13,7 @@ Report bugs and propose features through the [Rhino Linux tracker](https://githu
 ```text
 build.sh                build entry point
 deploy.sh               runs debos for preinstalled images
+pull.sh                 downloads deploy workflow artifacts from Actions
 
 base/
   base/                 Files shared by every image
@@ -81,6 +82,19 @@ deploy.sh <platform> <environment> <build-directory>
 After `build.sh` creates a rootfs tarball, `deploy.sh` reconstructs the assembled
 build directory, runs the appropriate Debos recipes, and writes compressed device
 images under `<build-directory>/builds/`.
+
+The images produced by the deploy workflows can be pulled back down for upload
+with `pull.sh` (requires GitHub CLI). Run it with no arguments to
+download every image from the latest successful run of each deploy workflow, or
+pass the images you need:
+
+```text
+pull.sh [image...]
+pull.sh pinephone rpi-desktop
+pull.sh amd64 arm64-lomiri
+```
+
+Run `pull.sh --help` for the full list of image selectors and options.
 
 The build scripts are sourced libraries rather than standalone executables:
 

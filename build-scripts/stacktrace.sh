@@ -68,3 +68,16 @@ function stacktrace() {
     return "${catch}"
   fi
 }
+
+function contains() {
+  { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
+  local check
+  local -n arra="${1:?No array passed to array.contains}"
+  local input="${2:?No input given to array.contains}"
+  for check in "${arra[@]}"; do
+    if [[ ${check} == "${input}" ]]; then
+      return 0
+    fi
+  done
+  { ignore_stack=true; return 1; }
+}
