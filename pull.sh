@@ -31,8 +31,16 @@ declare -A RPI_IMAGES=(
   [rpi-server]="Rhino-Linux-*-rpi-server.img.xz"
 )
 
+declare -A ISO_IMAGES=(
+  [amd64]="Rhino-Linux-*-amd64.iso"
+  [amd64-lomiri]="Rhino-Linux-*-amd64-lomiri.iso"
+  [arm64]="Rhino-Linux-*-arm64.iso"
+  [arm64-lomiri]="Rhino-Linux-*-arm64-lomiri.iso"
+)
+
 PINE64_WORKFLOW="build-pine64.yaml"
 RPI_WORKFLOW="build-rpi.yaml"
+ISO_WORKFLOW="build-iso.yaml"
 
 function help_message() {
     echo -e "Usage: $0 [SELECTOR...] [OPTIONS]
@@ -47,6 +55,8 @@ SELECTOR:
     - pinetab, pinetab-lomiri
     - pinetab2, pinetab2-lomiri
     - rpi-desktop, rpi-server
+    - amd64, amd64-lomiri
+    - arm64, arm64-lomiri
 
 OPTIONS:
     -h, --help          Show this help message
@@ -111,7 +121,8 @@ function parse_args() {
     for selector in "${SELECTED[@]}"; do
         if [[ "${selector}" != "all" ]] \
             && ! [[ -n ${PINE64_IMAGES[${selector}]:-} ]] \
-            && ! [[ -n ${RPI_IMAGES[${selector}]:-} ]]; then
+            && ! [[ -n ${RPI_IMAGES[${selector}]:-} ]] \
+            && ! [[ -n ${ISO_IMAGES[${selector}]:-} ]]; then
             fancy_message error "Unknown image: ${selector}"
             help_message
             exit 1
@@ -142,13 +153,16 @@ function find_run() {
 
 function download() {
     local workflow="${1}" run="${2}" args=() key pattern
-    for key in "${!PINE64_IMAGES[@]}" "${!RPI_IMAGES[@]}"; do
+    for key in "${!PINE64_IMAGES[@]}" "${!RPI_IMAGES[@]}" "${!ISO_IMAGES[@]}"; do
         if [[ -n ${PINE64_IMAGES[${key}]:-} ]]; then
             [[ "${workflow}" == "${PINE64_WORKFLOW}" ]] || continue
             pattern="${PINE64_IMAGES[${key}]}"
-        else
+        elif [[ -n ${RPI_IMAGES[${key}]:-} ]]; then
             [[ "${workflow}" == "${RPI_WORKFLOW}" ]] || continue
             pattern="${RPI_IMAGES[${key}]}"
+        else
+            [[ "${workflow}" == "${ISO_WORKFLOW}" ]] || continue
+            pattern="${ISO_IMAGES[${key}]}"
         fi
         in_selection "${key}" || continue
         args+=("--pattern" "${pattern}")
@@ -163,11 +177,12 @@ function main() {
     verify
     mkdir -p "${OUT_DIR}"
 
-    local pine64=false rpi=false run_pine64="" run_rpi="" key
+    local pine64=false rpi=false iso=false run_pine64="" run_rpi="" run_iso="" key
     if [[ -n ${RUN_ID} ]]; then
         fancy_message warn "Using provided run ${RUN_ID} for every workflow"
         run_pine64="${RUN_ID}"
         run_rpi="${RUN_ID}"
+        run_iso="${RUN_ID}"
     else
         for key in "${!PINE64_IMAGES[@]}"; do
             in_selection "${key}" && pine64=true
@@ -175,12 +190,17 @@ function main() {
         for key in "${!RPI_IMAGES[@]}"; do
             in_selection "${key}" && rpi=true
         done
+        for key in "${!ISO_IMAGES[@]}"; do
+            in_selection "${key}" && iso=true
+        done
         ${pine64} && run_pine64="$(find_run "${PINE64_WORKFLOW}")"
         ${rpi} && run_rpi="$(find_run "${RPI_WORKFLOW}")"
+        ${iso} && run_iso="$(find_run "${ISO_WORKFLOW}")"
     fi
 
     [[ -n ${run_pine64} ]] && download "${PINE64_WORKFLOW}" "${run_pine64}"
     [[ -n ${run_rpi} ]] && download "${RPI_WORKFLOW}" "${run_rpi}"
+    [[ -n ${run_iso} ]] && download "${ISO_WORKFLOW}" "${run_iso}"
 
     fancy_message info "Images ready for upload under ${OUT_DIR}"
 }

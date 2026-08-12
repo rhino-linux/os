@@ -91,6 +91,7 @@ pass the images you need:
 ```text
 pull.sh [image...]
 pull.sh pinephone rpi-desktop
+pull.sh amd64 arm64-lomiri
 ```
 
 Run `pull.sh --help` for the full list of image selectors and options.
