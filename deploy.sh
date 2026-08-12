@@ -5,7 +5,7 @@ set -e
 declare -gx PS4=$'\E[0;10m\E[1m\033[1;31m\033[1;37m[\033[1;35m${BASH_SOURCE[0]##*/}:\033[1;34m${FUNCNAME[0]:-NOFUNC}():\033[1;33m${LINENO}\033[1;37m] - \033[1;33mDEBUG: \E[0;10m'
 
 function help_message() {
-    echo -e "Usage: $0 PLATFORM ENVIRONMENT BUILDDIR
+  echo -e "Usage: $0 PLATFORM ENVIRONMENT BUILDDIR
 
 Build a Rhino Linux ISO.
 
@@ -21,8 +21,8 @@ ENVIRONMENT:
 }
 
 if [[ ${1} == "-h" ]] || [[ ${1} == "--help" ]]; then
-    help_message
-    exit 0
+  help_message
+  exit 0
 fi
 
 platform="${1}"
