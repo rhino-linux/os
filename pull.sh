@@ -43,7 +43,7 @@ RPI_WORKFLOW="build-rpi.yaml"
 ISO_WORKFLOW="build-iso.yaml"
 
 function help_message() {
-    echo -e "Usage: $0 [SELECTOR...] [OPTIONS]
+  echo -e "Usage: $0 [SELECTOR...] [OPTIONS]
 
 Download images produced by the deploy workflows from GitHub Actions.
 
@@ -67,142 +67,142 @@ OPTIONS:
 }
 
 function verify() {
-    if ! command -v gh; then
-        fancy_message error "The GitHub CLI (gh) is required"
-        fancy_message error "Install it from https://github.com/cli/cli"
-        exit 1
-    fi
-    if ! gh auth status; then
-        fancy_message error "Not authenticated with gh, run 'gh auth login' first"
-        exit 1
-    fi
+  if ! command -v gh; then
+    fancy_message error "The GitHub CLI (gh) is required"
+    fancy_message error "Install it from https://github.com/cli/cli"
+    exit 1
+  fi
+  if ! gh auth status; then
+    fancy_message error "Not authenticated with gh, run 'gh auth login' first"
+    exit 1
+  fi
 }
 
 function parse_args() {
-    while [[ $# -gt 0 ]]; do
-        case "${1}" in
-            -h|--help)
-                help_message
-                exit 0
-            ;;
-            -d|--dir)
-                [[ -n ${2:-} ]] || { fancy_message error "$1 requires an argument"; exit 1; }
-                OUT_DIR="${2}"
-                shift 2
-            ;;
-            -b|--branch)
-                [[ -n ${2:-} ]] || { fancy_message error "$1 requires an argument"; exit 1; }
-                BRANCH="${2}"
-                shift 2
-            ;;
-            -r|--run)
-                [[ -n ${2:-} ]] || { fancy_message error "$1 requires an argument"; exit 1; }
-                RUN_ID="${2}"
-                shift 2
-            ;;
-            --repo)
-                [[ -n ${2:-} ]] || { fancy_message error "$1 requires an argument"; exit 1; }
-                REPO="${2}"
-                shift 2
-            ;;
-            -*)
-                fancy_message error "Unknown option: ${1}"
-                help_message
-                exit 1
-            ;;
-            *)
-                SELECTED+=("${1}")
-                shift
-            ;;
-        esac
-    done
+  while [[ $# -gt 0 ]]; do
+    case "${1}" in
+      -h|--help)
+        help_message
+        exit 0
+      ;;
+      -d|--dir)
+        [[ -n ${2:-} ]] || { fancy_message error "$1 requires an argument"; exit 1; }
+        OUT_DIR="${2}"
+        shift 2
+      ;;
+      -b|--branch)
+        [[ -n ${2:-} ]] || { fancy_message error "$1 requires an argument"; exit 1; }
+        BRANCH="${2}"
+        shift 2
+      ;;
+      -r|--run)
+        [[ -n ${2:-} ]] || { fancy_message error "$1 requires an argument"; exit 1; }
+        RUN_ID="${2}"
+        shift 2
+      ;;
+      --repo)
+        [[ -n ${2:-} ]] || { fancy_message error "$1 requires an argument"; exit 1; }
+        REPO="${2}"
+        shift 2
+      ;;
+      -*)
+        fancy_message error "Unknown option: ${1}"
+        help_message
+        exit 1
+      ;;
+      *)
+        SELECTED+=("${1}")
+        shift
+      ;;
+    esac
+  done
 
-    local selector
-    for selector in "${SELECTED[@]}"; do
-        if [[ "${selector}" != "all" ]] \
-            && ! [[ -n ${PINE64_IMAGES[${selector}]:-} ]] \
-            && ! [[ -n ${RPI_IMAGES[${selector}]:-} ]] \
-            && ! [[ -n ${ISO_IMAGES[${selector}]:-} ]]; then
-            fancy_message error "Unknown image: ${selector}"
-            help_message
-            exit 1
-        fi
-    done
+  local selector
+  for selector in "${SELECTED[@]}"; do
+    if [[ "${selector}" != "all" ]] \
+      && ! [[ -n ${PINE64_IMAGES[${selector}]:-} ]] \
+      && ! [[ -n ${RPI_IMAGES[${selector}]:-} ]] \
+      && ! [[ -n ${ISO_IMAGES[${selector}]:-} ]]; then
+      fancy_message error "Unknown image: ${selector}"
+      help_message
+      exit 1
+    fi
+  done
 }
 
 function in_selection() {
-    local key="${1}" i
-    [[ ${#SELECTED[@]} -eq 0 ]] && return 0
-    for i in "${SELECTED[@]}"; do
-        [[ "${i}" == "${key}" || "${i}" == "all" ]] && return 0
-    done
-    return 1
+  local key="${1}" i
+  [[ ${#SELECTED[@]} -eq 0 ]] && return 0
+  for i in "${SELECTED[@]}"; do
+    [[ "${i}" == "${key}" || "${i}" == "all" ]] && return 0
+  done
+  return 1
 }
 
 function find_run() {
-    local workflow="${1}" run
-    run="$(gh run list --repo "${REPO}" --workflow "${workflow}" \
-        --branch "${BRANCH}" --status success --limit 1 \
-        --json databaseId --jq '.[0].databaseId')"
-    if [[ -z ${run} ]] || [[ "${run}" == "null" ]]; then
-        fancy_message error "No successful ${workflow} run found for ${BRANCH}"
-        exit 1
-    fi
-    echo "${run}"
+  local workflow="${1}" run
+  run="$(gh run list --repo "${REPO}" --workflow "${workflow}" \
+    --branch "${BRANCH}" --status success --limit 1 \
+    --json databaseId --jq '.[0].databaseId')"
+  if [[ -z ${run} ]] || [[ "${run}" == "null" ]]; then
+    fancy_message error "No successful ${workflow} run found for ${BRANCH}"
+    exit 1
+  fi
+  echo "${run}"
 }
 
 function download() {
-    local workflow="${1}" run="${2}" args=() key pattern
-    for key in "${!PINE64_IMAGES[@]}" "${!RPI_IMAGES[@]}" "${!ISO_IMAGES[@]}"; do
-        if [[ -n ${PINE64_IMAGES[${key}]:-} ]]; then
-            [[ "${workflow}" == "${PINE64_WORKFLOW}" ]] || continue
-            pattern="${PINE64_IMAGES[${key}]}"
-        elif [[ -n ${RPI_IMAGES[${key}]:-} ]]; then
-            [[ "${workflow}" == "${RPI_WORKFLOW}" ]] || continue
-            pattern="${RPI_IMAGES[${key}]}"
-        else
-            [[ "${workflow}" == "${ISO_WORKFLOW}" ]] || continue
-            pattern="${ISO_IMAGES[${key}]}"
-        fi
-        in_selection "${key}" || continue
-        args+=("--pattern" "${pattern}")
-    done
-    [[ ${#args[@]} -gt 0 ]] || return
-    fancy_message info "Downloading from ${workflow} run ${run}"
-    gh run download "${run}" --repo "${REPO}" --dir "${OUT_DIR}" "${args[@]}"
+  local workflow="${1}" run="${2}" args=() key pattern
+  for key in "${!PINE64_IMAGES[@]}" "${!RPI_IMAGES[@]}" "${!ISO_IMAGES[@]}"; do
+    if [[ -n ${PINE64_IMAGES[${key}]:-} ]]; then
+      [[ "${workflow}" == "${PINE64_WORKFLOW}" ]] || continue
+      pattern="${PINE64_IMAGES[${key}]}"
+    elif [[ -n ${RPI_IMAGES[${key}]:-} ]]; then
+      [[ "${workflow}" == "${RPI_WORKFLOW}" ]] || continue
+      pattern="${RPI_IMAGES[${key}]}"
+    else
+      [[ "${workflow}" == "${ISO_WORKFLOW}" ]] || continue
+      pattern="${ISO_IMAGES[${key}]}"
+    fi
+    in_selection "${key}" || continue
+    args+=("--pattern" "${pattern}")
+  done
+  [[ ${#args[@]} -gt 0 ]] || return
+  fancy_message info "Downloading from ${workflow} run ${run}"
+  gh run download "${run}" --repo "${REPO}" --dir "${OUT_DIR}" "${args[@]}"
 }
 
 function main() {
-    parse_args "$@"
-    verify
-    mkdir -p "${OUT_DIR}"
+  parse_args "$@"
+  verify
+  mkdir -p "${OUT_DIR}"
 
-    local pine64=false rpi=false iso=false run_pine64="" run_rpi="" run_iso="" key
-    if [[ -n ${RUN_ID} ]]; then
-        fancy_message warn "Using provided run ${RUN_ID} for every workflow"
-        run_pine64="${RUN_ID}"
-        run_rpi="${RUN_ID}"
-        run_iso="${RUN_ID}"
-    else
-        for key in "${!PINE64_IMAGES[@]}"; do
-            in_selection "${key}" && pine64=true
-        done
-        for key in "${!RPI_IMAGES[@]}"; do
-            in_selection "${key}" && rpi=true
-        done
-        for key in "${!ISO_IMAGES[@]}"; do
-            in_selection "${key}" && iso=true
-        done
-        ${pine64} && run_pine64="$(find_run "${PINE64_WORKFLOW}")"
-        ${rpi} && run_rpi="$(find_run "${RPI_WORKFLOW}")"
-        ${iso} && run_iso="$(find_run "${ISO_WORKFLOW}")"
-    fi
+  local pine64=false rpi=false iso=false run_pine64="" run_rpi="" run_iso="" key
+  if [[ -n ${RUN_ID} ]]; then
+    fancy_message warn "Using provided run ${RUN_ID} for every workflow"
+    run_pine64="${RUN_ID}"
+    run_rpi="${RUN_ID}"
+    run_iso="${RUN_ID}"
+  else
+    for key in "${!PINE64_IMAGES[@]}"; do
+      in_selection "${key}" && pine64=true
+    done
+    for key in "${!RPI_IMAGES[@]}"; do
+      in_selection "${key}" && rpi=true
+    done
+    for key in "${!ISO_IMAGES[@]}"; do
+      in_selection "${key}" && iso=true
+    done
+    ${pine64} && run_pine64="$(find_run "${PINE64_WORKFLOW}")"
+    ${rpi} && run_rpi="$(find_run "${RPI_WORKFLOW}")"
+    ${iso} && run_iso="$(find_run "${ISO_WORKFLOW}")"
+  fi
 
-    [[ -n ${run_pine64} ]] && download "${PINE64_WORKFLOW}" "${run_pine64}"
-    [[ -n ${run_rpi} ]] && download "${RPI_WORKFLOW}" "${run_rpi}"
-    [[ -n ${run_iso} ]] && download "${ISO_WORKFLOW}" "${run_iso}"
+  [[ -n ${run_pine64} ]] && download "${PINE64_WORKFLOW}" "${run_pine64}"
+  [[ -n ${run_rpi} ]] && download "${RPI_WORKFLOW}" "${run_rpi}"
+  [[ -n ${run_iso} ]] && download "${ISO_WORKFLOW}" "${run_iso}"
 
-    fancy_message info "Images ready for upload under ${OUT_DIR}"
+  fancy_message info "Images ready for upload under ${OUT_DIR}"
 }
 
 main "$@"
