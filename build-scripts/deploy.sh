@@ -27,25 +27,25 @@ function verify() {
   # normalize platforms
   terra_envir="${envir}"
   case "${platform}" in
-    raspberrypi|raspi|rpi)
+    raspberrypi | raspi | rpi)
       platform="rpi"
-    ;;
-    pinephone|pp|ppog)
+      ;;
+    pinephone | pp | ppog)
       platform="pinephone"
-    ;;
-    pinephonepro|ppp)
+      ;;
+    pinephonepro | ppp)
       platform="pinephonepro"
-    ;;
-    pinetab|pt|ptog|pt1)
+      ;;
+    pinetab | pt | ptog | pt1)
       platform="pinetab"
-    ;;
-    pinetab2|pt2)
+      ;;
+    pinetab2 | pt2)
       platform="pinetab2"
-    ;;
+      ;;
     *)
       fancy_message error "Unknown platform"
       return 1
-    ;;
+      ;;
   esac
   terra_platform="${platform}"
   export terra_platform terra_envir
@@ -63,18 +63,18 @@ function verify() {
 
   # select environment-specific recipe and image names
   case "${platform}:${envir}" in
-    pinephone:unicorn|pinephonepro:unicorn|pinetab:unicorn|pinetab2:unicorn)
+    pinephone:unicorn | pinephonepro:unicorn | pinetab:unicorn | pinetab2:unicorn)
       target="${platform}"
-    ;;
-    pinephone:lomiri|pinephonepro:lomiri|pinetab:lomiri|pinetab2:lomiri)
+      ;;
+    pinephone:lomiri | pinephonepro:lomiri | pinetab:lomiri | pinetab2:lomiri)
       target="${platform}-lomiri"
-    ;;
+      ;;
     rpi:unicorn)
       target="rpi-desktop"
-    ;;
+      ;;
     rpi:server)
       target="rpi-server"
-    ;;
+      ;;
   esac
 }
 
@@ -108,13 +108,13 @@ function start_deploy() {
   case "${target}" in
     rpi-desktop)
       recipe="raspberrypi-desktop.yaml"
-    ;;
+      ;;
     rpi-server)
       recipe="raspberrypi-server.yaml"
-    ;;
+      ;;
     *)
       recipe="${target}.yaml"
-    ;;
+      ;;
   esac
   image="${FNAME}.img"
 

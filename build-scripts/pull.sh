@@ -46,7 +46,7 @@ function find_run() {
     gh run list \
       -r "${repo}" -b "${branch}" -w "${f_workflow}" \
       -s success --json databaseId -q '.[].databaseId' -L 1
-    )"
+  )"
   if [[ -z ${f_run} || ${f_run} == "null" ]]; then
     fancy_message error "No successful ${f_workflow} run found for ${repo}:${branch}"
     return 1

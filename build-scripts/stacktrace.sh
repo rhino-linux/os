@@ -25,31 +25,31 @@ function set_colors() {
 }
 
 function fancy_message() {
-    local MESSAGE_TYPE="${1}" MESSAGE="${2}" FANCYTEXT
-    shift 2
-    local PRINTARGS=("${@}")
-    case ${MESSAGE_TYPE} in
-        info) FANCYTEXT="[${BGreen}+${NC}] ${BOLD}INFO${NC}:" ;;
-        warn) FANCYTEXT="[${BYellow}*${NC}] ${BOLD}WARNING${NC}:" ;;
-        error) FANCYTEXT="[${BRed}!${NC}] ${BOLD}ERROR${NC}:" ;;
-        sub) FANCYTEXT="\t[${BBlue}>${NC}]" ;;
-        *) FANCYTEXT="[${BOLD}?${NC}] ${BOLD}UNKNOWN${NC}:" ;;
-    esac
-    case ${MESSAGE_TYPE} in
-        info|sub) printf "${FANCYTEXT} ${MESSAGE}\n" "${PRINTARGS[@]}" ;;
-        *) printf "${FANCYTEXT} ${MESSAGE}\n" "${PRINTARGS[@]}" >&2 ;;
-    esac
+  local MESSAGE_TYPE="${1}" MESSAGE="${2}" FANCYTEXT
+  shift 2
+  local PRINTARGS=("${@}")
+  case ${MESSAGE_TYPE} in
+    info) FANCYTEXT="[${BGreen}+${NC}] ${BOLD}INFO${NC}:" ;;
+    warn) FANCYTEXT="[${BYellow}*${NC}] ${BOLD}WARNING${NC}:" ;;
+    error) FANCYTEXT="[${BRed}!${NC}] ${BOLD}ERROR${NC}:" ;;
+    sub) FANCYTEXT="\t[${BBlue}>${NC}]" ;;
+    *) FANCYTEXT="[${BOLD}?${NC}] ${BOLD}UNKNOWN${NC}:" ;;
+  esac
+  case ${MESSAGE_TYPE} in
+    info | sub) printf "${FANCYTEXT} ${MESSAGE}\n" "${PRINTARGS[@]}" ;;
+    *) printf "${FANCYTEXT} ${MESSAGE}\n" "${PRINTARGS[@]}" >&2 ;;
+  esac
 }
 
 #TODO/FIXME: running as ./build.sh rather than as an absolute path results in read errors when cd'd elsewhere
 function stacktrace() {
   local catch=$?
-  if ((catch!=0)) && ! ${ignore_stack}; then
+  if ((catch != 0)) && ! ${ignore_stack}; then
     local i stack_size=${#FUNCNAME[@]} func linen src trace stack_color color_idx \
       colors=(196 197 198 199 200 201 165 129 93 57 21 27 33 39 45 51 50 49 48 47 46 82 118 154 190 226 220 214 208 202)
     echo -e "[${BRed}!${NC}] ${BOLD}ERROR${NC}: Stacktrace (most recent call last)" >&2
     for ((i = stack_size - 1; i >= 1; i--)); do
-      color_idx=$(( (stack_size - 1 - i) % ${#colors[@]} ))
+      color_idx=$(((stack_size - 1 - i) % ${#colors[@]}))
       stack_color="\033[38;5;${colors[color_idx]}m"
       ((i != stack_size - 1)) && func="${FUNCNAME[i - 1]}"
       [[ -z ${func} ]] && func='MAIN'

@@ -27,132 +27,132 @@ trap cleanup EXIT INT
 case ${1} in
   build)
     shift 1
-	  source "${scriptdir}/build.sh"
+    source "${scriptdir}/build.sh"
 
-		if [[ ${1} == "-h" ]] || [[ ${1} == "--help" ]]; then
-		  help_build
-		  exit 0
-		fi
+    if [[ ${1} == "-h" ]] || [[ ${1} == "--help" ]]; then
+      help_build
+      exit 0
+    fi
 
-		platform="${1}"
-		envir="${2}"
-		builddir="${3}"
+    platform="${1}"
+    envir="${2}"
+    builddir="${3}"
 
-		# fail out if platform, envir, and builddir are not all provided
-		if ! [[ -n ${platform} && -n ${envir} && -n ${builddir} ]]; then
-		  help_build
-		  exit 1
-		fi
+    # fail out if platform, envir, and builddir are not all provided
+    if ! [[ -n ${platform} && -n ${envir} && -n ${builddir} ]]; then
+      help_build
+      exit 1
+    fi
 
-		# set full path
-		builddir="$(realpath ${builddir})"
+    # set full path
+    builddir="$(realpath ${builddir})"
 
-		# cleanup function to trap EXIT & INT
-		export cleaned=false
-		function cleanup() {
-		  cd "${REPO_ROOT}"
-		  if ! ${cleaned}; then
-		    fancy_message info "Restoring backups"
-		    # restore any patched files to their original state
-		    for i in "binary_grub-efi" "binary_rootfs"; do
-		      if [[ -f "${builddir}/${i}.bak" ]]; then
-		        cp "${builddir}/${i}.bak" "/usr/lib/live/build/${i}"
-		      fi
-		    done
-		    if [[ -f "${builddir}/functions.bak" ]]; then
-		      cp "${builddir}/functions.bak" /usr/share/debootstrap/functions
-		    fi
-		    export cleaned=true
-		  fi
-		}
+    # cleanup function to trap EXIT & INT
+    export cleaned=false
+    function cleanup() {
+      cd "${REPO_ROOT}"
+      if ! ${cleaned}; then
+        fancy_message info "Restoring backups"
+        # restore any patched files to their original state
+        for i in "binary_grub-efi" "binary_rootfs"; do
+          if [[ -f "${builddir}/${i}.bak" ]]; then
+            cp "${builddir}/${i}.bak" "/usr/lib/live/build/${i}"
+          fi
+        done
+        if [[ -f "${builddir}/functions.bak" ]]; then
+          cp "${builddir}/functions.bak" /usr/share/debootstrap/functions
+        fi
+        export cleaned=true
+      fi
+    }
 
-	  build_steps
-	  exit 0
-  ;;
+    build_steps
+    exit 0
+    ;;
   deploy)
     shift 1
     source "${scriptdir}/deploy.sh"
 
-		if [[ ${1} == "-h" ]] || [[ ${1} == "--help" ]]; then
-		  help_deploy
-		  exit 0
-		fi
+    if [[ ${1} == "-h" ]] || [[ ${1} == "--help" ]]; then
+      help_deploy
+      exit 0
+    fi
 
-		platform="${1}"
-		envir="${2}"
-		builddir="${3}"
+    platform="${1}"
+    envir="${2}"
+    builddir="${3}"
 
-		# fail out if platform, envir, and builddir are not all provided
-		if ! [[ -n ${platform} && -n ${envir} && -n ${builddir} ]]; then
-		  help_deploy
-		  exit 1
-		fi
+    # fail out if platform, envir, and builddir are not all provided
+    if ! [[ -n ${platform} && -n ${envir} && -n ${builddir} ]]; then
+      help_deploy
+      exit 1
+    fi
 
-		# set full path
-		builddir="$(realpath ${builddir})"
+    # set full path
+    builddir="$(realpath ${builddir})"
 
-		# cleanup function to trap EXIT & INT
-		export cleaned=false
-		function cleanup() {
-		  cd "${REPO_ROOT}"
-		  if ! ${cleaned}; then
-		    # put any cleanup steps here if/as needed
-		    export cleaned=true
-		  fi
-		}
+    # cleanup function to trap EXIT & INT
+    export cleaned=false
+    function cleanup() {
+      cd "${REPO_ROOT}"
+      if ! ${cleaned}; then
+        # put any cleanup steps here if/as needed
+        export cleaned=true
+      fi
+    }
 
-		deploy_steps
-		exit 0
-	;;
+    deploy_steps
+    exit 0
+    ;;
   pull)
-  	shift 1
-  	source "${scriptdir}/pull.sh"
+    shift 1
+    source "${scriptdir}/pull.sh"
 
-		if [[ ${1} == "-h" ]] || [[ ${1} == "--help" ]]; then
-		  help_pull
-		  exit 0
-		fi
+    if [[ ${1} == "-h" ]] || [[ ${1} == "--help" ]]; then
+      help_pull
+      exit 0
+    fi
 
-		repo="${1}" # rhino-linux/os
-		branch="${2}" # main
-		outdir="${3}" # $PWD
+    repo="${1}"   # rhino-linux/os
+    branch="${2}" # main
+    outdir="${3}" # $PWD
 
-		# fail out if repo, branch, and outdir are not all provided
-		if ! [[ -n ${repo} && -n ${branch} && -n ${outdir} ]]; then
-		  help_pull
-		  exit 1
-		fi
-		if ! command -v gh; then
-		  fancy_message error "GitHub CLI (gh) is required"
-		  exit 1
-		fi
-		if ! gh auth status; then
-		  fancy_message error "Not authenticated with gh, run 'gh auth login' first"
-		  exit 1
-		fi
+    # fail out if repo, branch, and outdir are not all provided
+    if ! [[ -n ${repo} && -n ${branch} && -n ${outdir} ]]; then
+      help_pull
+      exit 1
+    fi
+    if ! command -v gh; then
+      fancy_message error "GitHub CLI (gh) is required"
+      exit 1
+    fi
+    if ! gh auth status; then
+      fancy_message error "Not authenticated with gh, run 'gh auth login' first"
+      exit 1
+    fi
 
-		shift 3
-		# images to download
-		selected=("${@}")
-		if [[ -z ${selected[*]} ]]; then
-		  selected=("all")
-		fi
+    shift 3
+    # images to download
+    selected=("${@}")
+    if [[ -z ${selected[*]} ]]; then
+      selected=("all")
+    fi
 
-		# cleanup function to trap EXIT & INT
-		export cleaned=false
-		function cleanup() {
-		  cd "${REPO_ROOT}"
-		  if ! ${cleaned}; then
-		    # put any cleanup steps here if/as needed
-		    export cleaned=true
-		  fi
-		}
+    # cleanup function to trap EXIT & INT
+    export cleaned=false
+    function cleanup() {
+      cd "${REPO_ROOT}"
+      if ! ${cleaned}; then
+        # put any cleanup steps here if/as needed
+        export cleaned=true
+      fi
+    }
 
-  	pull_steps
-  	exit 0
-  ;;
-  *) 
-  	fancy_message error "Unknown function"
-  	exit 1
-	;;
+    pull_steps
+    exit 0
+    ;;
+  *)
+    fancy_message error "Unknown function"
+    exit 1
+    ;;
 esac

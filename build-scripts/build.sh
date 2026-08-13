@@ -28,22 +28,22 @@ function verify() {
 
   # normalize platforms
   case "${platform}" in
-    amd64|arm64)
+    amd64 | arm64)
       # already normalized
-    ;;
-    raspberrypi|raspi|rpi)
+      ;;
+    raspberrypi | raspi | rpi)
       platform="rpi"
-    ;;
-    pinephone|pp|ppog|pinephonepro|ppp)
+      ;;
+    pinephone | pp | ppog | pinephonepro | ppp)
       platform="pinephone"
-    ;;
-    pinetab|pt|ptog|pt1|pinetab2|pt2)
+      ;;
+    pinetab | pt | ptog | pt1 | pinetab2 | pt2)
       platform="pinetab"
-    ;;
+      ;;
     *)
       fancy_message error "Unknown platform"
       return 1
-    ;;
+      ;;
   esac
 
   # check validity of input
