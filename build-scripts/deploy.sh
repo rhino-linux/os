@@ -81,7 +81,7 @@ function verify() {
 function source_scripts() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   fancy_message info "Sourcing build scripts"
-  source "${REPO_ROOT}/build-scripts/overlayer.sh"
+  source "${scriptdir}/overlayer.sh"
 }
 
 function create_builddir() {

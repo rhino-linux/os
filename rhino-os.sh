@@ -4,11 +4,11 @@ set -e
 # declare verbose debug output
 declare -gx PS4=$'\E[0;10m\E[1m\033[1;31m\033[1;37m[\033[1;35m${BASH_SOURCE[0]##*/}:\033[1;34m${FUNCNAME[0]:-NOFUNC}():\033[1;33m${LINENO}\033[1;37m] - \033[1;33mDEBUG: \E[0;10m'
 
-REPO_ROOT="${PWD}"
-scriptdir="${REPO_ROOT}/build-scripts"
+export REPO_ROOT="${PWD}"
+export scriptdir="${REPO_ROOT}/build-scripts"
 
 #init sequences
-source "${REPO_ROOT}/build-scripts/stacktrace.sh"
+source "${scriptdir}/stacktrace.sh"
 set_colors
 
 # cleanup function to trap EXIT & INT

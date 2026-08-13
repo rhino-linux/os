@@ -79,9 +79,9 @@ function source_scripts() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   fancy_message info "Sourcing build scripts"
   # imports `overlayer` function
-  source "${REPO_ROOT}/build-scripts/overlayer.sh"
+  source "${scriptdir}/overlayer.sh"
   # imports `lb_build` and `lb_run` functions; `lb_build` calls `lb_run`
-  source "${REPO_ROOT}/build-scripts/live-build.sh"
+  source "${scriptdir}/live-build.sh"
 }
 
 function create_builddir() {
