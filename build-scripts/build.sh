@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 function help_build() {
-  echo -e "Usage: $0 PLATFORM ENVIRONMENT BUILDDIR
+  echo -e "Usage: $0 build PLATFORM ENVIRONMENT BUILDDIR
 
-Build a Rhino Linux ISO.
+Build a Rhino Linux image.
 
 PLATFORM:
     - amd64

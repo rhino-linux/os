@@ -11,9 +11,7 @@ Report bugs and propose features through the [Rhino Linux tracker](https://githu
 ## Repository Layout
 
 ```text
-build.sh                build entry point
-deploy.sh               runs debos for preinstalled images
-pull.sh                 downloads deploy workflow artifacts from Actions
+rhino-os.sh             build and image management entry point
 
 base/
   base/                 Files shared by every image
@@ -26,6 +24,9 @@ platform/
   rpi/                  Raspberry Pi files
 
 build-scripts/
+  build.sh              defines the build functions
+  deploy.sh             defines the Debos deployment functions
+  pull.sh               defines the artifact download functions
   overlayer.sh          assembles source layers
   live-build.sh         runs live-build
   stacktrace.sh         common functions for script debugging
@@ -64,10 +65,10 @@ See [the configuration documentation](docs/configuration.md) for the supported v
 
 ## Build Process
 
-The end-to-end build entry point is `build.sh`, run as root from the repository root:
+The end-to-end build command is run as root from the repository root:
 
 ```text
-build.sh <platform> <environment> <build-directory>
+sudo ./rhino-os.sh build <platform> <environment> <build-directory>
 ```
 
 It initializes the submodules, installs the build dependencies (including the vendored live-build package under `base/base/debs/`), sources the build scripts, assembles the overlays into the build directory, patches the host's live-build and debootstrap files, and starts the live-build stage.
@@ -76,27 +77,27 @@ Preinstalled images have a separate deploy entry point, also run as root from th
 repository root:
 
 ```text
-deploy.sh <platform> <environment> <build-directory>
+sudo ./rhino-os.sh deploy <platform> <environment> <build-directory>
 ```
 
-After `build.sh` creates a rootfs tarball, `deploy.sh` reconstructs the assembled
-build directory, runs the appropriate Debos recipes, and writes compressed device
-images under `<build-directory>/builds/`.
+After the build command creates a rootfs tarball, the deploy command reconstructs
+the assembled build directory, runs the appropriate Debos recipe, and writes the
+device image under `<build-directory>/builds/`.
 
 The images produced by the deploy workflows can be pulled back down for upload
-with `pull.sh` (requires GitHub CLI). Run it with no arguments to
-download every image from the latest successful run of each deploy workflow, or
-pass the images you need:
+with the `pull` command. It requires an authenticated GitHub CLI. Pass the
+repository, branch, output directory, and any images you need:
 
 ```text
-pull.sh [image...]
-pull.sh pinephone rpi-desktop
-pull.sh amd64 arm64-lomiri
+./rhino-os.sh pull rhino-linux/os main "$PWD"
+./rhino-os.sh pull rhino-linux/os main "$PWD" pinephone rpi-desktop
+./rhino-os.sh pull rhino-linux/os main "$PWD" amd64 arm64-lomiri
 ```
 
-Run `pull.sh --help` for the full list of image selectors and options.
+Run `./rhino-os.sh pull --help` for the full list of image selectors. See the
+[`rhino-os.sh` documentation](docs/rhino-os.md) for all commands.
 
-The build scripts are sourced libraries rather than standalone executables:
+The scripts under `build-scripts/` are sourced libraries rather than standalone executables:
 
 1. `build-scripts/overlayer.sh` defines the `overlayer` function, which assembles the required source layers.
 2. `build-scripts/live-build.sh` defines the `lb_build` and `lb_run` functions, which produce an ISO or root filesystem archive.
@@ -114,14 +115,8 @@ Preinstalled root filesystem archives are written under:
 <build-directory>/binary/
 ```
 
-### Migration Status
-
-Remaining work:
-
-- TODO: Update publishing workflows to read configuration from the consolidated layout.
-
-The generic ISO, PINE64, and Raspberry Pi workflows use the consolidated entry
-points. See [the workflow documentation](docs/workflows.md).
+The generic ISO, PINE64, and Raspberry Pi workflows use `rhino-os.sh`. See the
+[workflow documentation](docs/workflows.md).
 
 ## Supported Images
 

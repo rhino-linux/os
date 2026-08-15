@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function help_pull() {
-  echo -e "Usage: $0 REPO BRANCH OUTDIR [IMAGES]
+  echo -e "Usage: $0 pull REPO BRANCH OUTDIR [IMAGES]
 
 Download images produced by GitHub Actions workflows for publishing.
 
@@ -10,7 +10,7 @@ IMAGES:
     - all
     - amd64, amd64-lomiri
     - arm64, arm64-lomiri
-    - rpi-desktop, rpi-servers
+    - rpi-desktop, rpi-server
     - pinephone, pinephone-lomiri
     - pinephonepro, pinephonepro-lomiri
     - pinetab, pinetab-lomiri

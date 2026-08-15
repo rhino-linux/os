@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function help_deploy() {
-  echo -e "Usage: $0 PLATFORM ENVIRONMENT BUILDDIR
+  echo -e "Usage: $0 deploy PLATFORM ENVIRONMENT BUILDDIR
 
 Deploy a Rhino Linux IMG with debos.
 
@@ -98,7 +98,7 @@ function init_config() {
   # check for root filesystem tarball
   tarball="${builddir}/binary/${FNAME}.tar"
   if ! [[ -f ${tarball} ]]; then
-    fancy_message error "Root tarball not found, please run build.sh first and ensure output is placed in ${builddir}/binary"
+    fancy_message error "Root tarball not found, please run rhino-os.sh build first and ensure output is placed in ${builddir}/binary"
     return 1
   fi
 }

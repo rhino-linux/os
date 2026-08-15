@@ -45,7 +45,7 @@ server
 
 These inputs are supplied by the build entry point, which passes its arguments to the overlay and live-build stages. `build-scripts/live-build.sh` normalizes the platform and environment arguments and exports `terra_platform` and `terra_envir` so the assembled `terraform.conf` can read them.
 
-`build.sh` passes the platform and environment arguments through, and the live-build stage accepts additional platform aliases and normalizes them before exporting these variables.
+`rhino-os.sh build` passes the platform and environment arguments through, and the live-build stage accepts additional platform aliases and normalizes them before exporting these variables.
 
 CI/CD should select the platform and environment and pass them to the build entry point. It should not modify or generate separate copies of `terraform.conf`.
 
@@ -99,17 +99,17 @@ Package selection and image customization are currently implemented through live
 
 ### Build Entry Point
 
-`build.sh` is the supported entry point. It must be run as root from the repository root:
+`rhino-os.sh` is the supported entry point. The build command must be run as root from the repository root:
 
 ```text
-build.sh <platform> <environment> <build-directory>
+sudo ./rhino-os.sh build <platform> <environment> <build-directory>
 ```
 
 It initializes submodules, installs the build dependencies (including the vendored live-build package under `base/base/debs/`), sources both build scripts, assembles the overlays, patches the host's live-build and debootstrap files, and starts live-build.
 
 ### Overlay Assembly
 
-`build-scripts/overlayer.sh` defines the `overlayer` function. It is sourced by `build.sh`, not executed directly:
+`build-scripts/overlayer.sh` defines the `overlayer` function. It is sourced by the build command, not executed directly:
 
 ```text
 source build-scripts/overlayer.sh
@@ -120,7 +120,7 @@ It must be invoked from the repository root because its source paths are relativ
 
 ### live-build
 
-`build-scripts/live-build.sh` defines the `lb_build` and `lb_run` functions. It is sourced by `build.sh`, not executed directly:
+`build-scripts/live-build.sh` defines the `lb_build` and `lb_run` functions. It is sourced by the build command, not executed directly:
 
 ```text
 source build-scripts/live-build.sh
@@ -144,8 +144,8 @@ binary/
 ```
 
 A device-specific Debos recipe consumes that archive and creates an image. The
-`deploy.sh` entry point reconstructs the assembled build directory, selects the
-recipe, runs Debos, and compresses the resulting image. Common image finishing
+`rhino-os.sh deploy` command reconstructs the assembled build directory, selects
+the recipe, and runs Debos. Common image finishing
 steps are defined in:
 
 ```text
@@ -172,8 +172,6 @@ Debos recipes produce `.img` files and the common polishing recipe produces a co
 
 ## CI/CD Status
 
-Generic ISO, PINE64, and Raspberry Pi workflows use the consolidated `build.sh`
-and `deploy.sh` interfaces. Device workflows pass rootfs tarballs between ARM64
+Generic ISO, PINE64, and Raspberry Pi workflows use the `rhino-os.sh` interface.
+Device workflows pass rootfs tarballs between ARM64
 build jobs and amd64 deploy jobs as workflow artifacts.
-
-- TODO: Update publishing workflows to obtain version information from the shared configuration without requiring unrelated build selectors.

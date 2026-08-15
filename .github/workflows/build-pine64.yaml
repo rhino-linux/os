@@ -26,7 +26,7 @@ jobs:
         run: |
           sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list
           sudo rm -rf /var/lib/apt/lists/*
-          sudo ./build.sh \
+          sudo ./rhino-os.sh build \
             "${{ matrix.platform }}" \
             "${{ matrix.environment }}" \
             "build_${{ matrix.platform }}"
@@ -72,7 +72,7 @@ jobs:
 
       - name: Deploy image
         run: |
-          sudo ./deploy.sh \
+          sudo ./rhino-os.sh deploy \
             "${{ matrix.target.platform }}" \
             "${{ matrix.environment }}" \
             "build_${{ matrix.target.rootfs }}"
