@@ -26,7 +26,12 @@ function verify() {
   rpi_images=(rpi-{desktop,server})
   export iso_images pine64_images rpi_images
 
-  valid_images=("${iso_images[@]}" "${pine64_images[@]}" "${rpi_images[@]}" "all")
+  valid_images=("${iso_images[@]}" "${pine64_images[@]}" "${rpi_images[@]}")
+  
+  if contains selected "all"; then
+    selected=("${valid_images[@]}")
+    export selected
+  fi
 
   for i in "${selected[@]}"; do
     if ! contains valid_images "${i}"; then
