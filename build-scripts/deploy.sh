@@ -98,7 +98,7 @@ function init_config() {
   # check for root filesystem tarball
   tarball="${builddir}/binary/${FNAME}.tar"
   if ! [[ -f ${tarball} ]]; then
-    fancy_message error "Root tarball not found, please run rhino-os.sh build first and ensure output is placed in ${builddir}/binary"
+    fancy_message error "Root tarball ${tarball} not found, please run 'rhino-os.sh build' first"
     return 1
   fi
 }
