@@ -50,7 +50,7 @@ iso_conf=(
   --initramfs live-boot
   --linux-packages "linux-image"
   --linux-flavours "generic"
-  --bootappend-live "boot=casper quiet splash"
+  --bootappend-live "boot=casper hostname=rhino-live username=rhino-live quiet splash"
   --apt-recommends false
   --binary-image iso-hybrid
   --chroot-squashfs-compression-type "xz -Xdict-size 1M -b 1M"
