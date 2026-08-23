@@ -3,5 +3,4 @@ tmp/
 build_*/
 .build/
 chroot/
-config/
 .DS_Store
