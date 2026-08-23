@@ -97,6 +97,13 @@ function init_config() {
 
   # check for root filesystem tarball
   tarball="${builddir}/binary/${FNAME}.tar"
+
+  if [[ ${platform} == "pinephonepro" ]]; then
+    tarball="${tarball/pinephonepro/pinephone}"
+  elif [[ ${platform} == "pinetab2" ]]; then
+    tarball="${tarball/pinetab2/pinetab}"
+  fi
+
   if ! [[ -f ${tarball} ]]; then
     fancy_message error "Root tarball ${tarball} not found, please run 'rhino-os.sh build' first"
     return 1
