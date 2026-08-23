@@ -11,8 +11,6 @@ command-not-found
 curl
 doc-base
 expect
-expect
-flash-kernel
 fonts-firacode
 fonts-noto-cjk
 fonts-noto-cjk-extra
@@ -52,6 +50,7 @@ net-tools
 network-manager-gnome
 ntfs-3g
 parted
+piboot-try
 pipewire
 pipewire-pulse
 plymouth
