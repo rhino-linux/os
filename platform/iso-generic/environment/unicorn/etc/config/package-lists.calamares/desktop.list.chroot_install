@@ -10,6 +10,7 @@ btrfs-progs
 ca-certificates
 cifs-utils
 command-not-found
+coreutils-from-gnu
 cryptsetup
 cryptsetup-initramfs
 curl

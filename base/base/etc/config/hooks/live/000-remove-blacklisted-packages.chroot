@@ -21,10 +21,7 @@ apt-get autoremove --purge -f -q -y \
     snapd \
     update-manager \
     update-notifier \
-    gparted \
-    sudo-rs
-
-apt-get install coreutils-from-gnu coreutils-from-uutils- --allow-remove-essential -q -y
+    gparted
 
 rm -rf ../ubuntu-seeds ../platform
 

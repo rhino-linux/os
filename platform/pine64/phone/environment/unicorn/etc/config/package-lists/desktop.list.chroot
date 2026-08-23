@@ -5,6 +5,7 @@ bc
 bridge-utils
 ca-certificates
 command-not-found
+coreutils-from-gnu
 curl
 doc-base
 expect

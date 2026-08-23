@@ -5,9 +5,9 @@ bc
 bridge-utils
 btrfs-progs
 ca-certificates
-ca-certificates
 cifs-utils
 command-not-found
+coreutils-from-gnu
 curl
 doc-base
 expect
