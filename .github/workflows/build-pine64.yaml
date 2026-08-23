@@ -41,7 +41,7 @@ jobs:
           compression-level: 0
 
   deploy:
-    name: Deploy ${{ matrix.target.rootfs }} ${{ matrix.environment }} image
+    name: Deploy ${{ matrix.target.platform }} ${{ matrix.environment }} image
     needs: build
     if: ${{ !cancelled() }}
     strategy:
@@ -76,6 +76,7 @@ jobs:
             "${{ matrix.target.platform }}" \
             "${{ matrix.environment }}" \
             "build_${{ matrix.target.rootfs }}"
+          sudo chmod 777 -R "build_${{ matrix.target.rootfs }}"
 
       - name: Compress image
         run: |

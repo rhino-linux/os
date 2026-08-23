@@ -53,6 +53,7 @@ jobs:
       - name: Deploy image
         run: |
           sudo ./rhino-os.sh deploy rpi "${{ matrix.environment }}" build_rpi
+          sudo chmod 777 -R "build_rpi"
 
       - name: Compress image
         run: |
