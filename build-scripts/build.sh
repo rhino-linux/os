@@ -117,6 +117,12 @@ function patch_tools() {
     cp "${builddir}/functions" /usr/share/debootstrap/functions
     cd "${REPO_ROOT}"
   fi
+
+  sed -i \
+    -e 's|base=$(without "$base $ADDITIONAL" "$EXCLUDE")|base=$(without "$base" "$EXCLUDE")|g' \
+    -e 's|required=$(without "$required" "$EXCLUDE")|required=$(without "$required $ADDITIONAL" "$EXCLUDE")|g' \
+    -e 's|base=$(without "$base" "$required")|base=$(without "$base" "$required $EXCLUDE")|g' \
+    /usr/sbin/debootstrap
 }
 
 function start_livebuild() {
