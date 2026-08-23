@@ -43,7 +43,7 @@ rpi_conf=(
 )
 
 pine_conf=(
-  --debootstrap-options "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg --include=coreutils-from-gnu,mobile-tweaks-common"
+  --debootstrap-options "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg --include=coreutils-from-gnu,mobile-tweaks-common --exclude=coreutils-from-uutils"
 )
 
 iso_conf=(
@@ -75,7 +75,7 @@ rpi_pine_conf=(
 rpi_iso_conf=(
   --iso-application "$NAME"
   --iso-volume "$NAME"
-  --debootstrap-options "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg --include=coreutils-from-gnu --exclude=pinephone-tweaks,mobile-tweaks-common,librem5-tweaks,pinetab-tweaks"
+  --debootstrap-options "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg --include=coreutils-from-gnu --exclude=coreutils-from-uutils,pinephone-tweaks,mobile-tweaks-common,librem5-tweaks,pinetab-tweaks"
   --bootloaders "$BOOTLOADERS"
 )
 
