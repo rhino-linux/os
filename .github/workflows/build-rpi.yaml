@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   build:
-    name: Build ${{ matrix.environment }} rootfs
+    name: Build rpi rootfs
     strategy:
       fail-fast: false
     runs-on: ubuntu-24.04-arm
@@ -31,7 +31,7 @@ jobs:
           compression-level: 0
 
   deploy:
-    name: Deploy ${{ matrix.environment }} image
+    name: Deploy rpi ${{ matrix.environment }} image
     needs: build
     if: ${{ !cancelled() }}
     strategy:
