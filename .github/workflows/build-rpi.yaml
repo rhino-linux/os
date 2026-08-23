@@ -19,7 +19,7 @@ jobs:
         run: |
           sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list
           sudo rm -rf /var/lib/apt/lists/*
-          sudo ./build.sh rpi unicorn build_rpi
+          sudo ./rhino-os.sh build rpi unicorn build_rpi
 
       - name: Upload rootfs
         uses: actions/upload-artifact@v7
@@ -52,7 +52,7 @@ jobs:
 
       - name: Deploy image
         run: |
-          sudo ./deploy.sh rpi "${{ matrix.environment }}" build_rpi
+          sudo ./rhino-os.sh deploy rpi "${{ matrix.environment }}" build_rpi
 
       - name: Compress image
         run: |

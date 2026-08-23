@@ -40,16 +40,16 @@ function lb_finish() {
       OUTPUT_DIR="${BASE_DIR}/builds"
       INPUT_FILE="${BASE_DIR}/tmp/${BUILD_ARCH}/${FNAME}-${BUILD_ARCH}.hybrid.iso"
       OUTPUT_FILE="${FNAME}.iso"
-    ;;
+      ;;
     img)
       OUTPUT_DIR="${BASE_DIR}/binary"
       INPUT_FILE="${BASE_DIR}/tmp/${BUILD_ARCH}/${FNAME}-${BUILD_ARCH}.tar.tar"
       OUTPUT_FILE="${FNAME}.tar"
-    ;;
+      ;;
     *)
       fancy_message error "Invalid build type"
       return 1
-    ;;
+      ;;
   esac
 
   mkdir -p "${OUTPUT_DIR}"
@@ -76,22 +76,22 @@ function lb_build() {
   # get config
   terra_envir="${lb_envir}"
   case "${lb_platform}" in
-    amd64|arm64)
+    amd64 | arm64)
       terra_platform="${lb_platform}"
-    ;;
-    raspberrypi|raspi|rpi)
+      ;;
+    raspberrypi | raspi | rpi)
       terra_platform="rpi"
-    ;;
-    pinephone|pp|ppog|pinephonepro|ppp)
+      ;;
+    pinephone | pp | ppog | pinephonepro | ppp)
       terra_platform="pinephone"
-    ;;
-    pinetab|pt|ptog|pt1|pinetab2|pt2)
+      ;;
+    pinetab | pt | ptog | pt1 | pinetab2 | pt2)
       terra_platform="pinetab"
-    ;;
+      ;;
     *)
       fancy_message error "Unknown platform"
       return 1
-    ;;
+      ;;
   esac
   export terra_platform terra_envir
 

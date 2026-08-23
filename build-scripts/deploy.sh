@@ -1,13 +1,9 @@
 #!/usr/bin/env bash
 
-set -e
-# declare verbose debug output
-declare -gx PS4=$'\E[0;10m\E[1m\033[1;31m\033[1;37m[\033[1;35m${BASH_SOURCE[0]##*/}:\033[1;34m${FUNCNAME[0]:-NOFUNC}():\033[1;33m${LINENO}\033[1;37m] - \033[1;33mDEBUG: \E[0;10m'
+function help_deploy() {
+  echo -e "Usage: $0 deploy PLATFORM ENVIRONMENT BUILDDIR
 
-function help_message() {
-  echo -e "Usage: $0 PLATFORM ENVIRONMENT BUILDDIR
-
-Build a Rhino Linux ISO.
+Deploy a Rhino Linux IMG with debos.
 
 PLATFORM:
     - raspberrypi|raspi|rpi
@@ -20,42 +16,6 @@ ENVIRONMENT:
     - server (rpi only)"
 }
 
-if [[ ${1} == "-h" ]] || [[ ${1} == "--help" ]]; then
-  help_message
-  exit 0
-fi
-
-platform="${1}"
-envir="${2}"
-builddir="${3}"
-REPO_ROOT="${PWD}"
-
-# fail out if platform, envir, and builddir are not all provided
-if ! [[ -n ${platform} && -n ${envir} && -n ${builddir} ]]; then
-  help_message
-  exit 1
-fi
-
-# set full path
-builddir="$(realpath ${builddir})"
-
-#init sequences
-source "${REPO_ROOT}/build-scripts/stacktrace.sh"
-set_colors
-
-# cleanup function to trap EXIT & INT
-export cleaned=false
-function cleanup() {
-  cd "${REPO_ROOT}"
-  if ! ${cleaned}; then
-    # put any cleanup steps here if/as needed
-    export cleaned=true
-  fi
-}
-trap cleanup EXIT INT
-
-{ export ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
-
 function verify() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   # check for root permissions
@@ -67,25 +27,25 @@ function verify() {
   # normalize platforms
   terra_envir="${envir}"
   case "${platform}" in
-    raspberrypi|raspi|rpi)
+    raspberrypi | raspi | rpi)
       platform="rpi"
-    ;;
-    pinephone|pp|ppog)
+      ;;
+    pinephone | pp | ppog)
       platform="pinephone"
-    ;;
-    pinephonepro|ppp)
+      ;;
+    pinephonepro | ppp)
       platform="pinephonepro"
-    ;;
-    pinetab|pt|ptog|pt1)
+      ;;
+    pinetab | pt | ptog | pt1)
       platform="pinetab"
-    ;;
-    pinetab2|pt2)
+      ;;
+    pinetab2 | pt2)
       platform="pinetab2"
-    ;;
+      ;;
     *)
       fancy_message error "Unknown platform"
       return 1
-    ;;
+      ;;
   esac
   terra_platform="${platform}"
   export terra_platform terra_envir
@@ -103,25 +63,25 @@ function verify() {
 
   # select environment-specific recipe and image names
   case "${platform}:${envir}" in
-    pinephone:unicorn|pinephonepro:unicorn|pinetab:unicorn|pinetab2:unicorn)
+    pinephone:unicorn | pinephonepro:unicorn | pinetab:unicorn | pinetab2:unicorn)
       target="${platform}"
-    ;;
-    pinephone:lomiri|pinephonepro:lomiri|pinetab:lomiri|pinetab2:lomiri)
+      ;;
+    pinephone:lomiri | pinephonepro:lomiri | pinetab:lomiri | pinetab2:lomiri)
       target="${platform}-lomiri"
-    ;;
+      ;;
     rpi:unicorn)
       target="rpi-desktop"
-    ;;
+      ;;
     rpi:server)
       target="rpi-server"
-    ;;
+      ;;
   esac
 }
 
 function source_scripts() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   fancy_message info "Sourcing build scripts"
-  source "${REPO_ROOT}/build-scripts/overlayer.sh"
+  source "${scriptdir}/overlayer.sh"
 }
 
 function create_builddir() {
@@ -138,7 +98,7 @@ function init_config() {
   # check for root filesystem tarball
   tarball="${builddir}/binary/${FNAME}.tar"
   if ! [[ -f ${tarball} ]]; then
-    fancy_message error "Root tarball not found, please run build.sh first and ensure output is placed in ${builddir}/binary"
+    fancy_message error "Root tarball ${tarball} not found, please run 'rhino-os.sh build' first"
     return 1
   fi
 }
@@ -148,13 +108,13 @@ function start_deploy() {
   case "${target}" in
     rpi-desktop)
       recipe="raspberrypi-desktop.yaml"
-    ;;
+      ;;
     rpi-server)
       recipe="raspberrypi-server.yaml"
-    ;;
+      ;;
     *)
       recipe="${target}.yaml"
-    ;;
+      ;;
   esac
   image="${FNAME}.img"
 
@@ -181,6 +141,3 @@ function deploy_steps() {
   init_config || return 1
   start_deploy || return 1
 }
-
-deploy_steps
-exit 0

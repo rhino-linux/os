@@ -150,8 +150,8 @@ The generic GRUB theme is a Git submodule at:
 platform/iso-generic/base/etc/config/includes.binary/grub
 ```
 
-Initialize submodules before building an ISO; `build.sh` does this automatically. These are not used by the preinstalled images.
+Initialize submodules before building an ISO; `rhino-os.sh build` does this automatically. These are not used by the preinstalled images.
 
-`build.sh` also patches the build host before running live-build. It copies the assembled `binary_grub-efi` and, for PINE64 targets, `binary_rootfs` over the live-build scripts in `/usr/lib/live/build/`, symlinks the `gutsy` debootstrap script as `devel`, and applies `0002-remove-WRONGSUITE-error.patch` to debootstrap's `functions`. The replaced files are backed up inside the build directory and restored when the build exits.
+The build command also patches the build host before running live-build. It copies the assembled `binary_grub-efi` and, for PINE64 targets, `binary_rootfs` over the live-build scripts in `/usr/lib/live/build/`, symlinks the `gutsy` debootstrap script as `devel`, and applies `0002-remove-WRONGSUITE-error.patch` to debootstrap's `functions`. The replaced files are backed up inside the build directory and restored when the build exits.
 
 `base/base/rebuild-list` is historical metadata and is not required by the current build scripts.
