@@ -41,7 +41,6 @@ function fancy_message() {
   esac
 }
 
-#TODO/FIXME: running as ./rhino-os.sh rather than as an absolute path results in read errors when cd'd elsewhere
 function stacktrace() {
   local catch=$?
   if ((catch != 0)) && ! ${ignore_stack}; then
@@ -56,7 +55,11 @@ function stacktrace() {
       [[ ${func} == "stacktrace" ]] && { unset func; trace="${RED}TRACEBACK${NC}"; }
       linen="${BASH_LINENO[i - 1]}"
       src="${BASH_SOURCE[i]}"
-      [[ -z ${src} ]] && src=non_file_source
+      if [[ -z ${src} ]]; then
+        src=non_file_source
+      elif [[ ${src} == "./rhino-os.sh" ]]; then
+        src="${REPO_ROOT}/rhino-os.sh"
+      fi
       echo -e " ${stack_color}${func:+├}${trace:+╰}─➤${GREEN}${func}${NC}${trace}${NC}${func:+()}${trace:+:} ${src%/*}/${PURPLE}${src##*/}${NC}:${YELLOW}${linen}${NC}" >&2
       # shellcheck disable=SC2027
       echo -e " ${stack_color}${func:+│}${trace:+ }${NC}  ${CYAN}╰───➤${NC} \033[38;5;242m"$(tail -n +"${linen}" "${src}" | head -n1)"${NC}" >&2
