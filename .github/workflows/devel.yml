@@ -13,6 +13,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh workflow run build-iso.yml --ref "$GITHUB_REF_NAME"
-          gh workflow run build-pine64.yml --ref "$GITHUB_REF_NAME"
-          gh workflow run build-rpi.yml --ref "$GITHUB_REF_NAME"
+          gh workflow run build-iso.yaml --ref "$GITHUB_REF_NAME"
+          gh workflow run build-pine64.yaml --ref "$GITHUB_REF_NAME"
+          gh workflow run build-rpi.yaml --ref "$GITHUB_REF_NAME"
