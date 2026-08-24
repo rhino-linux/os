@@ -18,7 +18,9 @@ export GITHUB_ACTIONS=true
 
 # disallow uutils from pacstall install
 sudo mkdir -p /etc/apt/preferences.d
-echo -e "Package: coreutils-from-uutils\nPin: version *\nPin-Priority: -1" | sudo tee /etc/apt/preferences.d/coreuutils-pin
+echo "Package: coreutils-from-uutils
+Pin: version *
+Pin-Priority: -1" | sudo tee /etc/apt/preferences.d/coreuutils-pin
 
 # Install pacstall
 echo N | sudo bash -c "$(curl -fsSL https://git.io/JsADh || wget -q https://git.io/JsADh -O -)"
