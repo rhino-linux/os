@@ -115,15 +115,17 @@ function start_deploy() {
   case "${target}" in
     rpi-desktop)
       recipe="raspberrypi-desktop.yaml"
+      image="${FNAME}-desktop.img"
       ;;
     rpi-server)
       recipe="raspberrypi-server.yaml"
+      image="${FNAME}-server.img"
       ;;
     *)
       recipe="${target}.yaml"
+      image="${FNAME}.img"
       ;;
   esac
-  image="${FNAME}.img"
 
   cd "${builddir}"
 
