@@ -33,3 +33,14 @@ touch /etc/skel/.local/share/applications/nm-connection-editor.desktop
 touch /etc/skel/.local/share/applications/gnome-language-selector.desktop
 touch /etc/skel/.local/share/applications/gnome-printers-panel.desktop
 touch /etc/skel/.local/share/applications/calamares.desktop
+
+# Fake coreutils-from-uutils
+sudo wget https://github.com/oklopfer/debs/raw/refs/heads/master/coreutils/fake-coreutils-from-uutils_1.0_all.deb
+sudo dpkg -i fake-coreutils-from-uutils_1.0_all.deb
+sudo rm fake-coreutils-from-uutils_1.0_all.deb
+
+# Disallow coreutils-from-uutils from apt
+sudo mkdir -p /etc/apt/preferences.d
+echo "Package: coreutils-from-uutils
+Pin: version *
+Pin-Priority: -1" | sudo tee /etc/apt/preferences.d/coreuutils-pin

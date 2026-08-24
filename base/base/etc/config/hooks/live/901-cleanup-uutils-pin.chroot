@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# remove after everything else has been installed and such
+sudo rm -rf /etc/apt/preferences.d/coreuutils-pin

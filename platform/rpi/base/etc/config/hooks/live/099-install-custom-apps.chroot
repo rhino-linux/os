@@ -114,6 +114,3 @@ autologin-user-timeout=0' | sudo tee -a /etc/lightdm/lightdm.conf
 
 sudo apt-get clean
 sudo update-initramfs -u
-
-# remove after everything else has been installed
-sudo rm -rf /etc/apt/preferences.d/coreuutils-pin
