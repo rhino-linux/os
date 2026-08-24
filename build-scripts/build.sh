@@ -117,6 +117,15 @@ function patch_tools() {
     cp "${builddir}/functions" /usr/share/debootstrap/functions
     cd "${REPO_ROOT}"
   fi
+
+  if grep -q 'base=$(without "$base" "$required")' /usr/sbin/debootstrap; then
+    cp /usr/sbin/debootstrap "${builddir}/debootstrap.bak"
+    cp "${builddir}/debootstrap.bak" "${builddir}/debootstrap"
+    cd "${builddir}"
+    patch -i "0001-force-debootstrap-exclude.patch" || return 1
+    cp "${builddir}/debootstrap" /usr/sbin/debootstrap
+    cd "${REPO_ROOT}"
+  fi
 }
 
 function start_livebuild() {

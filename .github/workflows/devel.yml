@@ -1,0 +1,18 @@
+name: Trigger all builds
+
+on:
+  workflow_dispatch:
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trigger workflows
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run build-iso.yaml --ref "$GITHUB_REF_NAME"
+          gh workflow run build-pine64.yaml --ref "$GITHUB_REF_NAME"
+          gh workflow run build-rpi.yaml --ref "$GITHUB_REF_NAME"

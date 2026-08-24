@@ -1,0 +1,27 @@
+diff --git a/debootstrap b/debootstrap
+index 76f493a..386d572 100755
+--- a/debootstrap
++++ b/debootstrap
+@@ -745,8 +745,8 @@ if am_doing_phase finddebs; then
+ 
+ 	work_out_debs
+ 
+-	base=$(without "$base $ADDITIONAL" "$EXCLUDE")
+-	required=$(without "$required" "$EXCLUDE")
++	base=$(without "$base" "$EXCLUDE")
++	required=$(without "$required $ADDITIONAL" "$EXCLUDE")
+ 
+ 	if [ "$RESOLVE_DEPS" = true ]; then
+ 		requiredX=$(echo "$required" | tr ' ' '\n' | sort | uniq)
+@@ -754,9 +754,10 @@ if am_doing_phase finddebs; then
+ 
+ 		info RESOLVEREQ "Resolving dependencies of required packages..."
+ 		required=$(resolve_deps "$requiredX")
++		required=$(without "$required" "$EXCLUDE")
+ 		info RESOLVEBASE "Resolving dependencies of base packages..."
+ 		base=$(resolve_deps "$baseX")
+-		base=$(without "$base" "$required")
++		base=$(without "$base" "$required $EXCLUDE")
+ 
+ 		if [ "${LOG_EXTRA_DEPS-}" = true ]; then
+ 			baseN=$(without "$baseX" "$requiredX")
