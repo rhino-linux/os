@@ -61,7 +61,7 @@ function find_run() {
 
 function download() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
-  local download_ext workflow_ext download_key workflow run
+  local download_ext workflow_ext download_key workflow run run_catch
   mkdir -p "${outdir}"
   for i in "${selected[@]}"; do
     if contains iso_images "${i}"; then
@@ -77,7 +77,13 @@ function download() {
     fi
     download_key="Rhino-Linux-*-${i}.${download_ext}"
     workflow="build-${workflow_ext}.yaml"
-    run="$(find_run "${workflow}" || return 1)"
+
+    run="$(find_run "${workflow}")"
+    run_catch=$?
+    if ((run_catch != 0)); then
+      return 1
+    fi
+
     fancy_message info "Downloading ${download_key} from ${workflow}"
     gh run download -r "${repo}" -p "${download_key}" -d "${outdir}" "${run}" || return 1
   done
