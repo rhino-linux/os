@@ -62,6 +62,9 @@ case ${1} in
         if [[ -f "${builddir}/functions.bak" ]]; then
           cp "${builddir}/functions.bak" /usr/share/debootstrap/functions
         fi
+        if [[ -f "${builddir}/debootstrap.bak" ]]; then
+          cp "${builddir}/debootstrap.bak" /usr/sbin/debootstrap
+        fi        
         export cleaned=true
       fi
     }

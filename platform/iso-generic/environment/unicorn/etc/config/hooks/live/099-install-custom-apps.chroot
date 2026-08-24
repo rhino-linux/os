@@ -233,3 +233,6 @@ sudo ln -sf /usr/share/backgrounds/xfce/rolling-rhino-default.png /usr/share/xfc
 sudo apt-get clean
 sudo apt-get remove linux*7.0.0* -yq
 sudo update-initramfs -c -k all
+
+# remove after everything else has been installed
+sudo rm -rf /etc/apt/preferences.d/coreuutils-pin

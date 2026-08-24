@@ -118,12 +118,14 @@ function patch_tools() {
     cd "${REPO_ROOT}"
   fi
 
-  sed -i \
-    -e 's|base=$(without "$base $ADDITIONAL" "$EXCLUDE")|base=$(without "$base" "$EXCLUDE")|g' \
-    -e 's|required=$(without "$required" "$EXCLUDE")|required=$(without "$required $ADDITIONAL" "$EXCLUDE")|g' \
-    -e 's|required=$(resolve_deps "$requiredX")|required=$(resolve_deps "$requiredX"); required=$(without "$required" "$EXCLUDE")|g' \
-    -e 's|base=$(without "$base" "$required")|base=$(without "$base" "$required $EXCLUDE")|g' \
-    /usr/sbin/debootstrap
+  if grep -q 'base=$(without "$base" "$required")' /usr/sbin/debootstrap; then
+    cp /usr/sbin/debootstrap "${builddir}/debootstrap.bak"
+    cp "${builddir}/debootstrap.bak" "${builddir}/debootstrap"
+    cd "${builddir}"
+    patch -i "0001-force-debootstrap-exclude.patch" || return 1
+    cp "${builddir}/debootstrap" /usr/sbin/debootstrap
+    cd "${REPO_ROOT}"
+  fi
 }
 
 function start_livebuild() {

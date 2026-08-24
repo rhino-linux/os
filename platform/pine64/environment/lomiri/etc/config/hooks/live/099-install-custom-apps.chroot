@@ -60,3 +60,6 @@ echo "Pin: release o=Ubuntu" >> /etc/apt/preferences.d/rhino.pref
 echo "Pin-Priority: 1" >> /etc/apt/preferences.d/rhino.pref
 sudo apt-get clean
 sudo update-initramfs -u
+
+# remove after everything else has been installed
+sudo rm -rf /etc/apt/preferences.d/coreuutils-pin
