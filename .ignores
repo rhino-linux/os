@@ -1,0 +1,6 @@
+builds/
+tmp/
+build_*/
+.build/
+chroot/
+.DS_Store
