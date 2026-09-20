@@ -85,7 +85,7 @@ function download() {
     fi
 
     fancy_message info "Downloading ${download_key} from ${workflow}"
-    gh run download -r "${repo}" -p "${download_key}" -d "${outdir}" "${run}" || return 1
+    gh run download -R "${repo}" -p "${download_key}" -d "${outdir}" "${run}" || return 1
   done
 }
 
