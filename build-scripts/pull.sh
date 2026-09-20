@@ -49,7 +49,7 @@ function find_run() {
   local f_workflow="${1}" f_run
   f_run="$(
     gh run list \
-      -r "${repo}" -b "${branch}" -w "${f_workflow}" \
+      -R "${repo}" -b "${branch}" -w "${f_workflow}" \
       -s success --json databaseId -q '.[].databaseId' -L 1
   )"
   if [[ -z ${f_run} || ${f_run} == "null" ]]; then
