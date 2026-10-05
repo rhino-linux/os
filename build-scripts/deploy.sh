@@ -6,11 +6,13 @@ function help_deploy() {
 Deploy a Rhino Linux IMG with debos.
 
 PLATFORM:
+  Target platform to create pre-built image for:
     - raspberrypi|raspi|rpi
     - pinephone|pp|ppog|pinephonepro|ppp
     - pinetab|pt|ptog|pt1|pinetab2|pt2
 
 ENVIRONMENT:
+  Target desktop environment being used for pre-built image:
     - unicorn
     - lomiri (excludes rpi)
     - server (rpi only)"
@@ -127,7 +129,7 @@ function start_deploy() {
       ;;
   esac
 
-  cd "${builddir}"
+  cd "${builddir}" || return 1
 
   # begin deploy
   fancy_message info "Building ${image} from ${recipe}"
@@ -139,7 +141,7 @@ function start_deploy() {
   mv "${image}" "${output_dir}"
   mv "${image}.bmap" "${output_dir}"
 
-  cd "${REPO_ROOT}"
+  cd "${REPO_ROOT}" || return 1
 }
 
 function deploy_steps() {

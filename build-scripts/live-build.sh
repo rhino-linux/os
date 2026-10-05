@@ -59,10 +59,10 @@ function lb_finish() {
   # includes the filename and not the path to
   # our file.
   fancy_message info "Generating hashes"
-  cd "${OUTPUT_DIR}"
+  cd "${OUTPUT_DIR}" || return 1
   sha512sum "${OUTPUT_FILE}" > "${FNAME}.sha512"
   sha256sum "${OUTPUT_FILE}" > "${FNAME}.sha256"
-  cd "${BASE_DIR}"
+  cd "${BASE_DIR}" || return 1
 }
 
 function lb_build() {
