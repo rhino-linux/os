@@ -10,15 +10,11 @@ jobs:
         with:
           path: os
 
-      - name: Change APT repository URLs because of the Ubuntu Archive slowdowns
+      - name: Update APT cache and install rclone
         run: |
           sudo sed -i 's/azure\.archive\.ubuntu\.com/mirrors.mit.edu/g' /etc/apt/sources.list
-
-      - name: Update APT cache
-        run: sudo apt-get update
-
-      - name: Install rclone
-        run: sudo apt-get install rclone -y
+          sudo apt-get update
+          sudo apt-get install rclone -y
 
       - name: Download release assets from latest CI run
         run: ./rhino-os.sh "${GITHUB_REPOSITORY}" "${GITHUB_REF_NAME}" builds all
