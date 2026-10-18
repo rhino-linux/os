@@ -1,0 +1,30 @@
+name: Publish Rhino Linux Images
+on: workflow_dispatch
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: os
+
+      - name: Change APT repository URLs because of the Ubuntu Archive slowdowns
+        run: |
+          sudo sed -i 's/azure\.archive\.ubuntu\.com/mirrors.mit.edu/g' /etc/apt/sources.list
+
+      - name: Update APT cache
+        run: sudo apt-get update
+
+      - name: Install rclone
+        run: sudo apt-get install rclone -y
+
+      - name: Download release assets from latest CI run
+        run: ./rhino-os.sh "${GITHUB_REPOSITORY}" "${GITHUB_REF_NAME}" builds all
+
+      - name: Upload assets to SourceForge
+        run: |
+          SOURCEFORGE_USER=${{ secrets.SOURCEFORGE_USER }} \
+          SOURCEFORGE_PASS=${{ secrets.SOURCEFORGE_PASS }} \
+          ./rhino-os.sh publish sourceforge ${{ secrets.SOURCEFORGE_LOCATION }} builds all
