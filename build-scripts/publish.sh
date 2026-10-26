@@ -63,7 +63,7 @@ function verify() {
   done
   shopt -u nullglob
 
-  if [[ -z "${artifacts[@]}" ]]; then
+  if [[ -z "${artifacts[*]}" ]]; then
     fancy_message error "No images downloaded"
     return 1
   fi
