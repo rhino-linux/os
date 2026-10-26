@@ -17,7 +17,9 @@ jobs:
           sudo apt-get install rclone -y
 
       - name: Download release assets from latest CI run
-        run: ./rhino-os.sh "${GITHUB_REPOSITORY}" "${GITHUB_REF_NAME}" builds all
+        run: |
+          mkdir -p builds/
+          ./rhino-os.sh "${GITHUB_REPOSITORY}" "${GITHUB_REF_NAME}" builds all
 
       - name: Upload assets to SourceForge
         run: |
