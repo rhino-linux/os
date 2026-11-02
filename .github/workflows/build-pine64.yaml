@@ -80,7 +80,7 @@ jobs:
 
       - name: Compress image
         run: |
-          xz -T0 -v "build_${{ matrix.target.rootfs }}/builds/Rhino"*.img
+          sudo xz -T0 -v "build_${{ matrix.target.rootfs }}/builds/Rhino"*.img
           echo "IMGNAME=$(cd "build_${{ matrix.target.rootfs }}/builds"; ls *.img.xz)" >> $GITHUB_ENV
 
       - name: Upload image
