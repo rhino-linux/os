@@ -57,7 +57,7 @@ jobs:
 
       - name: Compress image
         run: |
-          xz -T0 -v "build_rpi/builds/"*.img
+          sudo xz -T0 -v "build_rpi/builds/"*.img
           echo "IMGNAME=$(cd "build_rpi/builds"; ls *.img.xz)" >> $GITHUB_ENV
 
       - name: Upload image
