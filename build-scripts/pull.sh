@@ -6,7 +6,7 @@ function help_pull() {
 Download images produced by GitHub Actions workflows for publishing.
 
 IMAGES:
-    Images to download (default: all):
+  Images to download (default: all):
     - all
     - amd64, amd64-lomiri
     - arm64, arm64-lomiri

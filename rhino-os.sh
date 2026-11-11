@@ -134,6 +134,9 @@ case ${1} in
       exit 1
     fi
 
+    # set full path
+    outdir="$(realpath ${outdir})"
+
     shift 3
     # images to download
     selected=("${@}")
@@ -152,6 +155,48 @@ case ${1} in
     }
 
     pull_steps
+    exit 0
+    ;;
+  publish)
+    shift 1
+    source "${scriptdir}/publish.sh"
+
+    if [[ ${1} == "-h" ]] || [[ ${1} == "--help" ]]; then
+      help_publish
+      exit 0
+    fi
+
+    type="${1}"        # e.g. sourceforge
+    destination="${2}" # e.g. sourceforge destination
+    indir="${3}"       # $PWD
+
+    # fail out if repo, branch, and outdir are not all provided
+    if ! [[ -n ${type} && -n ${destination} && -n ${indir} ]]; then
+      help_publish
+      exit 1
+    fi
+
+    # set full path
+    indir="$(realpath ${indir})"
+
+    shift 3
+    # images to upload
+    selected=("${@}")
+    if [[ -z ${selected[*]} ]]; then
+      selected=("all")
+    fi
+
+    # cleanup function to trap EXIT & INT
+    export cleaned=false
+    function cleanup() {
+      cd "${REPO_ROOT}"
+      if ! ${cleaned}; then
+        # put any cleanup steps here if/as needed
+        export cleaned=true
+      fi
+    }
+
+    publish_steps
     exit 0
     ;;
   *)

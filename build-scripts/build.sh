@@ -6,6 +6,7 @@ function help_build() {
 Build a Rhino Linux image.
 
 PLATFORM:
+  Target platform to build on:
     - amd64
     - arm64
     - raspberrypi|raspi|rpi
@@ -13,6 +14,7 @@ PLATFORM:
     - pinetab|pt|ptog|pt1|pinetab2|pt2
 
 ENVIRONMENT:
+  Target desktop environment type to build on:
     - unicorn
     - lomiri (excludes rpi)
     - server (rpi only)"
@@ -112,19 +114,19 @@ function patch_tools() {
     # patch out debootstrap error
     cp /usr/share/debootstrap/functions "${builddir}/functions.bak"
     cp "${builddir}/functions.bak" "${builddir}/functions"
-    cd "${builddir}"
+    cd "${builddir}" || return 1
     patch -i "0002-remove-WRONGSUITE-error.patch" || return 1
     cp "${builddir}/functions" /usr/share/debootstrap/functions
-    cd "${REPO_ROOT}"
+    cd "${REPO_ROOT}" || return 1
   fi
 
   if grep -q 'base=$(without "$base" "$required")' /usr/sbin/debootstrap; then
     cp /usr/sbin/debootstrap "${builddir}/debootstrap.bak"
     cp "${builddir}/debootstrap.bak" "${builddir}/debootstrap"
-    cd "${builddir}"
+    cd "${builddir}" || return 1
     patch -i "0001-force-debootstrap-exclude.patch" || return 1
     cp "${builddir}/debootstrap" /usr/sbin/debootstrap
-    cd "${REPO_ROOT}"
+    cd "${REPO_ROOT}" || return 1
   fi
 }
 
@@ -132,7 +134,7 @@ function start_livebuild() {
   { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
   fancy_message info "Starting live-build"
   lb_build "${platform}" "${envir}" "${builddir}" "etc/terraform.conf" || return 1
-  cd "${REPO_ROOT}"
+  cd "${REPO_ROOT}" || return 1
 }
 
 function build_steps() {
